@@ -164,3 +164,35 @@ The research question, prediction, conditions, controls and milestone 3 were rew
 
 - Why. PPS steers with the difference between the task and reference proxies, and the reference proxy is distilled from the base only on the original task observations. Self-training sends rollouts into states that distillation never covered, so any error in the reference proxy's imitation of the base there feeds straight into the steering delta. The old design compared self-training with training longer but could not tell this effect apart from the kind of data being kept. The new design measures reference proxy fidelity every round and adds condition 4, which re-distills the reference proxy on visited states, to test whether this drift matters.
 - Two of the three open design decisions listed under the old Conditions section are now settled. Each round the task proxy restarts from the current reference proxy, and steered rollouts do the collecting. The sampling ratio between original demos and kept rollouts is still open.
+
+### 2026-11-04, milestone 0
+
+Milestone 0 is met with pi05_libero on held-out LIBERO-90 tasks. Full numbers are in results/milestone0.md, and raw per-episode records are in results/m0/. Setup is openpi commit 215abfb with the PyTorch backend on an RTX PRO 6000 Blackwell (sm_120), and the local openpi changes are in results/m0/openpi_local.patch. The eval scripts are in scripts/m0/. The server takes flow matching noise from the client, seeded per episode, so every episode is reproducible. A rerun of 5 episodes gave identical outcomes and step counts.
+
+Install problems and fixes.
+
+- torch build. openpi's uv.lock pins torch 2.7.1 from PyPI, which is the CUDA 12.6 build and has no sm_120 kernels. Fixed by adding the PyTorch cu128 index as a uv source for torch and torchvision and re-locking, which gives 2.7.1+cu128 with sm_120. The transformers patch openpi needs was applied with UV_LINK_MODE=copy so it stays out of the uv cache.
+- EGL. MuJoCo headless rendering failed with "'NoneType' object has no attribute 'eglQueryString'" because the container had the NVIDIA EGL vendor library but no glvnd loader libEGL.so.1. Fixed with apt-get install libegl1 libgl1 libglvnd0. This lives outside /workspace and has to be redone on a fresh pod.
+- LIBERO config. LIBERO asks for a config path interactively on first import. Fixed by writing /workspace/.libero/config.yaml and setting LIBERO_CONFIG_PATH.
+- Checkpoint conversion. openpi's JAX to PyTorch converter copies assets from the parent of the checkpoint directory, which does not hold them for the downloaded layout, so the norm stats were missing. Fixed by copying the assets folder into each converted checkpoint by hand.
+
+Two smaller issues. RunPod's nginx holds port 8001, so servers use 8000 and 8002 to 8005. torch.compile max-autotune logs runtime errors for some matmul candidates on sm_120, but inductor skips them and the compiled policy runs fine. All environment variables are in /workspace/env.sh.
+
+What pi05_libero was trained on. The pi05_libero config fine-tunes on physical-intelligence/libero, which openpi builds from libero_10, libero_goal, libero_object and libero_spatial. The dataset's task list has exactly those 40 tasks. LIBERO-90 is excluded entirely. The hold-out is mostly at the scene level, because several LIBERO-90 instructions reuse training wording in a new scene (three are word for word identical). Task 38 is the reverse case, a new instruction in a scene used by a LIBERO-10 training task. Whether pi05_base saw LIBERO in pretraining is not documented.
+
+The screen is bimodal. All 90 LIBERO-90 tasks were run for 5 episodes each, on init states kept apart from the evaluation states. 56 tasks went 0 of 5 and 16 went 5 of 5, and only 9 landed at 1 or 2 of 5. Most held-out tasks are therefore all or nothing for this checkpoint, and the usable middle is small.
+
+Evaluation, 30 episodes each on init states 0 to 29.
+
+| libero_90 task | Success | 95% interval |
+| --- | --- | --- |
+| 28 close the top drawer of the cabinet | 40.0% | 24.6 to 57.7 |
+| 30 put the black bowl on the plate | 70.0% | 52.1 to 83.3 |
+| 38 put the right moka pot on the stove | 46.7% | 30.2 to 63.9 |
+| 59 pick up the tomato sauce and put it in the tray | 36.7% | 21.9 to 54.5 |
+| 64 stack the right bowl on the left bowl and place them in the tray | 53.3% | 36.1 to 69.8 |
+
+- Uncertainty caveat. With 30 episodes each interval spans about 30 points, so the order of tasks 28, 38, 59 and 64 is not established and any could sit a little outside the band. The 5-episode screen was a weak guide, since task 30 went from 2 of 5 to 70 percent.
+- Cost. 10 denoising steps by default. A policy call takes 44 ms at batch 1, and an episode takes 3 to 8 s with the GPU to itself. Peak GPU memory is 7.77 GB allocated and 8.11 GB reserved per server.
+- Experiments 2 (pi05_base on LIBERO without fine-tuning) and 3 (object placement offsets) were skipped because experiment 1 met the target.
+- Decision. Task 59 is the primary task, with task 38 and then task 28 as backups. Tasks 59 and 38 are pick-and-place tasks, so a mid-episode perturbation is natural for the later recovery tests.
