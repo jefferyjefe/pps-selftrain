@@ -12,42 +12,72 @@ so the base stays in control wherever the two proxies agree.
 
 ## Research question
 
-"Does repeatedly training PPS on its own successful attempts improve task success compared to PPS trained longer on the original demos, and how does recovery under perturbation change across rounds?"
+"When PPS is trained repeatedly on its own successful rollouts, does the reference proxy's imitation of the base degrade on newly visited states, and does re-distilling it on those states preserve recovery?"
 
 ## Prediction
 
-Success rises for a round or two and then flattens. Recovery under perturbation declines across rounds, because the rollouts that pass the success filter and get kept are mostly easy, demo-like states. This is a hypothesis to test. It is not a result.
+Without refresh, the gap between v_ref and v_base grows on states visited in later rounds, so the steering delta (v_task minus v_ref) picks up imitation error and recovery under perturbation declines across rounds. With refresh, the gap stays near round-zero levels and recovery holds. If the gap never grows, refreshing the reference proxy won't matter, and the finding is that the reference proxy is already robust to this drift. This is a hypothesis to test. It is not a result.
 
 ## Conditions
 
-1. Original PPS. Reference proxy distilled from the base, task proxy fine tuned from the reference on the original demos.
-2. PPS trained longer. The task proxy is trained longer on the original demos only, matched in gradient updates to condition 3.
-3. PPS with self-training. The task proxy is trained on the original demos plus successful self rollouts, collected round by round.
+Four conditions, all from the same starting demos, with the base frozen throughout.
 
-The base and the reference proxy are fixed and shared by all three conditions.
+1. PPS at round zero. Reference proxy distilled from the base, task proxy fine tuned from the reference on the original demos.
+2. Task proxy trained longer on the original demos, with gradient updates matched to conditions 3 and 4. This is the matched-data control.
+3. Self-training with the reference proxy fixed. Each round, run a fixed budget of steered rollouts, keep the successes, add them to the task proxy's training set, and retrain the task proxy initialized from the fixed reference proxy.
+4. Self-training with the reference proxy refreshed. Same as 3, but each round the reference proxy is first re-distilled from the frozen base on a sample of states visited in that round's rollouts (DAgger with the base as expert), and the task proxy is then initialized from the refreshed reference proxy.
 
-Open design decisions for condition 3, to settle before milestone 3 and record in the log.
-
-- Whether each round continues from the previous task proxy or restarts from the reference proxy.
-- The sampling ratio between original demos and kept self rollouts.
-- Which policy collects each round, steered PPS at the fixed gamma being the default.
+In both 3 and 4 the task proxy is initialized from the current reference proxy every round, and this is what keeps the comparison fair. Each round's steering delta starts at zero and grows only from what the task proxy learns, so the one difference between 3 and 4 is whether the reference proxy was refreshed.
 
 ## Controls
 
-- Equal training updates across conditions 2 and 3, with the same batch size and optimizer settings in every round.
-- Gamma selected once on validation episodes and then fixed across all rounds and all conditions.
-- A fixed rollout budget per round. The number of successes kept in each round is reported next to the success rate.
+- Equal gradient updates across conditions 2, 3 and 4.
+- Gamma selected once on validation episodes at round zero and fixed across rounds.
+- A fixed rollout budget per round, with the number of successes reported.
 - Collection, validation and final evaluation use disjoint starting configurations.
-- Perturbations are applied at a defined task event, such as the first contact with or grasp of the target object, rather than at a fixed timestep.
+- Perturbations applied at a defined task event, such as after grasp.
 - 100 to 200 evaluation episodes per condition per round.
-- Multiple seeds, at least three, for proxy training and for collection.
+- Three seeds minimum.
+
+## Measurements
+
+Recorded every round for every condition.
+
+- Success rate.
+- Recovery rate under perturbation.
+- Action diversity across successful rollouts.
+- Reference proxy fidelity, defined as cosine similarity and MSE between v_ref and v_base on a held-out sample of that round's visited states, logged per denoising step.
+- Compute cost of the round, including base forward passes used for refresh.
+
+## Limitations
+
+- The loop is success-only, because the flow-matching loss cannot use failed rollouts. Q-Planning reports that success-only fine-tuning stalled on real tasks.
+- Refreshing the reference proxy costs base forward passes each round. That cost will be measured in the pilot.
+
+## Related work and citations
+
+Closest prior work
+- ReGuide, Lin et al., 2026, arXiv 2606.28939. Feeds successful guided rollouts back into a diffusion policy across rounds. Updates the policy; we keep the base frozen and update only the proxies.
+- Q-Planning, Giridhar et al., 2026, arXiv 2608.21204. Frozen base policy plus a small learned Q-function that improves from both successes and failures. Reports that fine-tuning on successes alone stalls. Our loop is success-only, so this is a known limitation.
+- DAgger, Ross et al., AISTATS 2011. Querying the expert on learner-visited states. Condition 4 re-distills the reference proxy from the frozen base on visited states, which is DAgger with the base as expert.
+- On-Policy Distillation, Agarwal et al., ICLR 2024, arXiv 2306.13649. Student learns from teacher feedback on its own samples. Same motivation as condition 4, from language models.
+
+Background
+- Probe, Learn, Distill, Xiao et al., ICLR 2026, arXiv 2511.00091. Residual RL specialists collect recovery-rich data, then the generalist is fine-tuned on it. We never fine-tune the generalist.
+- Self-Imitation Learning, Oh et al., ICML 2018. Learning from an agent's own past successes.
+
+Why we measure diversity
+- On-Policy Self-Distillation Reduces Output Diversity, Nicolicioiu et al., 2026, arXiv 2606.26091. Self-distillation can raise average performance while collapsing the variety of successful strategies. We track action diversity every round for this reason.
+
+Method being reproduced
+- Proxy Policy Steering, Ning et al., CoRL 2026, arXiv 2609.09148.
 
 ## Milestones
 
 0. Find a base checkpoint and a LIBERO task where the base succeeds 10 to 50 percent of the time.
 1. PushT toy. A small state based flow matching version of the whole PPS pipeline that runs on a laptop. See docs/toy.md.
 2. Full reproduction on pi0.5 with a gamma sweep plot.
-3. Self-training loop with the three conditions above.
+3. Self-training loop with the four conditions above.
 
 ## Layout
 
@@ -127,3 +157,10 @@ Results on the variant, 3 proxy seeds by 200 evaluation episodes, same starts an
 - PPS does beat both of its parts. At gamma 1 it is above the task proxy alone by 0.125 ± 0.018 in coverage and 8.8 ± 2.5 points in success at 0.90, and above the base by 0.033 ± 0.014 and 26.2 ± 2.4 points.
 - The two metrics disagree on shape. Coverage rewards any gamma from 0.25 to 1.0 about equally, while success at 0.90 keeps improving up to gamma 1. One reading, not tested here, is that the base already gets the T close and the residual mostly helps with the last few pixels.
 - Decision. The toy stops here without a middle gamma peak. Next is milestone 0.
+
+### 2026-11-03, research question revised
+
+The research question, prediction, conditions, controls and milestone 3 were rewritten, and Measurements, Limitations and Related work sections were added. No code or results changed, and no self-training run has happened yet.
+
+- Why. PPS steers with the difference between the task and reference proxies, and the reference proxy is distilled from the base only on the original task observations. Self-training sends rollouts into states that distillation never covered, so any error in the reference proxy's imitation of the base there feeds straight into the steering delta. The old design compared self-training with training longer but could not tell this effect apart from the kind of data being kept. The new design measures reference proxy fidelity every round and adds condition 4, which re-distills the reference proxy on visited states, to test whether this drift matters.
+- Two of the three open design decisions listed under the old Conditions section are now settled. Each round the task proxy restarts from the current reference proxy, and steered rollouts do the collecting. The sampling ratio between original demos and kept rollouts is still open.
