@@ -1,0 +1,183 @@
+{
+ "conditions": {
+  "none": {
+   "episodes": 30,
+   "success": 9,
+   "success_rate": 0.3,
+   "wilson95": [
+    0.16664562643958933,
+    0.4787612101166018
+   ],
+   "fired": 14,
+   "success_given_fired": 9,
+   "success_rate_given_fired": 0.6428571428571429,
+   "wilson95_given_fired": [
+    0.3876400468214042,
+    0.8365550926279727
+   ],
+   "timing_checks_passed_of_fired": {
+    "commanded_closed": 14,
+    "both_fingers_on_bottle": 14,
+    "squeezing": 14,
+    "stalled": 14,
+    "first_such_step": 14,
+    "bottle_not_yet_lifted": 14
+   },
+   "event_steps": {
+    "0": 299,
+    "3": 298,
+    "6": 291,
+    "11": 208,
+    "14": 134,
+    "18": 206,
+    "20": 255,
+    "21": 221,
+    "22": 127,
+    "24": 305,
+    "25": 281,
+    "26": 67,
+    "27": 195,
+    "28": 218
+   },
+   "lift_after_event": 14,
+   "infer_ms_mean": 243.13172536996683
+  },
+  "teleport": {
+   "episodes": 30,
+   "success": 9,
+   "success_rate": 0.3,
+   "wilson95": [
+    0.16664562643958933,
+    0.4787612101166018
+   ],
+   "fired": 14,
+   "success_given_fired": 9,
+   "success_rate_given_fired": 0.6428571428571429,
+   "wilson95_given_fired": [
+    0.3876400468214042,
+    0.8365550926279727
+   ],
+   "timing_checks_passed_of_fired": {
+    "commanded_closed": 14,
+    "both_fingers_on_bottle": 14,
+    "squeezing": 14,
+    "stalled": 14,
+    "first_such_step": 14,
+    "bottle_not_yet_lifted": 14,
+    "same_step_as_unperturbed_twin": 14,
+    "moved_set_distance": 14,
+    "no_vertical_move": 14,
+    "clear_direction_found": 14
+   },
+   "event_steps": {
+    "0": 299,
+    "3": 298,
+    "6": 291,
+    "11": 208,
+    "14": 134,
+    "18": 206,
+    "20": 255,
+    "21": 221,
+    "22": 127,
+    "24": 305,
+    "25": 281,
+    "26": 67,
+    "27": 195,
+    "28": 218
+   },
+   "lift_after_event": 12,
+   "paired_with_none": {
+    "episodes": 14,
+    "none_success": 9,
+    "perturbed_success": 9,
+    "lost_by_perturbation": [
+     24
+    ],
+    "gained_under_perturbation": [
+     27
+    ]
+   },
+   "regrasped": 13,
+   "teleport_tries": {
+    "0": 2,
+    "3": 1,
+    "6": 1,
+    "11": 1,
+    "14": 6,
+    "18": 2,
+    "20": 1,
+    "21": 2,
+    "22": 2,
+    "24": 1,
+    "25": 1,
+    "26": 1,
+    "27": 2,
+    "28": 1
+   },
+   "infer_ms_mean": 243.46625809150063
+  },
+  "release": {
+   "episodes": 30,
+   "success": 10,
+   "success_rate": 0.3333333333333333,
+   "wilson95": [
+    0.19230295526846194,
+    0.5122027418616973
+   ],
+   "fired": 14,
+   "success_given_fired": 10,
+   "success_rate_given_fired": 0.7142857142857143,
+   "wilson95_given_fired": [
+    0.4535045882751561,
+    0.882788120898909
+   ],
+   "timing_checks_passed_of_fired": {
+    "commanded_closed": 14,
+    "both_fingers_on_bottle": 14,
+    "squeezing": 14,
+    "stalled": 14,
+    "first_such_step": 14,
+    "bottle_not_yet_lifted": 14,
+    "same_step_as_unperturbed_twin": 14,
+    "overridden_frames": 14,
+    "command_open_during_release": 14,
+    "fingers_opened": 13
+   },
+   "event_steps": {
+    "0": 299,
+    "3": 298,
+    "6": 291,
+    "11": 208,
+    "14": 134,
+    "18": 206,
+    "20": 255,
+    "21": 221,
+    "22": 127,
+    "24": 305,
+    "25": 281,
+    "26": 67,
+    "27": 195,
+    "28": 218
+   },
+   "lift_after_event": 14,
+   "paired_with_none": {
+    "episodes": 14,
+    "none_success": 9,
+    "perturbed_success": 10,
+    "lost_by_perturbation": [],
+    "gained_under_perturbation": [
+     27
+    ]
+   },
+   "regrasped": 14,
+   "infer_ms_mean": 242.74582798588165
+  }
+ },
+ "none_vs_m0_compiled": {
+  "episodes": 30,
+  "m0_success": 11,
+  "eager_success": 9,
+  "same_outcome": 20,
+  "same_outcome_and_steps": 16
+ }
+}

@@ -1,6 +1,6 @@
 # Stage 2, PPS plumbing on pi0.5
 
-Stage 2 runs PPS on the real base, pi05_libero with openpi's PyTorch backend, on LIBERO-90 task 59 ("pick up the tomato sauce and put it in the tray", 36.7 percent for the base in milestone 0). This file covers the plumbing that comes before any proxy is trained. It has three parts, a steering capable sampler, the reference proxy distillation dataset and a perturbation wrapper for recovery tests (part 3 still to come). Every departure from the paper's recipe is listed in the last section.
+Stage 2 runs PPS on the real base, pi05_libero with openpi's PyTorch backend, on LIBERO-90 task 59 ("pick up the tomato sauce and put it in the tray", 36.7 percent for the base in milestone 0). This file covers the plumbing that comes before any proxy is trained. It has three parts, a steering capable sampler, the reference proxy distillation dataset and a perturbation wrapper for recovery tests. Every departure from the paper's recipe is listed in the last section.
 
 ## Code layout
 
@@ -104,10 +104,67 @@ Checks (`results/stage2/distill_check.json`).
 - Batch 64 against batch 1, free replay. When the batch 1 base instead runs its own path from the same noise, 63 of 64 trajectories stay within cosine 0.9999 at every step, but one drifts to cosine 0.967 and its final action chunk differs by up to 0.38. A difference of bf16 rounding at an early step was enough to send that sample somewhere visibly different. So the base's flow is sensitive for a small share of draws, which is worth remembering when PPS deltas, much larger than rounding, are added along the path.
 - Features from the batch 1 replay against the stored features have cosine at least 0.989 per token (median 0.998), again the batch size effect in bf16.
 
+## 3. Perturbation wrapper for recovery tests
+
+`pps_real/perturb.py` holds the event detector and the perturbations, and `scripts/stage2/eval_perturb.py` runs base episodes with them. The event and the perturbation type are arguments (`--event`, `--perturbation`, `--teleport-dist`, `--release-frames`). The episode loop is the milestone 0 loop (10 settle steps, replan every 5 actions, 400 steps, init state k, env seed 7 + k, noise from `default_rng((7, k))`), served by `scripts/stage2/serve.py`, which runs the eager sampler from part 1 with no hook.
+
+### Event
+
+The event is the first env step at which the gripper has closed on the tomato sauce bottle. Two simpler definitions failed on the first 10 episodes and the final one is stricter.
+
+- robosuite's own grasp test needs both fingerpad geoms on the object. On this bottle the pads almost never touch, and an episode that lifted the bottle and succeeded never registered a grasp. The test now asks for any collision geom of each finger.
+- Contact plus a close command still fired on a fingertip brushing the bottle while the fingers swept shut past it (episode 0, step 241, the fingers closed to 3 mm on nothing).
+
+So the event requires all four of the following after the step. Both fingers touch the bottle. The policy commands the gripper closed. The gripper's internal finger target is at least 5 mm narrower than the actual opening, so the fingers are pressing. The opening shrank by less than 2 mm on this step, so the bottle stopped them. This covers ordinary grasps (opening around 4 to 6 cm) and the case where the can has fallen over and the gripper closes across its length (opening stuck at 8 cm, episode 3).
+
+### Perturbations
+
+- teleport moves the bottle 5 cm in a random horizontal direction, drawn from `default_rng((7, k, 2))`, keeping its height and orientation and zeroing its velocity. A direction whose new pose would touch anything but the table is rejected and redrawn. Over 14 events this took 1 to 6 draws (median 1), and every event found a clear direction. 10 of the 24 draws were rejected, every one for touching the gripper's hand or fingers, so without the rejection many teleports would have pushed the bottle into the gripper.
+- release opens the gripper for 3 env steps after the event, keeping the policy's arm actions. This needed an interpretation. LIBERO's Panda gripper does not map the action to a finger target. It integrates the sign of the action into a target at 0.25 of the full range per env step. After a sustained close the target sits at fully closed, and 3 steps of an open action only relax it to 0.25 closed, which still squeezes. A first version that just overrode the action moved the fingers by less than 0.5 mm. The wrapper therefore sets the gripper's internal target fully open on each of the 3 steps. After that the policy's close command takes about 8 steps to bring the target back to closed.
+
+The policy is not told about a perturbation. Its current action chunk carries on and it sees the new scene at its next replanning step, at most 5 steps later.
+
+### Verification
+
+The check uses the fact that the sim and the sampler are deterministic. A perturbed episode and its unperturbed twin (same init state, env seed and noise) must be identical up to the event, so the event must fire at the same step in both. `scripts/stage2/summarize_perturb.py` checks this and the event conditions for every fired episode, and recomputes the event predicate from the logged per step trace to confirm that no earlier step met it. All checks passed on the first 10 episodes of each condition, after the fixes above, and again on all 30 (`results/stage2/perturb_summary.json`).
+
+| Check, over the 14 fired episodes | none | teleport | release |
+| --- | --- | --- | --- |
+| Commanded closed, both fingers on bottle, squeezing, stalled | 14 | 14 | 14 |
+| No earlier step meets the predicate | 14 | 14 | 14 |
+| Bottle not yet lifted 2 cm | 14 | 14 | 14 |
+| Same step as the unperturbed twin | | 14 | 14 |
+| Moved exactly 5 cm, no vertical change, clear direction | | 14 | |
+| Command open for exactly 3 steps | | | 14 |
+| Fingers opened during the release | | | 13 |
+
+The one release that did not open the fingers further is episode 3, where the gripper was already at its full 8 cm opening around the fallen can. In none of the 16 unperturbed episodes without an event was the bottle ever lifted 2 cm, and none of them succeeded, so the detector misses no grasp that matters. Events fired between steps 67 and 305.
+
+Videos of 2 fired episodes per condition (episodes 0 and 3), with the perturbation frames outlined in red, and stills of the observation at the event and right after it for all 14 fired episodes, are in `/workspace/runs/stage2/videos` (not in git). The frames show the bottle leaving the closed gripper on a teleport and the fingers parting around it on a release.
+
+### Recovery baselines for the base alone
+
+30 episodes per condition on init states 0 to 29, eager sampler.
+
+| Condition | Success | 95% interval | Event fired | Success given event | 95% interval |
+| --- | --- | --- | --- | --- | --- |
+| none | 9 of 30, 30.0% | 16.7 to 47.9 | 14 | 9 of 14, 64.3% | 38.8 to 83.7 |
+| teleport 5 cm | 9 of 30, 30.0% | 16.7 to 47.9 | 14 | 9 of 14, 64.3% | 38.8 to 83.7 |
+| release 3 steps | 10 of 30, 33.3% | 19.2 to 51.2 | 14 | 10 of 14, 71.4% | 45.4 to 88.3 |
+
+Intervals are Wilson. Paired against the unperturbed twins, teleport lost episode 24 and gained episode 27, and release gained episode 27 and lost none. The base grasped the bottle again after 13 of 14 teleports (median 51 steps later) and after all 14 releases (median 18 steps later).
+
+Reading. Neither perturbation, at the strength specified, measurably hurts the base. Once it has reached the bottle it recovers about as often as it succeeds unperturbed. Most of the base's failures on t59 happen before the grasp (16 of 30 episodes never close on the bottle), and a perturbation at the grasp cannot touch those. Two consequences for the recovery tests in stage 3. First, only about half of the episodes produce a perturbation, so 30 episodes give about 14 recovery trials and intervals about 45 points wide. Second, a perturbation the base already shrugs off leaves little room to show that PPS or self-training changes recovery. Stronger variants, such as a teleport while the bottle is lifted in transit, a larger distance, or a longer release once the bottle is off the table, would be single argument changes in `pps_real/perturb.py` and have not been tried.
+
+The unperturbed eager base got 9 of 30 on the same init states and noise as milestone 0's compiled base (11 of 30). Outcomes agree in 20 of 30 paired episodes and step counts match exactly in 16, so the small numeric difference from compilation changes about a third of the trajectories. The 2 episode gap is well inside the noise. From here on the eager number is the base's reference.
+
+Cost. An episode took 24 s on average with three servers and the distillation collector sharing the GPU, and a policy call took 243 ms under that contention (98 ms alone, part 1).
+
 ## Departures from the paper's recipe
 
-- The base runs the eager sampler, because a compiled function cannot take a per step hook. The compiled sampler that milestone 0 measured differs numerically (actions by up to 0.010).
+- The base runs the eager sampler, because a compiled function cannot take a per step hook. The compiled sampler that milestone 0 measured differs numerically (actions by up to 0.010) and gives a different outcome in 10 of 30 t59 episodes.
 - Proxies will read the base's frozen final layer prefix features, pooled to 33 tokens, instead of raw observations through their own encoder.
 - Distillation targets use 16 fixed noise draws per observation instead of fresh noise every batch.
 - Distillation targets were computed at batch 64, so they differ slightly from the base's batch 1 velocities (measured in part 2).
 - Distillation observations are the demo states re-rendered at eval resolution, not the hdf5's 128 px images.
+- The paper does not define the perturbations. The grasp event, the 5 cm teleport with collision rejection, and the release by setting the gripper's internal target open are this project's definitions, explained in part 3.
