@@ -1,0 +1,82 @@
+{
+ "task": "libero_90 task 59, LIVING_ROOM_SCENE3_pick_up_the_tomato_sauce_and_put_it_in_the_tray",
+ "prompt": "pick up the tomato sauce and put it in the tray",
+ "observation_source": "5571 frames of the 50 LIBERO-90 t59 demos (/workspace/data/libero_datasets/libero_90/LIVING_ROOM_SCENE3_pick_up_the_tomato_sauce_and_put_it_in_the_tray_demo.hdf5), sim states re-rendered at 256 px and processed as the eval client does",
+ "base": {
+  "checkpoint": "/workspace/checkpoints/pi05_libero_pytorch",
+  "config": "pi05_libero",
+  "openpi_commit": "215abfb",
+  "sampler": "pps_real.sampler.sample_actions, eager, Recorder hook, bit exact vs stock eager",
+  "num_steps": 10,
+  "batch_rows": 64
+ },
+ "repo_commit_at_collection": "42ceccd",
+ "recipe": "paper Eq. 5 and Appendix A.3, on policy. (x_t, t, v_base) at each of the 10 Euler steps along the base's own sampling path from fresh Gaussian noise",
+ "draws_per_frame": 16,
+ "noise": "numpy default_rng((59, frame, draw)).standard_normal((10, 32)) float32",
+ "n_frames": 5571,
+ "n_trajectories": 89136,
+ "n_tuples": 891360,
+ "t_values": [
+  1.0,
+  0.8999999761581421,
+  0.7999999523162842,
+  0.6999999284744263,
+  0.5999999046325684,
+  0.49999991059303284,
+  0.3999999165534973,
+  0.2999999225139618,
+  0.19999992847442627,
+  0.09999992698431015
+ ],
+ "time_convention": "openpi, t = 1 is noise, t = 0 is data, Euler dt = -0.1, x_(k+1) = x_k + dt * v_k",
+ "features": {
+  "file": "features.npy",
+  "dtype": "float16",
+  "shape": [
+   5571,
+   33,
+   2048
+  ],
+  "source": "final layer PaliGemma prefix hidden states (after final norm), computed once per frame by the base during sampling",
+  "rows": "0..15 agentview tokens average pooled 16x16 to 4x4 (row major), 16..31 wrist tokens pooled the same way, 32 mean over valid language tokens",
+  "from_row": "draw 0 of each frame"
+ },
+ "arrays": {
+  "x_t.npy": "(F, draws, step, 10, 32) float32",
+  "v_base.npy": "(F, draws, step, 10, 32) float32",
+  "x0.npy": "(F, draws, 10, 32) float32 raw model output",
+  "t.npy": "(step,) float32",
+  "demo_idx.npy": "(F,) demo number 0..49",
+  "frame_idx.npy": "(F,) frame within demo"
+ },
+ "action_dims": "all 32 model dims are stored. LIBERO uses the first 7, the other 25 are padding the base still denoises, so they are part of x_t",
+ "split": {
+  "val_demos": [
+   45,
+   46,
+   47,
+   48,
+   49
+  ],
+  "note": "a marker only, nothing was dropped"
+ },
+ "base_forward_passes": {
+  "prefix_passes": 89136,
+  "denoise_step_passes": 891360,
+  "sampler_calls_at_batch": 1393,
+  "note": "the prefix is recomputed for every row, so the 16 draws of a frame each pay one prefix pass"
+ },
+ "gpu_s_sampling": 3166.264889438171,
+ "wall_s_collection": 3745.8004915714264,
+ "bytes": {
+  "demo_idx.npy": 22412,
+  "features.npy": 753021056,
+  "frame_idx.npy": 22412,
+  "t.npy": 168,
+  "v_base.npy": 1140940928,
+  "x0.npy": 114094208,
+  "x_t.npy": 1140940928
+ },
+ "total_gb": 3.149042112
+}

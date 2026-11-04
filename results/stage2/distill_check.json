@@ -1,0 +1,44 @@
+{
+ "data": "/workspace/data/t59_distill",
+ "n_frames": 5571,
+ "draws": 16,
+ "path_inconsistent_trajectories": 0,
+ "noise_mismatch_of_sampled": 0,
+ "batch1_replay": {
+  "n": 64,
+  "v_base_max_abs_diff": {
+   "max": 4.0113701820373535,
+   "median": 0.027837812900543213
+  },
+  "v_base_min_cosine_per_step": {
+   "min": 0.9673991203308105,
+   "median": 0.9999785721302032
+  },
+  "x0_max_abs_diff": {
+   "max": 0.38334280252456665,
+   "median": 0.0047108083963394165
+  },
+  "v_base_mean_abs_for_scale": 0.8155367970466614,
+  "free_replay_pairs_with_min_cosine_below_0.999": 1,
+  "teacher_forced_v_base_max_abs_diff": {
+   "max": 0.08353191614151001,
+   "median": 0.026233665645122528
+  },
+  "teacher_forced_v_base_min_cosine_per_step": {
+   "min": 0.9999494552612305,
+   "median": 0.999987006187439
+  },
+  "teacher_forced_relative_l2_error": {
+   "max": 0.007973342202603817,
+   "median": 0.003190708579495549
+  },
+  "features_max_abs_diff": {
+   "max": 3.9375,
+   "median": 1.89453125
+  },
+  "features_min_cosine_per_row": {
+   "min": 0.988801896572113,
+   "median": 0.9979430735111237
+  }
+ }
+}
