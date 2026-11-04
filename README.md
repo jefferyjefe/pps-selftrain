@@ -196,3 +196,11 @@ Evaluation, 30 episodes each on init states 0 to 29.
 - Cost. 10 denoising steps by default. A policy call takes 44 ms at batch 1, and an episode takes 3 to 8 s with the GPU to itself. Peak GPU memory is 7.77 GB allocated and 8.11 GB reserved per server.
 - Experiments 2 (pi05_base on LIBERO without fine-tuning) and 3 (object placement offsets) were skipped because experiment 1 met the target.
 - Decision. Task 59 is the primary task, with task 38 and then task 28 as backups. Tasks 59 and 38 are pick-and-place tasks, so a mid-episode perturbation is natural for the later recovery tests.
+
+### 2026-11-04, stage 2 plumbing
+
+Stage 2 starts on t59 with the plumbing for PPS on pi05_libero. No proxies are trained yet. Details and every departure from the paper are in docs/stage2.md.
+
+- Steering capable sampler. pps_real/sampler.py copies openpi's PyTorch sample_actions and adds a hook that sees (x_t, t, v_base) at each of the 10 denoising steps and may replace the velocity. With torch.compile off it is bit for bit equal to the stock sampler on 20 t59 observations with fixed noise, with no hook, with recording, identity and zero delta PPS hooks, through the full policy transforms, and batched (results/stage2/sampler_check.json).
+- The hook needs the eager path. The compiled stock sampler that milestone 0 served is itself not bit exact with eager stock (actions differ by up to 0.010), so the base from here on is the eager one. Our hooked sampler takes 92 ms per call against 37 ms for compiled stock, a 2.46 times slowdown. The hook itself costs about 2 ms.
+- The 50 t59 demos were downloaded from yifengzhu-hf/LIBERO-datasets and every one of their 5571 sim states was re-rendered at eval resolution, because the hdf5 only stores 128 px images.
