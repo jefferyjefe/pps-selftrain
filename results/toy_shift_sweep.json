@@ -1,0 +1,90 @@
+{
+  "base_full_task": {
+    "condition": "base on original task",
+    "seeds_start": 1000000,
+    "n": 200,
+    "mean_max_coverage": 0.7380751758257802,
+    "mean_max_coverage_se": 0.025844588223682973,
+    "success_090": 0.675,
+    "success_090_se": 0.03311910324872942,
+    "success_095": 0.4,
+    "success_095_se": 0.034641016151377546,
+    "mean_final_coverage": 0.6320250904567861,
+    "mean_steps": 252.5
+  },
+  "band_success_090": [
+    0.1,
+    0.3
+  ],
+  "shifts_tried": [
+    {
+      "shift": 8,
+      "offset": [
+        8.0,
+        8.0
+      ],
+      "n": 200,
+      "mean_max_coverage": 0.7068504898708422,
+      "mean_max_coverage_se": 0.020328223970532685,
+      "success_090": 0.11,
+      "success_090_se": 0.022124646889837587,
+      "success_095": 0.02,
+      "success_095_se": 0.009899494936611665,
+      "mean_final_coverage": 0.5111748267110221,
+      "mean_steps": 298.105,
+      "in_band": true
+    },
+    {
+      "shift": 12,
+      "offset": [
+        12.0,
+        12.0
+      ],
+      "n": 200,
+      "mean_max_coverage": 0.6395897606591007,
+      "mean_max_coverage_se": 0.01862723842609974,
+      "success_090": 0.04,
+      "success_090_se": 0.013856406460551017,
+      "success_095": 0.0,
+      "success_095_se": 0.0,
+      "mean_final_coverage": 0.44039495911141535,
+      "mean_steps": 300.0,
+      "in_band": false
+    },
+    {
+      "shift": 16,
+      "offset": [
+        16.0,
+        16.0
+      ],
+      "n": 200,
+      "mean_max_coverage": 0.5682801359293994,
+      "mean_max_coverage_se": 0.017029097523380807,
+      "success_090": 0.03,
+      "success_090_se": 0.012062338081814818,
+      "success_095": 0.005,
+      "success_095_se": 0.004987484335815001,
+      "mean_final_coverage": 0.37815127062302023,
+      "mean_steps": 299.09,
+      "in_band": false
+    },
+    {
+      "shift": 20,
+      "offset": [
+        20.0,
+        20.0
+      ],
+      "n": 200,
+      "mean_max_coverage": 0.4993864897013177,
+      "mean_max_coverage_se": 0.015793491701459998,
+      "success_090": 0.03,
+      "success_090_se": 0.012062338081814818,
+      "success_095": 0.0,
+      "success_095_se": 0.0,
+      "mean_final_coverage": 0.3146615279889585,
+      "mean_steps": 300.0,
+      "in_band": false
+    }
+  ],
+  "val_seeds_start": 2000000
+}

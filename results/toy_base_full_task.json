@@ -1,0 +1,13 @@
+{
+  "condition": "base on original task",
+  "seeds_start": 1000000,
+  "n": 200,
+  "mean_max_coverage": 0.7380751758257802,
+  "mean_max_coverage_se": 0.025844588223682973,
+  "success_090": 0.675,
+  "success_090_se": 0.03311910324872942,
+  "success_095": 0.4,
+  "success_095_se": 0.034641016151377546,
+  "mean_final_coverage": 0.6320250904567861,
+  "mean_steps": 252.5
+}
