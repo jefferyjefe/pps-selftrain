@@ -1,0 +1,1217 @@
+{
+ "n_normal": 100,
+ "n_bank": 120,
+ "points": {
+  "base": {
+   "name": "\u03c00.5",
+   "normal": [
+    23,
+    100,
+    0.15843265832598313,
+    0.3215438310092749
+   ],
+   "recovery": [
+    115,
+    120,
+    0.9061591471148217,
+    0.9820732832333764
+   ],
+   "completion": [
+    110,
+    120,
+    0.8533776777514769,
+    0.9541063498377941
+   ]
+  },
+  "blend_f_g02": {
+   "name": "blend \u03b3 0.2 (faithful)",
+   "normal": [
+    36,
+    100,
+    0.2727122033881362,
+    0.45764597626718284
+   ],
+   "recovery": [
+    112,
+    120,
+    0.873948695378013,
+    0.9658346933148289
+   ],
+   "completion": [
+    108,
+    120,
+    0.8333182582648719,
+    0.9418664082208283
+   ]
+  },
+  "blend_f_g04": {
+   "name": "blend \u03b3 0.4 (faithful)",
+   "normal": [
+    86,
+    100,
+    0.7786281171512964,
+    0.9147365637350263
+   ],
+   "recovery": [
+    106,
+    120,
+    0.8136664831818966,
+    0.9292188222002328
+   ],
+   "completion": [
+    101,
+    120,
+    0.765906675868092,
+    0.8962302267551102
+   ]
+  },
+  "blend_f_g06": {
+   "name": "blend \u03b3 0.6 (faithful)",
+   "normal": [
+    98,
+    100,
+    0.9299882086824253,
+    0.9944980324993383
+   ],
+   "recovery": [
+    100,
+    120,
+    0.7565471853891594,
+    0.8894400366822575
+   ],
+   "completion": [
+    98,
+    120,
+    0.7379908641411742,
+    0.8756969968266718
+   ]
+  },
+  "blend_f_g08": {
+   "name": "blend \u03b3 0.8 (faithful)",
+   "normal": [
+    100,
+    100,
+    0.9630065012310038,
+    1.0000000000000002
+   ],
+   "recovery": [
+    97,
+    120,
+    0.7287884392669061,
+    0.8687497411491546
+   ],
+   "completion": [
+    94,
+    120,
+    0.7014563739698626,
+    0.8476327647908416
+   ]
+  },
+  "pps_f_g02": {
+   "name": "PPS \u03b3 0.2 (faithful)",
+   "normal": [
+    31,
+    100,
+    0.22779697154852568,
+    0.4062605579836929
+   ],
+   "recovery": [
+    115,
+    120,
+    0.9061591471148217,
+    0.9820732832333764
+   ],
+   "completion": [
+    109,
+    120,
+    0.8432915296559418,
+    0.9480428173815438
+   ]
+  },
+  "pps_f_g04": {
+   "name": "PPS \u03b3 0.4 (faithful)",
+   "normal": [
+    79,
+    100,
+    0.7002003108844285,
+    0.8583434598295537
+   ],
+   "recovery": [
+    113,
+    120,
+    0.8844740790888672,
+    0.97145899015576
+   ],
+   "completion": [
+    108,
+    120,
+    0.8333182582648719,
+    0.9418664082208283
+   ]
+  },
+  "pps_f_g06": {
+   "name": "PPS \u03b3 0.6 (faithful)",
+   "normal": [
+    100,
+    100,
+    0.9630065012310038,
+    1.0000000000000002
+   ],
+   "recovery": [
+    109,
+    120,
+    0.8432915296559418,
+    0.9480428173815438
+   ],
+   "completion": [
+    106,
+    120,
+    0.8136664831818966,
+    0.9292188222002328
+   ]
+  },
+  "pps_f_g08": {
+   "name": "PPS \u03b3 0.8 (faithful)",
+   "normal": [
+    100,
+    100,
+    0.9630065012310038,
+    1.0000000000000002
+   ],
+   "recovery": [
+    105,
+    120,
+    0.8039705972707158,
+    0.922765027559628
+   ],
+   "completion": [
+    103,
+    120,
+    0.7848050544393514,
+    0.9096312092874215
+   ]
+  },
+  "pps_f_g10": {
+   "name": "PPS \u03b3 1.0 (faithful)",
+   "normal": [
+    91,
+    100,
+    0.8377378707781101,
+    0.9519274602313131
+   ],
+   "recovery": [
+    96,
+    120,
+    0.7196332642424819,
+    0.8617552356217935
+   ],
+   "completion": [
+    98,
+    120,
+    0.7379908641411742,
+    0.8756969968266718
+   ]
+  },
+  "task_f": {
+   "name": "task proxy alone (faithful)",
+   "normal": [
+    100,
+    100,
+    0.9630065012310038,
+    1.0000000000000002
+   ],
+   "recovery": [
+    92,
+    120,
+    0.6834455285355779,
+    0.8333442491215556
+   ],
+   "completion": [
+    90,
+    120,
+    0.6655886326483037,
+    0.8189017839052589
+   ]
+  }
+ },
+ "matched": [
+  {
+   "a": "pps_f_g06",
+   "b": "blend_f_g08",
+   "normal": [
+    100,
+    100,
+    100
+   ],
+   "recovery": {
+    "a": 109,
+    "b": 97,
+    "n": 120,
+    "diff": 0.09999999999999998,
+    "ci": [
+     0.05,
+     0.15833333333333333
+    ],
+    "mcnemar_p": 0.00048828125,
+    "a_only": 12,
+    "b_only": 0,
+    "rla": {
+     "all": {
+      "n": 120,
+      "retained": 97,
+      "lost": 0,
+      "acquired": 12,
+      "neither": 11
+     },
+     "base": {
+      "n": 40,
+      "retained": 18,
+      "lost": 0,
+      "acquired": 11,
+      "neither": 11
+     },
+     "pps_f_g04": {
+      "n": 40,
+      "retained": 39,
+      "lost": 0,
+      "acquired": 1,
+      "neither": 0
+     },
+     "task_f": {
+      "n": 40,
+      "retained": 40,
+      "lost": 0,
+      "acquired": 0,
+      "neither": 0
+     }
+    }
+   },
+   "completion": {
+    "a": 106,
+    "b": 94,
+    "n": 120,
+    "diff": 0.09999999999999998,
+    "ci": [
+     0.05,
+     0.15833333333333333
+    ],
+    "mcnemar_p": 0.00048828125,
+    "a_only": 12,
+    "b_only": 0,
+    "rla": {
+     "all": {
+      "n": 120,
+      "retained": 94,
+      "lost": 0,
+      "acquired": 12,
+      "neither": 14
+     },
+     "base": {
+      "n": 40,
+      "retained": 15,
+      "lost": 0,
+      "acquired": 11,
+      "neither": 14
+     },
+     "pps_f_g04": {
+      "n": 40,
+      "retained": 39,
+      "lost": 0,
+      "acquired": 1,
+      "neither": 0
+     },
+     "task_f": {
+      "n": 40,
+      "retained": 40,
+      "lost": 0,
+      "acquired": 0,
+      "neither": 0
+     }
+    }
+   }
+  },
+  {
+   "a": "pps_f_g08",
+   "b": "blend_f_g08",
+   "normal": [
+    100,
+    100,
+    100
+   ],
+   "recovery": {
+    "a": 105,
+    "b": 97,
+    "n": 120,
+    "diff": 0.06666666666666665,
+    "ci": [
+     0.025,
+     0.11666666666666667
+    ],
+    "mcnemar_p": 0.0078125,
+    "a_only": 8,
+    "b_only": 0,
+    "rla": {
+     "all": {
+      "n": 120,
+      "retained": 97,
+      "lost": 0,
+      "acquired": 8,
+      "neither": 15
+     },
+     "base": {
+      "n": 40,
+      "retained": 18,
+      "lost": 0,
+      "acquired": 7,
+      "neither": 15
+     },
+     "pps_f_g04": {
+      "n": 40,
+      "retained": 39,
+      "lost": 0,
+      "acquired": 1,
+      "neither": 0
+     },
+     "task_f": {
+      "n": 40,
+      "retained": 40,
+      "lost": 0,
+      "acquired": 0,
+      "neither": 0
+     }
+    }
+   },
+   "completion": {
+    "a": 103,
+    "b": 94,
+    "n": 120,
+    "diff": 0.07499999999999996,
+    "ci": [
+     0.03333333333333333,
+     0.125
+    ],
+    "mcnemar_p": 0.00390625,
+    "a_only": 9,
+    "b_only": 0,
+    "rla": {
+     "all": {
+      "n": 120,
+      "retained": 94,
+      "lost": 0,
+      "acquired": 9,
+      "neither": 17
+     },
+     "base": {
+      "n": 40,
+      "retained": 15,
+      "lost": 0,
+      "acquired": 8,
+      "neither": 17
+     },
+     "pps_f_g04": {
+      "n": 40,
+      "retained": 39,
+      "lost": 0,
+      "acquired": 1,
+      "neither": 0
+     },
+     "task_f": {
+      "n": 40,
+      "retained": 40,
+      "lost": 0,
+      "acquired": 0,
+      "neither": 0
+     }
+    }
+   }
+  },
+  {
+   "a": "pps_f_g06",
+   "b": "task_f",
+   "normal": [
+    100,
+    100,
+    100
+   ],
+   "recovery": {
+    "a": 109,
+    "b": 92,
+    "n": 120,
+    "diff": 0.1416666666666666,
+    "ci": [
+     0.08333333333333333,
+     0.20833333333333334
+    ],
+    "mcnemar_p": 1.52587890625e-05,
+    "a_only": 17,
+    "b_only": 0,
+    "rla": {
+     "all": {
+      "n": 120,
+      "retained": 92,
+      "lost": 0,
+      "acquired": 17,
+      "neither": 11
+     },
+     "base": {
+      "n": 40,
+      "retained": 13,
+      "lost": 0,
+      "acquired": 16,
+      "neither": 11
+     },
+     "pps_f_g04": {
+      "n": 40,
+      "retained": 39,
+      "lost": 0,
+      "acquired": 1,
+      "neither": 0
+     },
+     "task_f": {
+      "n": 40,
+      "retained": 40,
+      "lost": 0,
+      "acquired": 0,
+      "neither": 0
+     }
+    }
+   },
+   "completion": {
+    "a": 106,
+    "b": 90,
+    "n": 120,
+    "diff": 0.1333333333333333,
+    "ci": [
+     0.075,
+     0.2
+    ],
+    "mcnemar_p": 3.0517578125e-05,
+    "a_only": 16,
+    "b_only": 0,
+    "rla": {
+     "all": {
+      "n": 120,
+      "retained": 90,
+      "lost": 0,
+      "acquired": 16,
+      "neither": 14
+     },
+     "base": {
+      "n": 40,
+      "retained": 11,
+      "lost": 0,
+      "acquired": 15,
+      "neither": 14
+     },
+     "pps_f_g04": {
+      "n": 40,
+      "retained": 39,
+      "lost": 0,
+      "acquired": 1,
+      "neither": 0
+     },
+     "task_f": {
+      "n": 40,
+      "retained": 40,
+      "lost": 0,
+      "acquired": 0,
+      "neither": 0
+     }
+    }
+   }
+  },
+  {
+   "a": "pps_f_g08",
+   "b": "task_f",
+   "normal": [
+    100,
+    100,
+    100
+   ],
+   "recovery": {
+    "a": 105,
+    "b": 92,
+    "n": 120,
+    "diff": 0.10833333333333328,
+    "ci": [
+     0.058333333333333334,
+     0.16666666666666666
+    ],
+    "mcnemar_p": 0.000244140625,
+    "a_only": 13,
+    "b_only": 0,
+    "rla": {
+     "all": {
+      "n": 120,
+      "retained": 92,
+      "lost": 0,
+      "acquired": 13,
+      "neither": 15
+     },
+     "base": {
+      "n": 40,
+      "retained": 13,
+      "lost": 0,
+      "acquired": 12,
+      "neither": 15
+     },
+     "pps_f_g04": {
+      "n": 40,
+      "retained": 39,
+      "lost": 0,
+      "acquired": 1,
+      "neither": 0
+     },
+     "task_f": {
+      "n": 40,
+      "retained": 40,
+      "lost": 0,
+      "acquired": 0,
+      "neither": 0
+     }
+    }
+   },
+   "completion": {
+    "a": 103,
+    "b": 90,
+    "n": 120,
+    "diff": 0.10833333333333328,
+    "ci": [
+     0.058333333333333334,
+     0.16666666666666666
+    ],
+    "mcnemar_p": 0.000244140625,
+    "a_only": 13,
+    "b_only": 0,
+    "rla": {
+     "all": {
+      "n": 120,
+      "retained": 90,
+      "lost": 0,
+      "acquired": 13,
+      "neither": 17
+     },
+     "base": {
+      "n": 40,
+      "retained": 11,
+      "lost": 0,
+      "acquired": 12,
+      "neither": 17
+     },
+     "pps_f_g04": {
+      "n": 40,
+      "retained": 39,
+      "lost": 0,
+      "acquired": 1,
+      "neither": 0
+     },
+     "task_f": {
+      "n": 40,
+      "retained": 40,
+      "lost": 0,
+      "acquired": 0,
+      "neither": 0
+     }
+    }
+   }
+  },
+  {
+   "a": "pps_f_g06",
+   "b": "blend_f_g06",
+   "normal": [
+    100,
+    98,
+    100
+   ],
+   "recovery": {
+    "a": 109,
+    "b": 100,
+    "n": 120,
+    "diff": 0.07499999999999996,
+    "ci": [
+     0.03333333333333333,
+     0.125
+    ],
+    "mcnemar_p": 0.00390625,
+    "a_only": 9,
+    "b_only": 0,
+    "rla": {
+     "all": {
+      "n": 120,
+      "retained": 100,
+      "lost": 0,
+      "acquired": 9,
+      "neither": 11
+     },
+     "base": {
+      "n": 40,
+      "retained": 20,
+      "lost": 0,
+      "acquired": 9,
+      "neither": 11
+     },
+     "pps_f_g04": {
+      "n": 40,
+      "retained": 40,
+      "lost": 0,
+      "acquired": 0,
+      "neither": 0
+     },
+     "task_f": {
+      "n": 40,
+      "retained": 40,
+      "lost": 0,
+      "acquired": 0,
+      "neither": 0
+     }
+    }
+   },
+   "completion": {
+    "a": 106,
+    "b": 98,
+    "n": 120,
+    "diff": 0.06666666666666665,
+    "ci": [
+     0.025,
+     0.11666666666666667
+    ],
+    "mcnemar_p": 0.0078125,
+    "a_only": 8,
+    "b_only": 0,
+    "rla": {
+     "all": {
+      "n": 120,
+      "retained": 98,
+      "lost": 0,
+      "acquired": 8,
+      "neither": 14
+     },
+     "base": {
+      "n": 40,
+      "retained": 18,
+      "lost": 0,
+      "acquired": 8,
+      "neither": 14
+     },
+     "pps_f_g04": {
+      "n": 40,
+      "retained": 40,
+      "lost": 0,
+      "acquired": 0,
+      "neither": 0
+     },
+     "task_f": {
+      "n": 40,
+      "retained": 40,
+      "lost": 0,
+      "acquired": 0,
+      "neither": 0
+     }
+    }
+   }
+  },
+  {
+   "a": "pps_f_g04",
+   "b": "blend_f_g04",
+   "normal": [
+    79,
+    86,
+    100
+   ],
+   "recovery": {
+    "a": 113,
+    "b": 106,
+    "n": 120,
+    "diff": 0.05833333333333335,
+    "ci": [
+     0.008333333333333333,
+     0.11666666666666667
+    ],
+    "mcnemar_p": 0.0654296875,
+    "a_only": 9,
+    "b_only": 2,
+    "rla": {
+     "all": {
+      "n": 120,
+      "retained": 104,
+      "lost": 2,
+      "acquired": 9,
+      "neither": 5
+     },
+     "base": {
+      "n": 40,
+      "retained": 25,
+      "lost": 2,
+      "acquired": 8,
+      "neither": 5
+     },
+     "pps_f_g04": {
+      "n": 40,
+      "retained": 39,
+      "lost": 0,
+      "acquired": 1,
+      "neither": 0
+     },
+     "task_f": {
+      "n": 40,
+      "retained": 40,
+      "lost": 0,
+      "acquired": 0,
+      "neither": 0
+     }
+    }
+   },
+   "completion": {
+    "a": 108,
+    "b": 101,
+    "n": 120,
+    "diff": 0.05833333333333335,
+    "ci": [
+     0.025,
+     0.1
+    ],
+    "mcnemar_p": 0.015625,
+    "a_only": 7,
+    "b_only": 0,
+    "rla": {
+     "all": {
+      "n": 120,
+      "retained": 101,
+      "lost": 0,
+      "acquired": 7,
+      "neither": 12
+     },
+     "base": {
+      "n": 40,
+      "retained": 22,
+      "lost": 0,
+      "acquired": 6,
+      "neither": 12
+     },
+     "pps_f_g04": {
+      "n": 40,
+      "retained": 39,
+      "lost": 0,
+      "acquired": 1,
+      "neither": 0
+     },
+     "task_f": {
+      "n": 40,
+      "retained": 40,
+      "lost": 0,
+      "acquired": 0,
+      "neither": 0
+     }
+    }
+   }
+  }
+ ],
+ "gaps": {
+  "recovery": {
+   "pps_f_g02": {
+    "gap": 0.015384615384615441,
+    "ci": [
+     -0.020000000000000018,
+     0.05192307692307685
+    ],
+    "frac_boot_gt0": 0.7607,
+    "n_boot_nan": 506
+   },
+   "pps_f_g04": {
+    "gap": 0.05133333333333334,
+    "ci": [
+     0.0050000000000001155,
+     0.10181902356902355
+    ],
+    "frac_boot_gt0": 0.9829,
+    "n_boot_nan": 0
+   },
+   "pps_f_g06": {
+    "gap": 0.09999999999999998,
+    "ci": [
+     0.04166666666666674,
+     0.15833333333333333
+    ],
+    "frac_boot_gt0": 0.9999,
+    "n_boot_nan": 0
+   },
+   "pps_f_g08": {
+    "gap": 0.06666666666666665,
+    "ci": [
+     0.01666666666666672,
+     0.11666666666666659
+    ],
+    "frac_boot_gt0": 0.996,
+    "n_boot_nan": 0
+   },
+   "pps_f_g10": {
+    "gap": -0.06249999999999989,
+    "ci": [
+     -0.12534846230158725,
+     -0.008333333333333415
+    ],
+    "frac_boot_gt0": 0.0091,
+    "n_boot_nan": 0
+   }
+  },
+  "completion": {
+   "pps_f_g02": {
+    "gap": 0.0019230769230769162,
+    "ci": [
+     -0.036283333333333334,
+     0.043402099970422874
+    ],
+    "frac_boot_gt0": 0.4963,
+    "n_boot_nan": 565
+   },
+   "pps_f_g04": {
+    "gap": 0.05016666666666669,
+    "ci": [
+     0.015666666666666718,
+     0.09166666666666679
+    ],
+    "frac_boot_gt0": 0.9996,
+    "n_boot_nan": 0
+   },
+   "pps_f_g06": {
+    "gap": 0.09999999999999998,
+    "ci": [
+     0.04166666666666663,
+     0.15000000000000002
+    ],
+    "frac_boot_gt0": 1.0,
+    "n_boot_nan": 0
+   },
+   "pps_f_g08": {
+    "gap": 0.07499999999999996,
+    "ci": [
+     0.02499999999999991,
+     0.125
+    ],
+    "frac_boot_gt0": 0.9991,
+    "n_boot_nan": 0
+   },
+   "pps_f_g10": {
+    "gap": -0.014583333333333393,
+    "ci": [
+     -0.054166666666666696,
+     0.019444444444444375
+    ],
+    "frac_boot_gt0": 0.1939,
+    "n_boot_nan": 0
+   }
+  }
+ },
+ "pps_vs_task_branch0": {
+  "pps_f_g02": {
+   "recovery": {
+    "all": {
+     "n": 120,
+     "retained": 91,
+     "lost": 1,
+     "acquired": 24,
+     "neither": 4
+    },
+    "base": {
+     "n": 40,
+     "retained": 12,
+     "lost": 1,
+     "acquired": 23,
+     "neither": 4
+    },
+    "pps_f_g04": {
+     "n": 40,
+     "retained": 39,
+     "lost": 0,
+     "acquired": 1,
+     "neither": 0
+    },
+    "task_f": {
+     "n": 40,
+     "retained": 40,
+     "lost": 0,
+     "acquired": 0,
+     "neither": 0
+    }
+   },
+   "completion": {
+    "all": {
+     "n": 120,
+     "retained": 89,
+     "lost": 1,
+     "acquired": 20,
+     "neither": 10
+    },
+    "base": {
+     "n": 40,
+     "retained": 10,
+     "lost": 1,
+     "acquired": 19,
+     "neither": 10
+    },
+    "pps_f_g04": {
+     "n": 40,
+     "retained": 39,
+     "lost": 0,
+     "acquired": 1,
+     "neither": 0
+    },
+    "task_f": {
+     "n": 40,
+     "retained": 40,
+     "lost": 0,
+     "acquired": 0,
+     "neither": 0
+    }
+   }
+  },
+  "pps_f_g04": {
+   "recovery": {
+    "all": {
+     "n": 120,
+     "retained": 91,
+     "lost": 1,
+     "acquired": 22,
+     "neither": 6
+    },
+    "base": {
+     "n": 40,
+     "retained": 12,
+     "lost": 1,
+     "acquired": 21,
+     "neither": 6
+    },
+    "pps_f_g04": {
+     "n": 40,
+     "retained": 39,
+     "lost": 0,
+     "acquired": 1,
+     "neither": 0
+    },
+    "task_f": {
+     "n": 40,
+     "retained": 40,
+     "lost": 0,
+     "acquired": 0,
+     "neither": 0
+    }
+   },
+   "completion": {
+    "all": {
+     "n": 120,
+     "retained": 89,
+     "lost": 1,
+     "acquired": 19,
+     "neither": 11
+    },
+    "base": {
+     "n": 40,
+     "retained": 10,
+     "lost": 1,
+     "acquired": 18,
+     "neither": 11
+    },
+    "pps_f_g04": {
+     "n": 40,
+     "retained": 39,
+     "lost": 0,
+     "acquired": 1,
+     "neither": 0
+    },
+    "task_f": {
+     "n": 40,
+     "retained": 40,
+     "lost": 0,
+     "acquired": 0,
+     "neither": 0
+    }
+   }
+  },
+  "pps_f_g06": {
+   "recovery": {
+    "all": {
+     "n": 120,
+     "retained": 92,
+     "lost": 0,
+     "acquired": 17,
+     "neither": 11
+    },
+    "base": {
+     "n": 40,
+     "retained": 13,
+     "lost": 0,
+     "acquired": 16,
+     "neither": 11
+    },
+    "pps_f_g04": {
+     "n": 40,
+     "retained": 39,
+     "lost": 0,
+     "acquired": 1,
+     "neither": 0
+    },
+    "task_f": {
+     "n": 40,
+     "retained": 40,
+     "lost": 0,
+     "acquired": 0,
+     "neither": 0
+    }
+   },
+   "completion": {
+    "all": {
+     "n": 120,
+     "retained": 90,
+     "lost": 0,
+     "acquired": 16,
+     "neither": 14
+    },
+    "base": {
+     "n": 40,
+     "retained": 11,
+     "lost": 0,
+     "acquired": 15,
+     "neither": 14
+    },
+    "pps_f_g04": {
+     "n": 40,
+     "retained": 39,
+     "lost": 0,
+     "acquired": 1,
+     "neither": 0
+    },
+    "task_f": {
+     "n": 40,
+     "retained": 40,
+     "lost": 0,
+     "acquired": 0,
+     "neither": 0
+    }
+   }
+  },
+  "pps_f_g08": {
+   "recovery": {
+    "all": {
+     "n": 120,
+     "retained": 92,
+     "lost": 0,
+     "acquired": 13,
+     "neither": 15
+    },
+    "base": {
+     "n": 40,
+     "retained": 13,
+     "lost": 0,
+     "acquired": 12,
+     "neither": 15
+    },
+    "pps_f_g04": {
+     "n": 40,
+     "retained": 39,
+     "lost": 0,
+     "acquired": 1,
+     "neither": 0
+    },
+    "task_f": {
+     "n": 40,
+     "retained": 40,
+     "lost": 0,
+     "acquired": 0,
+     "neither": 0
+    }
+   },
+   "completion": {
+    "all": {
+     "n": 120,
+     "retained": 90,
+     "lost": 0,
+     "acquired": 13,
+     "neither": 17
+    },
+    "base": {
+     "n": 40,
+     "retained": 11,
+     "lost": 0,
+     "acquired": 12,
+     "neither": 17
+    },
+    "pps_f_g04": {
+     "n": 40,
+     "retained": 39,
+     "lost": 0,
+     "acquired": 1,
+     "neither": 0
+    },
+    "task_f": {
+     "n": 40,
+     "retained": 40,
+     "lost": 0,
+     "acquired": 0,
+     "neither": 0
+    }
+   }
+  },
+  "pps_f_g10": {
+   "recovery": {
+    "all": {
+     "n": 120,
+     "retained": 89,
+     "lost": 3,
+     "acquired": 7,
+     "neither": 21
+    },
+    "base": {
+     "n": 40,
+     "retained": 11,
+     "lost": 2,
+     "acquired": 7,
+     "neither": 20
+    },
+    "pps_f_g04": {
+     "n": 40,
+     "retained": 39,
+     "lost": 0,
+     "acquired": 0,
+     "neither": 1
+    },
+    "task_f": {
+     "n": 40,
+     "retained": 39,
+     "lost": 1,
+     "acquired": 0,
+     "neither": 0
+    }
+   },
+   "completion": {
+    "all": {
+     "n": 120,
+     "retained": 89,
+     "lost": 1,
+     "acquired": 9,
+     "neither": 21
+    },
+    "base": {
+     "n": 40,
+     "retained": 10,
+     "lost": 1,
+     "acquired": 9,
+     "neither": 20
+    },
+    "pps_f_g04": {
+     "n": 40,
+     "retained": 39,
+     "lost": 0,
+     "acquired": 0,
+     "neither": 1
+    },
+    "task_f": {
+     "n": 40,
+     "retained": 40,
+     "lost": 0,
+     "acquired": 0,
+     "neither": 0
+    }
+   }
+  }
+ }
+}
