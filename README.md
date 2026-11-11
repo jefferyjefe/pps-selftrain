@@ -1,213 +1,309 @@
 # pps-selftrain
 
-Lab notebook for reproducing Proxy Policy Steering (PPS, Ning, Wang, Ma and Fang, CoRL 2026, arXiv 2609.09148) and extending it with a self-training loop. This file is written before any results exist. Sections above the log state what we plan to test and how. The log records what actually happened.
+```mermaid
+flowchart LR
+    obs[Observation] --> base[Frozen π0.5 base]
+    obs --> task[Task proxy]
+    obs --> ref[Reference proxy]
+    base --> pps["PPS<br/>base + γ × (task − reference)"]
+    task --> pps
+    ref --> pps
+    base --> blend["Blend<br/>(1 − γ) × base + γ × task"]
+    task --> blend
+    pps --> normal[Same normal trials]
+    pps --> drop[Same drop bank]
+    blend --> normal
+    blend --> drop
+    normal -->|success| curve["Success versus recovery<br/>curve across γ"]
+    drop -->|recovery| curve
+```
 
-PPS keeps a flow matching base policy frozen and trains two small proxies. A reference proxy is distilled from the base on target task observations. A task proxy starts as a copy of the reference and is fine tuned on task demos. At every denoising step the sampler follows
+## How it works
+
+This project studies the trade-off between **task success** and **recovery** from disturbances when a frozen robot
+generalist, **π0.5**, is adapted to a new task. **Proxy Policy Steering** (PPS, arXiv 2609.09148) is studied in depth.
+PPS keeps the base frozen and trains two small proxies. The **reference proxy** is distilled from the base. The
+**task proxy** starts as a copy of the reference and is fine-tuned on task demos.
+
+Both methods change only the velocity at each of the 10 flow matching denoising steps. PPS adds γ times the
+difference of the two proxies to the base velocity. The **blend** mixes the base and the task proxy directly.
 
 ```
-v_pps = v_base + gamma * (v_task - v_ref)
+v_pps   = v_base + γ * (v_task - v_ref)
+v_blend = (1 - γ) * v_base + γ * v_task
 ```
 
-so the base stays in control wherever the two proxies agree.
+Replace the reference proxy with the base itself (v_ref = v_base) and PPS becomes exactly the blend. The reference
+proxy is the only thing PPS adds. The main question is whether it gives a better success versus recovery trade-off
+than the blend across γ. Follow-up questions are
 
-## Research question
+- which recoveries each method loses, and why
+- what self-training on a method's own successes does to the trade-off
+- where LoRA, DSRL, online UF-OPS and a residual policy land on the same curve
 
-"When PPS is trained repeatedly on its own successful rollouts, does the reference proxy's imitation of the base degrade on newly visited states, and does re-distilling it on those states preserve recovery?"
+This builds on the official PPS code (github.com/TritiumR/pps) and runs in **LIBERO**, a setting their repo does not
+cover. All runs use openpi's pi05_libero checkpoint on LIBERO-90 task 59 (**t59**), "pick up the tomato sauce and put
+it in the tray", which is outside pi05_libero's fine-tuning data.
 
-## Prediction
+## Repository layout
 
-Without refresh, the gap between v_ref and v_base grows on states visited in later rounds, so the steering delta (v_task minus v_ref) picks up imitation error and recovery under perturbation declines across rounds. With refresh, the gap stays near round-zero levels and recovery holds. If the gap never grows, refreshing the reference proxy won't matter, and the finding is that the reference proxy is already robust to this drift. This is a hypothesis to test. It is not a result.
-
-## Conditions
-
-Four conditions, all from the same starting demos, with the base frozen throughout.
-
-1. PPS at round zero. Reference proxy distilled from the base, task proxy fine tuned from the reference on the original demos.
-2. Task proxy trained longer on the original demos, with gradient updates matched to conditions 3 and 4. This is the matched-data control.
-3. Self-training with the reference proxy fixed. Each round, run a fixed budget of steered rollouts, keep the successes, add them to the task proxy's training set, and retrain the task proxy initialized from the fixed reference proxy.
-4. Self-training with the reference proxy refreshed. Same as 3, but each round the reference proxy is first re-distilled from the frozen base on a sample of states visited in that round's rollouts (DAgger with the base as expert), and the task proxy is then initialized from the refreshed reference proxy.
-
-In both 3 and 4 the task proxy is initialized from the current reference proxy every round, and this is what keeps the comparison fair. Each round's steering delta starts at zero and grows only from what the task proxy learns, so the one difference between 3 and 4 is whether the reference proxy was refreshed.
-
-## Controls
-
-- Equal gradient updates across conditions 2, 3 and 4.
-- Gamma selected once on validation episodes at round zero and fixed across rounds.
-- A fixed rollout budget per round, with the number of successes reported.
-- Collection, validation and final evaluation use disjoint starting configurations.
-- Perturbations applied at a defined task event, such as after grasp.
-- 100 to 200 evaluation episodes per condition per round.
-- Three seeds minimum.
-
-## Measurements
-
-Recorded every round for every condition.
-
-- Success rate.
-- Recovery rate under perturbation.
-- Action diversity across successful rollouts.
-- Reference proxy fidelity, defined as cosine similarity and MSE between v_ref and v_base on a held-out sample of that round's visited states, logged per denoising step.
-- Compute cost of the round, including base forward passes used for refresh.
-
-## Limitations
-
-- The loop is success-only, because the flow-matching loss cannot use failed rollouts. Q-Planning reports that success-only fine-tuning stalled on real tasks.
-- Refreshing the reference proxy costs base forward passes each round. That cost will be measured in the pilot.
-
-## Related work and citations
-
-Closest prior work
-- ReGuide, Lin et al., 2026, arXiv 2606.28939. Feeds successful guided rollouts back into a diffusion policy across rounds. Updates the policy; we keep the base frozen and update only the proxies.
-- Q-Planning, Giridhar et al., 2026, arXiv 2608.21204. Frozen base policy plus a small learned Q-function that improves from both successes and failures. Reports that fine-tuning on successes alone stalls. Our loop is success-only, so this is a known limitation.
-- DAgger, Ross et al., AISTATS 2011. Querying the expert on learner-visited states. Condition 4 re-distills the reference proxy from the frozen base on visited states, which is DAgger with the base as expert.
-- On-Policy Distillation, Agarwal et al., ICLR 2024, arXiv 2306.13649. Student learns from teacher feedback on its own samples. Same motivation as condition 4, from language models.
-
-Background
-- Probe, Learn, Distill, Xiao et al., ICLR 2026, arXiv 2511.00091. Residual RL specialists collect recovery-rich data, then the generalist is fine-tuned on it. We never fine-tune the generalist.
-- Self-Imitation Learning, Oh et al., ICML 2018. Learning from an agent's own past successes.
-
-Why we measure diversity
-- On-Policy Self-Distillation Reduces Output Diversity, Nicolicioiu et al., 2026, arXiv 2606.26091. Self-distillation can raise average performance while collapsing the variety of successful strategies. We track action diversity every round for this reason.
-
-Method being reproduced
-- Proxy Policy Steering, Ning et al., CoRL 2026, arXiv 2609.09148.
-
-## Milestones
-
-0. Find a base checkpoint and a LIBERO task where the base succeeds 10 to 50 percent of the time.
-1. PushT toy. A small state based flow matching version of the whole PPS pipeline that runs on a laptop. See docs/toy.md.
-2. Full reproduction on pi0.5 with a gamma sweep plot.
-3. Self-training loop with the four conditions above.
-
-## Layout
-
-- `toy/` shared code for the PushT toy (data, model, PPS sampler, env, training loop)
-- `scripts/toy/` one script per toy step
-- `scripts/` future scripts for the full reproduction
-- `docs/` notes on each part
-- `results/` small result files and plots that are tracked in git, with superseded runs kept under `results/archive/`
-- `data/` and `checkpoints/` local only and ignored by git
+```
+pps_real/                     shared code for π0.5 in LIBERO
+  sampler.py                  openpi's sampler with a per step velocity hook
+  policy.py                   SteerablePolicy, openpi's input and output transforms around the sampler
+  libero_obs.py               LIBERO observation to policy input, as openpi's LIBERO client does it
+  perturb.py                  grasp test and forced gripper open
+scripts/
+  m0/                         base checkpoint and task screen on LIBERO-90
+  stage2/                     t59 data, proxy training and proxy checks
+    export_demo_states.py     demo sim states from the LIBERO hdf5
+    render_demo_obs.py        policy observations for every demo frame
+    collect_distill.py        (x_t, t, v_base) on π0.5's own path, the reference distillation set
+    paper_proxy.py            v3 ours proxy, DINOv3 ViT-S/16 encoder and a Gemma style action expert
+    train_reference_paper.py  reference proxy distillation
+    build_task_data.py        demo action chunks in π0.5's action space
+    train_task_paper.py       task proxy fine-tuning, initialized from the reference
+    check_task_paper.py       proxy fidelity on the distillation set
+  stage3/                     t59 evaluation
+    serve_eval.py             policy server for the base, pps and task methods
+    pps_steer.py              PPS hook and the task proxy alone
+    t59_sim.py                env setup, mid-carry event, exact snapshots and the drop
+    run_t59.py                normal trials, drop branches and replay checks
+    select_pool.py            picks the saved drop states
+    check_gamma0.py           γ = 0 against π0.5, bit for bit
+    run_4090.sh               full unattended eval on the RTX 4090
+    summarize_4090.py         results.json and SUMMARY.md for a run
+  toy/                        one script per step of the PushT toy
+toy/                          PushT toy of the whole pipeline, small enough for a laptop
+docs/                         notes on the toy and on stage 2
+results/                      small tracked result files
+runs/eval_t59/                tracked summary of the first t59 eval
+data/  checkpoints/           local only, ignored by git
+```
 
 ## Setup
 
-Environment management uses uv. Python is pinned to 3.12 and every dependency is pinned in pyproject.toml and uv.lock.
+### 1. Environment
+
+All evaluation runs on an **RTX 4090** (24 GB). Policy numerics in bf16 differ between GPU types from the first
+policy call, so trials from different GPUs cannot be paired. Heavy training runs on an RTX PRO 6000.
+
+Everything lives on the pod's network volume at /workspace. Two Python environments come from openpi at commit
+215abfb.
+
+- **openpi venv**, /workspace/openpi/.venv, Python 3.11 with torch 2.7.1+cu128. It runs π0.5, the proxies, the
+  policy servers and training. Its python links to the container's /usr/bin/python3.11, so the image must ship
+  Python 3.11.
+- **LIBERO venv**, /workspace/openpi/examples/libero/.venv, Python 3.8. It runs the simulator clients.
+
+Our changes to openpi (torch from the PyTorch cu128 index) are in results/m0/openpi_local.patch. To rebuild the
+venvs, follow openpi's README and examples/libero/README.md at that commit and apply the patch. The proxies need timm
+1.0.20 or newer for DINOv3. It sits in /workspace/.cache/proxy_pylib, installed with `--no-deps` so the openpi venv
+stays untouched. The PushT toy uses this repo's own uv environment (Python 3.12, `uv sync`).
+
+A fresh container lacks the glvnd EGL loader, and MuJoCo rendering fails. Install the EGL packages on every new
+container, since they live outside /workspace. Then source the environment file, which keeps all caches on the
+network volume and sets `MUJOCO_GL=egl` and `LIBERO_CONFIG_PATH=/workspace/.libero`.
 
 ```bash
-uv sync
+apt-get install -y libegl1 libgl1 libglvnd0
+source /workspace/env.sh
 ```
 
-Run the toy end to end, with three proxy seeds. About 25 minutes on an M5 laptop.
+Each policy server holds π0.5 and both proxies in about 8 GB. Run at most **2 policy servers** on one 24 GB card. A
+third runs out of memory on its first call. RunPod's nginx holds port 8001, so servers use 8010 and 8011.
+
+### 2. Assets and checkpoints
+
+None of this is in git. data/ and checkpoints/ in the repo are empty placeholders.
+
+```
+/workspace/
+├── env.sh                     environment variables, source first
+├── .libero/config.yaml        LIBERO paths
+├── openpi/                    openpi at 215abfb, with both venvs and third_party/libero
+├── external/pps_official/     official PPS code, cloned from github.com/TritiumR/pps at a22f9ad
+├── pps-selftrain/             this repo
+├── checkpoints/
+│   ├── openpi/                openpi's download cache (OPENPI_DATA_HOME)
+│   └── pi05_libero_pytorch/   π0.5 base in PyTorch
+├── data/
+│   ├── libero_datasets/       LIBERO demo hdf5 files
+│   ├── t59_demos/             t59 demo sim states and rendered policy observations
+│   ├── t59_distill/           reference proxy distillation set
+│   └── t59_task/              task proxy targets
+└── runs/                      proxy checkpoints, eval runs and logs
+```
+
+The t59 demos come from the Hugging Face dataset yifengzhu-hf/LIBERO-datasets. serve_eval.py loads these
+checkpoints by default.
+
+| Checkpoint | Path |
+|---|---|
+| π0.5 base (pi05_libero, PyTorch bf16) | /workspace/checkpoints/pi05_libero_pytorch |
+| Reference proxy, v3 ours | /workspace/runs/reference_t59_paper_all50/final.pt |
+| Task proxy, v3 ours | /workspace/runs/task_t59_paper_all50/final.pt |
+
+### 3. Base policy
+
+The base is openpi's **pi05_libero** checkpoint, converted from JAX to PyTorch bf16 with openpi's converter. The
+converter does not copy the norm stats for this layout, so copy the assets folder by hand.
 
 ```bash
-uv run python scripts/toy/train_base.py
+cd /workspace/openpi
+.venv/bin/python examples/convert_jax_model_to_pytorch.py \
+    --checkpoint_dir /workspace/checkpoints/openpi/openpi-assets/checkpoints/pi05_libero \
+    --config_name pi05_libero \
+    --output_path /workspace/checkpoints/pi05_libero_pytorch
+cp -r /workspace/checkpoints/openpi/openpi-assets/checkpoints/pi05_libero/assets /workspace/checkpoints/pi05_libero_pytorch/
+```
+
+The base always runs **eager**. The steering hook needs the eager path, and torch.compile changes individual
+trajectories.
+
+## Training
+
+These commands train the **v3 ours** proxies. Run them in the openpi venv from the repo root, except
+render_demo_obs.py, which needs the LIBERO venv. Each script's docstring lists its options. The repo has no training
+scripts for the faithful proxies yet.
+
+```bash
+cd /workspace/pps-selftrain
+source /workspace/env.sh
+export PYTHONPATH=.
+PY=/workspace/openpi/.venv/bin/python
+```
+
+**Distillation data.** The frozen base is rolled from 16 seeded noise draws on every frame of the 50 t59 demos, and
+(x_t, t, v_base) is recorded at each denoising step on its own path.
+
+```bash
+$PY scripts/stage2/export_demo_states.py
+PYTHONPATH=.:/workspace/openpi/third_party/libero /workspace/openpi/examples/libero/.venv/bin/python \
+    scripts/stage2/render_demo_obs.py
+$PY scripts/stage2/collect_distill.py
+$PY scripts/stage2/verify_distill.py
+```
+
+**Reference proxy**, distilled from the stored base velocities. 20,000 steps at batch 64 on all 50 demos.
+
+```bash
+$PY scripts/stage2/train_reference_paper.py --all-demos --out /workspace/runs/reference_t59_paper_all50
+```
+
+**Task proxy**, initialized from the reference and fine-tuned on the demo action chunks with openpi's flow matching
+loss.
+
+```bash
+$PY scripts/stage2/build_task_data.py
+$PY scripts/stage2/train_task_paper.py \
+    --init /workspace/runs/reference_t59_paper_all50/final.pt --out /workspace/runs/task_t59_paper_all50
+$PY scripts/stage2/check_task_paper.py
+```
+
+final.pt in each output directory is the model.
+
+## Evaluation
+
+Evaluation pairs policy servers in the openpi venv with simulator clients in the LIBERO venv. Run everything from the
+repo root on the RTX 4090. Each server loads π0.5 and both proxies and serves every method. The client picks one per
+request with `--method`, which is `base`, `pps` or `task`. Clients write `<out>/<method>/<name>.jsonl` and resume
+where they stopped.
+
+```bash
+cd /workspace/pps-selftrain
+source /workspace/env.sh
+SPY=/workspace/openpi/.venv/bin/python
+CPY=/workspace/openpi/examples/libero/.venv/bin/python
+R=/workspace/runs/eval_t59_4090
+PYTHONPATH=. $SPY scripts/stage3/check_gamma0.py --out $R/checks/gamma0_check.json
+PYTHONPATH=. $SPY scripts/stage3/serve_eval.py --port 8010 &
+PYTHONPATH=. $SPY scripts/stage3/serve_eval.py --port 8011 &
+export PYTHONPATH=.:/workspace/openpi/third_party/libero
+```
+
+run_4090.sh runs the normal trials and the drop test below unattended on two servers, for the base, PPS at γ 0.4 and
+the task proxy alone, then writes results.json and SUMMARY.md. It reuses the saved states already in $R/pool. Create
+$R/STOP to end it early.
+
+```bash
+nohup setsid bash scripts/stage3/run_4090.sh > /workspace/runs/eval_t59_4090/logs/run_4090.nohup 2>&1 < /dev/null &
+```
+
+> [!IMPORTANT]
+> **Eval rules**
+> - Run every eval on one GPU type, the RTX 4090.
+> - γ = 0 must reproduce π0.5 bit for bit. check_gamma0.py tests this before any PPS run.
+> - Every saved drop state leaves at least 130 env steps of the trial's budget after the event.
+> - Restoring a state never calls mj_forward. It rewrites qacc_warmstart and changes the next step.
+> - The drop holds the arm still and forces the gripper open for 10 steps.
+> - Success and recovery definitions are written down before a run.
+
+### Normal trials
+
+Trial i starts from LIBERO init state i mod 50 with env seed 7 + i and its own noise stream, so every method sees the
+same trials. Each trial runs 10 settle steps and up to 400 policy steps, replanning every 5 actions. Success is
+LIBERO's own goal check. π0.5 trials also save a snapshot at their first mid-carry event for the drop bank.
+
+```bash
+$CPY scripts/stage3/run_t59.py paired --port 8010 --method base --trial-list $(seq 0 199) --out $R
+$CPY scripts/stage3/run_t59.py paired --port 8011 --method pps --trial-list $(seq 0 199) --out $R
+```
+
+### Drop test
+
+The **drop bank** is 40 saved states, each a π0.5 trial snapshotted at its first **mid-carry event**. At that step the
+bottle is grasped, at least 5 cm above its resting height and at least 5 cm from the tray. A **drop branch** restores a state, holds
+the arm still with the gripper forced open for 10 steps, then lets the policy replan until success or the end of the
+trial's budget. Each state has 5 branches with their own noise, so each method gets 200 branches. A branch that
+succeeds is a **recovery**.
+
+Select the states, check that branching is exact, then run the branches.
+
+```bash
+python3 scripts/stage3/select_pool.py --root $R
+$CPY scripts/stage3/run_t59.py simreplay --port 8010 --out $R --states $(seq 0 39)
+$CPY scripts/stage3/run_t59.py replay --port 8010 --out $R --states $(seq 0 39)
+$CPY scripts/stage3/run_t59.py repeat --port 8010 --method base --pairs 0:0 1:0 2:0 --tag a --out $R
+$CPY scripts/stage3/run_t59.py repeat --port 8011 --method base --pairs 0:0 1:0 2:0 --tag b --out $R
+$SPY scripts/stage3/compare_repeat.py $R
 ```
 
 ```bash
-uv run python scripts/toy/make_task.py
+PAIRS=$(for s in $(seq 0 39); do for b in 0 1 2 3 4; do echo $s:$b; done; done)
+$CPY scripts/stage3/run_t59.py drop --port 8010 --method base --pairs $PAIRS --out $R
+$CPY scripts/stage3/run_t59.py drop --port 8011 --method pps --pairs $PAIRS --out $R
 ```
 
-```bash
-for s in 0 1 2; do uv run python scripts/toy/distill_ref.py --seed $s && uv run python scripts/toy/train_task.py --seed $s; done
-```
+### γ sweep for PPS and the blend
 
-```bash
-uv run python scripts/toy/eval.py --seeds 0 1 2
-```
+The sweep runs PPS and the blend at each γ on the same normal trials and the same drop bank, and gives one success
+versus recovery curve per method. At γ = 0 both rules are π0.5 alone. At γ = 1 the blend is the task proxy alone.
 
-## Log
+The server already takes any γ per request. The rest is not in the code yet. run_t59.py fixes PPS at γ 0.4 in
+`METHODS` and has no `--gamma` flag, and pps_steer.py and serve_eval.py have no blend method.
 
-### 2026-11-03
+## Differences from the official PPS code
 
-Notes from building the PushT toy, limited to what did not go as planned. Numbers for this first version come from results/archive/2026-11-03_shift40, where success means the env's 0.95 threshold.
+The **faithful** version matches the official code in these points.
 
-- Filtering episodes by goal region is impossible in PushT, because every episode shares one goal pose. The variant translates the goal by (40, 40) px instead.
-- lerobot/pusht has no block pose in its state, so the toy joins the block keypoints from lerobot/pusht_keypoints, which holds the same 206 episodes.
-- Only 7 of 206 PushT demos ever reach the env's 0.95 coverage success threshold. The 50 variant demos are therefore near successes with final coverage of at least 0.9 (mean 0.92, 4 of 50 above 0.95).
-- The toy does not show the paper's interior gamma optimum. On the variant the task proxy alone succeeds 4.8 percent of the time, and PPS at gamma 0.25 to 0.75 stays at or below 1.2 percent. Only gamma 1 (6.7 percent) beats the task proxy, in 2 of 3 seeds and tied in the third. That gap is about 1.4 pooled standard errors, so it is not established. A likely reason is that on this variant the base's prior points at the old goal everywhere, so keeping part of the base velocity hurts.
-- All success rates on the variant are under 10 percent, so the toy has little resolution for comparing conditions. In a one-off check that is not in the repo, a proxy-sized network trained from scratch on the same 50 demos without translation reached 1 percent on the original task. That suggests the limit is the 50 demos and not a bug in the translation.
+- **Real action dims only.** The proxies predict, train on and steer only the 7 LIBERO action dims, not the 25 padding
+  dims.
+- **Image augmentation** in distillation and task training. Crop and rotation on the third person camera, color
+  jitter on every camera, and DINOv3 RoPE coordinate jitter.
+- **State input.** The robot state enters the proxy as one token.
+- **Their architecture and attention mask.** Image, state and action tokens run as one sequence through every expert
+  layer, under their causal mask.
+- **Online distillation sampling.** Fresh noise at every training step and one stratified time per 0.1 bin on the
+  teacher's own path.
+- **Their learning rate, steps and batch size.** One learning rate group at peak 2.5e-5 with their cosine schedule.
 
-### 2026-11-03, variant redesign
+The earlier proxies from scripts/stage2/paper_proxy.py were built from the paper's text alone (arXiv v3) and differ on
+each point above. They are kept as the **v3 ours** ablation.
 
-What changed and why.
+## Credits
 
-- The 40 px goal shift left the base at zero success with a prior that pointed at the wrong goal everywhere. That is the one setting the paper says PPS should not help, so it was not a fair test. The variant was redesigned so the base is weak but not hopeless.
-- Primary metrics are now mean max coverage and success at 0.90, meaning max coverage above 0.90 at any point in the episode. Success at the env's 0.95 threshold stays in every JSON file as success_095. Only 7 of 206 human demos ever reach 0.95, so the 0.95 rates sat near zero and could not separate conditions.
-- The base was not retrained. Re-evaluated on the full task with the same 200 episodes as before it gets mean max coverage 0.738, success at 0.90 of 67.5 percent and success at 0.95 of 40.0 percent.
-- Goal shift sweep, offset (s, s), base on 200 validation episodes each. 8 px gives coverage 0.707 and success at 0.90 of 11.0 percent. 12 px gives 0.640 and 4.0 percent. 16 px gives 0.568 and 3.0 percent. 20 px gives 0.499 and 3.0 percent. Only 8 px lands inside the 10 to 30 percent band, so it was chosen and the hard initial pose fallback was not needed. Note that 8 px sits near the bottom of the band.
-- New demos for the 8 px shift. 194 of 206 translated demos replay within 1 px, 89 of those end at coverage 0.9 or higher, and 50 were sampled (mean final coverage 0.92, all 50 above 0.90, 3 above 0.95).
-- Reference and task proxies retrained for seeds 0, 1 and 2. The reference matches the base at cosine 0.994 along the base sampler's path. The task proxy moved only a little from the reference (cosine 0.99, residual norm about 0.67 against 5.96 for the base velocity).
-- Gamma sweep extended with 1.25 and 1.5. The plot now has one panel per primary metric. Old results are in results/archive/2026-11-03_shift40.
-
-Results on the variant, 3 proxy seeds by 200 evaluation episodes, same starts and noise for every condition.
-
-| Condition | Mean max coverage | Success at 0.90 |
-| --- | --- | --- |
-| Base alone | 0.657 | 12.5% |
-| Task proxy alone | 0.565 | 30.0% |
-| Reference proxy alone | 0.454 | 6.3% |
-| PPS gamma 0 | 0.657 | 12.5% |
-| PPS gamma 0.25 | 0.693 | 17.7% |
-| PPS gamma 0.5 | 0.694 | 23.8% |
-| PPS gamma 0.75 | 0.687 | 35.0% |
-| PPS gamma 1.0 | 0.691 | 38.7% |
-| PPS gamma 1.25 | 0.665 | 39.5% |
-| PPS gamma 1.5 | 0.642 | 35.2% |
-
-- No middle gamma peak. Success at 0.90 rises up to gamma 1 and 1.25 and drops at 1.5. Gamma 0.5 is 15.2 ± 2.4 points below gamma 1. Mean max coverage is flat from gamma 0.25 to 1.0 (gamma 0.5 minus gamma 1 is 0.003 ± 0.013) and falls above 1. The peak check in results/toy_gamma_sweep.json finds no middle peak on either metric. Differences here are paired over the same 600 episodes, ± one standard error.
-- PPS does beat both of its parts. At gamma 1 it is above the task proxy alone by 0.125 ± 0.018 in coverage and 8.8 ± 2.5 points in success at 0.90, and above the base by 0.033 ± 0.014 and 26.2 ± 2.4 points.
-- The two metrics disagree on shape. Coverage rewards any gamma from 0.25 to 1.0 about equally, while success at 0.90 keeps improving up to gamma 1. One reading, not tested here, is that the base already gets the T close and the residual mostly helps with the last few pixels.
-- Decision. The toy stops here without a middle gamma peak. Next is milestone 0.
-
-### 2026-11-03, research question revised
-
-The research question, prediction, conditions, controls and milestone 3 were rewritten, and Measurements, Limitations and Related work sections were added. No code or results changed, and no self-training run has happened yet.
-
-- Why. PPS steers with the difference between the task and reference proxies, and the reference proxy is distilled from the base only on the original task observations. Self-training sends rollouts into states that distillation never covered, so any error in the reference proxy's imitation of the base there feeds straight into the steering delta. The old design compared self-training with training longer but could not tell this effect apart from the kind of data being kept. The new design measures reference proxy fidelity every round and adds condition 4, which re-distills the reference proxy on visited states, to test whether this drift matters.
-- Two of the three open design decisions listed under the old Conditions section are now settled. Each round the task proxy restarts from the current reference proxy, and steered rollouts do the collecting. The sampling ratio between original demos and kept rollouts is still open.
-
-### 2026-11-04, milestone 0
-
-Milestone 0 is met with pi05_libero on held-out LIBERO-90 tasks. Full numbers are in results/milestone0.md, and raw per-episode records are in results/m0/. Setup is openpi commit 215abfb with the PyTorch backend on an RTX PRO 6000 Blackwell (sm_120), and the local openpi changes are in results/m0/openpi_local.patch. The eval scripts are in scripts/m0/. The server takes flow matching noise from the client, seeded per episode, so every episode is reproducible. A rerun of 5 episodes gave identical outcomes and step counts.
-
-Install problems and fixes.
-
-- torch build. openpi's uv.lock pins torch 2.7.1 from PyPI, which is the CUDA 12.6 build and has no sm_120 kernels. Fixed by adding the PyTorch cu128 index as a uv source for torch and torchvision and re-locking, which gives 2.7.1+cu128 with sm_120. The transformers patch openpi needs was applied with UV_LINK_MODE=copy so it stays out of the uv cache.
-- EGL. MuJoCo headless rendering failed with "'NoneType' object has no attribute 'eglQueryString'" because the container had the NVIDIA EGL vendor library but no glvnd loader libEGL.so.1. Fixed with apt-get install libegl1 libgl1 libglvnd0. This lives outside /workspace and has to be redone on a fresh pod.
-- LIBERO config. LIBERO asks for a config path interactively on first import. Fixed by writing /workspace/.libero/config.yaml and setting LIBERO_CONFIG_PATH.
-- Checkpoint conversion. openpi's JAX to PyTorch converter copies assets from the parent of the checkpoint directory, which does not hold them for the downloaded layout, so the norm stats were missing. Fixed by copying the assets folder into each converted checkpoint by hand.
-
-Two smaller issues. RunPod's nginx holds port 8001, so servers use 8000 and 8002 to 8005. torch.compile max-autotune logs runtime errors for some matmul candidates on sm_120, but inductor skips them and the compiled policy runs fine. All environment variables are in /workspace/env.sh.
-
-What pi05_libero was trained on. The pi05_libero config fine-tunes on physical-intelligence/libero, which openpi builds from libero_10, libero_goal, libero_object and libero_spatial. The dataset's task list has exactly those 40 tasks. LIBERO-90 is excluded entirely. The hold-out is mostly at the scene level, because several LIBERO-90 instructions reuse training wording in a new scene (three are word for word identical). Task 38 is the reverse case, a new instruction in a scene used by a LIBERO-10 training task. Whether pi05_base saw LIBERO in pretraining is not documented.
-
-The screen is bimodal. All 90 LIBERO-90 tasks were run for 5 episodes each, on init states kept apart from the evaluation states. 56 tasks went 0 of 5 and 16 went 5 of 5, and only 9 landed at 1 or 2 of 5. Most held-out tasks are therefore all or nothing for this checkpoint, and the usable middle is small.
-
-Evaluation, 30 episodes each on init states 0 to 29.
-
-| libero_90 task | Success | 95% interval |
-| --- | --- | --- |
-| 28 close the top drawer of the cabinet | 40.0% | 24.6 to 57.7 |
-| 30 put the black bowl on the plate | 70.0% | 52.1 to 83.3 |
-| 38 put the right moka pot on the stove | 46.7% | 30.2 to 63.9 |
-| 59 pick up the tomato sauce and put it in the tray | 36.7% | 21.9 to 54.5 |
-| 64 stack the right bowl on the left bowl and place them in the tray | 53.3% | 36.1 to 69.8 |
-
-- Uncertainty caveat. With 30 episodes each interval spans about 30 points, so the order of tasks 28, 38, 59 and 64 is not established and any could sit a little outside the band. The 5-episode screen was a weak guide, since task 30 went from 2 of 5 to 70 percent.
-- Cost. 10 denoising steps by default. A policy call takes 44 ms at batch 1, and an episode takes 3 to 8 s with the GPU to itself. Peak GPU memory is 7.77 GB allocated and 8.11 GB reserved per server.
-- Experiments 2 (pi05_base on LIBERO without fine-tuning) and 3 (object placement offsets) were skipped because experiment 1 met the target.
-- Decision. Task 59 is the primary task, with task 38 and then task 28 as backups. Tasks 59 and 38 are pick-and-place tasks, so a mid-episode perturbation is natural for the later recovery tests.
-
-### 2026-11-04, stage 2 plumbing
-
-Stage 2 starts on t59 with the plumbing for PPS on pi05_libero. No proxies are trained yet. Details and every departure from the paper are in docs/stage2.md.
-
-- Steering capable sampler. pps_real/sampler.py copies openpi's PyTorch sample_actions and adds a hook that sees (x_t, t, v_base) at each of the 10 denoising steps and may replace the velocity. With torch.compile off it is bit for bit equal to the stock sampler on 20 t59 observations with fixed noise, with no hook, with recording, identity and zero delta PPS hooks, through the full policy transforms, and batched (results/stage2/sampler_check.json).
-- The hook needs the eager path. The compiled stock sampler that milestone 0 served is itself not bit exact with eager stock (actions differ by up to 0.010), so the base from here on is the eager one. Our hooked sampler takes 92 ms per call against 37 ms for compiled stock, a 2.46 times slowdown. The hook itself costs about 2 ms.
-- The 50 t59 demos were downloaded from yifengzhu-hf/LIBERO-datasets and every one of their 5571 sim states was re-rendered at eval resolution, because the hdf5 only stores 128 px images.
-- Reference proxy distillation dataset, following the paper's Eq. 5 and Appendix A.3 as the toy did. The frozen base was rolled from 16 seeded noise draws on each of the 5571 frames of the 50 t59 demos, and (x_t, t, v_base) was recorded at every denoising step on its own path. That is 89,136 trajectories and 891,360 tuples, 3.15 GB in /workspace/data/t59_distill with a manifest. It took 53 GPU minutes, about 89k prefix passes and 891k action expert passes.
-- The proxies will read the base's own frozen final layer prefix features, each camera's tokens pooled to a 4 by 4 grid plus the mean language token (33 tokens of width 2048), instead of raw pixels. docs/stage2.md gives the reasons.
-- Targets were collected at batch 64. Teacher forced against the base at batch 1 they agree to cosine 0.99995 per step. In a free replay, 1 of 64 sampled trajectories drifted to a visibly different action chunk from bf16 rounding alone, so the base's flow is sensitive for a small share of draws.
-- Perturbation wrapper for t59 (pps_real/perturb.py, scripts/stage2/eval_perturb.py). The event is the first step at which the gripper has closed on the bottle, meaning both fingers touch it, the gripper is commanded closed, its finger target is inside the actual opening and the fingers have stalled. Two simpler definitions failed on the first 10 episodes. robosuite's fingerpad test never fired on this bottle, and contact alone fired on a fingertip brushing past. The perturbations are a 5 cm teleport of the bottle in a random horizontal direction, rejecting directions that would hit the gripper, and opening the gripper for 3 steps. LIBERO's gripper integrates its command, so 3 steps of an open action would never open it, and the wrapper sets the gripper's internal target open instead.
-- Verification. Every perturbed episode fires at the same step as its unperturbed twin, and every fired event passes the timing checks (results/stage2/perturb_summary.json). Videos of 2 fired episodes per condition are in /workspace/runs/stage2/videos.
-- Recovery baselines for the base, eager sampler, 30 episodes each on init states 0 to 29. Unperturbed 9 of 30 (30.0 percent), teleport 9 of 30, release 10 of 30. The event fires in only 14 of 30 episodes, because the base never closes on the bottle in the other 16 and none of those succeed. Given the event, success is 9 of 14 unperturbed, 9 of 14 after a teleport and 10 of 14 after a release (intervals about 45 points wide). At this strength neither perturbation measurably hurts the base, which grasped the bottle again after 13 of 14 teleports and all 14 releases. Stronger perturbations will probably be needed for the stage 3 recovery comparisons.
-- The unperturbed eager base got 9 of 30 against 11 of 30 for milestone 0's compiled base on the same init states and noise, with the same outcome in 20 of 30 episodes. Compilation alone changes about a third of the trajectories. The eager number is the reference from here on.
+- **Proxy Policy Steering** by Ning, Wang, Ma and Fang, arXiv 2609.09148. Official code at github.com/TritiumR/pps.
+- **openpi** by Physical Intelligence, github.com/Physical-Intelligence/openpi. The π0.5 model, the pi05_libero
+  checkpoint, the policy code and the LIBERO client come from it.
+- **LIBERO** by Liu et al., github.com/Lifelong-Robot-Learning/LIBERO. The tasks, init states and demos come from it.
