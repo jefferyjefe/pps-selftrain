@@ -1,5 +1,15 @@
 # pps-selftrain
 
+```mermaid
+flowchart LR
+    A[Self-Training Round] --> B[New States Visited]
+    B --> C[Fixed Reference]
+    B --> D[Refreshed Reference]
+    C --> E[Measure Drift + Recovery]
+    D --> E
+    E --> F[Does Refresh Preserve Recovery?]
+```
+
 Lab notebook for reproducing Proxy Policy Steering (PPS, Ning, Wang, Ma and Fang, CoRL 2026, arXiv 2609.09148) and extending it with a self-training loop. This file is written before any results exist and states what we plan to test and how. What actually happened is recorded in [LOG.md](LOG.md).
 
 PPS keeps a flow matching base policy frozen and trains two small proxies. A reference proxy is distilled from the base on target task observations. A task proxy starts as a copy of the reference and is fine tuned on task demos. At every denoising step the sampler follows
