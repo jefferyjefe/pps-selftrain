@@ -1,4 +1,4 @@
-# pps-selftrain
+# PPS Self-Training
 
 ```mermaid
 flowchart LR
