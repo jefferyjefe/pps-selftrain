@@ -9,9 +9,10 @@ import sys
 
 import numpy as np
 
+ROOT = sys.argv[1] if len(sys.argv) > 1 else "/workspace/runs/eval_t59"  # optional run dir (4090 rerun)
 ok = True
 for k in ("state_00_branch_0", "state_01_branch_0", "state_02_branch_0"):
-    fa, fb = ["/workspace/runs/eval_t59/base/drop/%s%s.npz" % (k, t) for t in "ab"]
+    fa, fb = ["%s/base/drop/%s%s.npz" % (ROOT, k, t) for t in "ab"]
     if not (os.path.exists(fa) and os.path.exists(fb)):
         print(k, "missing")
         sys.exit(2)

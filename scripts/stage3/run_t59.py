@@ -38,7 +38,8 @@ import t59_sim as S  # noqa: E402
 from pps_real import libero_obs  # noqa: E402
 
 DROP_SEED = 11
-METHODS = {"base": {"__method": "base"}, "pps": {"__method": "pps", "__gamma": 0.4}}
+METHODS = {"base": {"__method": "base"}, "pps": {"__method": "pps", "__gamma": 0.4},
+           "task": {"__method": "task"}}  # task: the task proxy alone (serve_eval.py), added for the 4090 rerun
 ROOT = pathlib.Path("/workspace/runs/eval_t59")
 N_PAIRED = 200
 N_STATES, N_BRANCHES = 40, 5
@@ -184,7 +185,10 @@ class Ctx(object):
         self.client, self.meta = connect(args.port)
         self.root = pathlib.Path(args.out)
         self.seed = args.seed
-        self.pool = self.root / "pool"
+        # Defaults reproduce the Nov 10 layout (one pool dir under --out, originals under --out).
+        self.pool = pathlib.Path(args.pool_dir) if args.pool_dir else self.root / "pool"
+        self.save_pool_dir = pathlib.Path(args.save_pool_dir) if args.save_pool_dir else self.pool
+        self.orig_root = pathlib.Path(args.orig_root) if args.orig_root else self.root
 
 
 def paired_trial(ctx, method, trial, video=False, save_pool=True):
@@ -200,7 +204,7 @@ def paired_trial(ctx, method, trial, video=False, save_pool=True):
     probe.start()
     noise_rng = np.random.default_rng((ctx.seed, trial))
     ev = {}
-    pool = ctx.pool if (save_pool and method == "base") else None
+    pool = ctx.save_pool_dir if (save_pool and method == "base") else None
     if pool is not None:
         pool.mkdir(parents=True, exist_ok=True)
 
@@ -300,7 +304,7 @@ def replay_state(ctx, man, s, jl):
     entry = man["states"][s]
     snap = S.load_snapshot(ctx.pool / entry["file"])
     c = snap["client"]
-    orig = np.load(ctx.root / "base" / "paired" / ("trial_%04d.npz" % entry["trial"]))
+    orig = np.load(ctx.orig_root / "base" / "paired" / ("trial_%04d.npz" % entry["trial"]))
     w0 = time.monotonic()
     obs, probe = restore(ctx.env, ctx.init_states, snap)
     img, wrist = libero_obs.process_images(obs)
@@ -330,11 +334,17 @@ def replay_state(ctx, man, s, jl):
                 cmp[k + "_max_abs_diff"] = float(diff.max()) if m else None
             ok = ok and same
     orig_rec = None
-    for line in open(ctx.root / "base" / "paired.jsonl"):
+    for line in open(ctx.orig_root / "base" / "paired.jsonl"):
         r = json.loads(line)
         if r["trial"] == entry["trial"]:
             orig_rec = r
     same_outcome = orig_rec is not None and orig_rec["success"] == res["success"] and orig_rec["env_steps"] == res["t_end"]
+    first_call = int(c["t_next"]) + len(c["plan"])  # env step of the replay's first fresh policy call
+    diffs = [cmp.get(k + "_first_diff_step") for k in ("action", "qpos", "qvel", "obj") if not cmp.get(k + "_identical")]
+    diffs = [d for d in diffs if d is not None]
+    cmp["first_fresh_call_step"] = first_call
+    cmp["first_diff_step_any"] = min(diffs) if diffs else None
+    cmp["identical_before_first_fresh_call"] = bool(img_equal and i0 is not None and (not diffs or min(diffs) >= first_call))
     rec = dict(key="state_%02d" % s, state=s, trial=entry["trial"], t_next=c["t_next"], plan_len=len(c["plan"]),
                restored_images_identical=img_equal, identical=bool(ok and same_outcome), same_outcome=same_outcome,
                success=res["success"], env_steps=res["t_end"], orig_success=orig_rec and orig_rec["success"],
@@ -342,6 +352,63 @@ def replay_state(ctx, man, s, jl):
                replay_server_port=ctx.meta.get("port"), wall_s=time.monotonic() - w0, **cmp)
     append_jsonl(jl, rec)
     logging.info("replay state %d trial %d identical=%s %s", s, entry["trial"], rec["identical"], cmp)
+    return rec["identical"]
+
+
+def simreplay_state(ctx, man, s, jl):
+    """Sim side exactness, independent of the policy and the GPU. Restore the snapshot and step the env open loop with
+    the original trial's logged actions from the snapshot on; compare qpos, qvel and bottle pose at every step and the
+    outcome (done at the same step) with the original log, bit for bit. Added for the 4090 rerun: a policy in the loop
+    replay cannot match a trajectory made on another GPU (bf16 kernels differ), but the sim and the restore must."""
+    entry = man["states"][s]
+    snap = S.load_snapshot(ctx.pool / entry["file"])
+    c = snap["client"]
+    orig = np.load(ctx.orig_root / "base" / "paired" / ("trial_%04d.npz" % entry["trial"]))
+    w0 = time.monotonic()
+    obs, probe = restore(ctx.env, ctx.init_states, snap)
+    img, wrist = libero_obs.process_images(obs)
+    img_equal = bool(np.array_equal(img, c["img"]) and np.array_equal(wrist, c["wrist"]))
+    ot = orig["step_t"]
+    i0 = int(np.nonzero(ot == c["t_next"])[0][0])
+    acts = orig["step_action"][i0:]
+    st = {"qpos": [], "qvel": [], "obj": []}
+    done, t = False, int(c["t_next"])
+    for a in acts:
+        libero_obs.process_images(obs)  # as the rollout loop does (no effect on the sim)
+        obs, _, done, _ = ctx.env.step(a.tolist())
+        r = probe.read(a.tolist())
+        st["qpos"].append(ctx.env.env.sim.data.qpos.copy())
+        st["qvel"].append(ctx.env.env.sim.data.qvel.copy())
+        st["obj"].append(r["obj"])
+        if done:
+            break
+        t += 1
+    cmp = {"n_steps_orig": int(len(acts)), "n_steps_replay": len(st["qpos"])}
+    ok = img_equal and cmp["n_steps_orig"] == cmp["n_steps_replay"]
+    for k in ("qpos", "qvel", "obj"):
+        a, b = orig["step_" + k][i0:], np.asarray(st[k])
+        same = a.shape == b.shape and np.array_equal(a, b)
+        cmp[k + "_identical"] = bool(same)
+        if not same and a.shape[1:] == b.shape[1:]:
+            m = min(len(a), len(b))
+            diff = np.abs(a[:m] - b[:m]).reshape(m, -1).max(1)
+            nz = np.nonzero(diff > 0)[0]
+            cmp[k + "_first_diff_index"] = int(nz[0]) if len(nz) else None
+            cmp[k + "_max_abs_diff"] = float(diff.max()) if m else None
+        ok = ok and same
+    orig_rec = None
+    for line in open(ctx.orig_root / "base" / "paired.jsonl"):
+        r = json.loads(line)
+        if r["trial"] == entry["trial"]:
+            orig_rec = r
+    t_end = t if done else S.T_END
+    same_outcome = orig_rec is not None and orig_rec["success"] == bool(done) and orig_rec["env_steps"] == t_end
+    rec = dict(key="state_%02d" % s, state=s, trial=entry["trial"], t_next=c["t_next"],
+               restored_images_identical=img_equal, identical=bool(ok and same_outcome), same_outcome=same_outcome,
+               success=bool(done), env_steps=t_end, orig_success=orig_rec and orig_rec["success"],
+               orig_env_steps=orig_rec and orig_rec["env_steps"], wall_s=time.monotonic() - w0, **cmp)
+    append_jsonl(jl, rec)
+    logging.info("simreplay state %d trial %d identical=%s %s", s, entry["trial"], rec["identical"], cmp)
     return rec["identical"]
 
 
@@ -416,9 +483,56 @@ def worker(ctx):
             return
 
 
+def worker_groups(ctx, groups):
+    """Worker for the 4090 rerun (pool fixed in advance, so no pool selection or POOL_EXTRA). Method groups run in
+    order: the first group's paired trials, then its drop branches (once DROP_OK exists), then the next group's. Within
+    a group the job order is the original worker's (trial major for paired, branch major for drop). If DROP_FAIL
+    exists drop branches are skipped and paired trials still run. Returns when nothing is left or STOP exists."""
+    root = ctx.root
+    while True:
+        if (root / "STOP").exists():
+            return
+        job = None
+        for g in groups:
+            done = {m: _done(root, m, "paired.jsonl") for m in g}
+            for t in range(N_PAIRED):
+                for m in g:
+                    key = "trial_%04d" % t
+                    if key in done[m] or not _claim(root, "paired_%s_%s" % (m, key)):
+                        continue
+                    job = ("paired", m, t)
+                    break
+                if job:
+                    break
+            if job:
+                break
+            if (root / "DROP_OK").exists():
+                man = load_manifest(ctx.pool)
+                done = {m: _done(root, m, "drop.jsonl") for m in g}
+                for m, s, b in [(m, s, b) for b in range(N_BRANCHES) for s in range(len(man["states"])) for m in g]:
+                    key = "state_%02d_branch_%d" % (s, b)
+                    if key in done[m] or not _claim(root, "drop_%s_%s" % (m, key)):
+                        continue
+                    job = ("drop", m, man, s, b)
+                    break
+                if job:
+                    break
+            elif not (root / "DROP_FAIL").exists():
+                job = ("wait",)
+                break
+        if job is None:
+            return
+        if job[0] == "wait":
+            time.sleep(10)
+        elif job[0] == "paired":
+            paired_trial(ctx, job[1], job[2], video=job[2] in VIDEO_TRIALS)
+        else:
+            drop_branch(ctx, job[1], job[2], job[3], job[4], video=(job[3], job[4]) in VIDEO_DROPS)
+
+
 def main():
     p = argparse.ArgumentParser()
-    p.add_argument("mode", choices=("worker", "paired", "drop", "replay", "repeat"))
+    p.add_argument("mode", choices=("worker", "paired", "drop", "replay", "repeat", "simreplay"))
     p.add_argument("--port", type=int, required=True)
     p.add_argument("--out", default=str(ROOT))
     p.add_argument("--seed", type=int, default=S.SEED)
@@ -427,11 +541,18 @@ def main():
     p.add_argument("--states", type=int, nargs="*", default=[])
     p.add_argument("--pairs", nargs="*", default=[], help="state:branch pairs (drop / repeat)")
     p.add_argument("--tag", default="")
+    p.add_argument("--pool-dir", default=None, help="saved states for drop/replay (default <out>/pool)")
+    p.add_argument("--save-pool-dir", default=None, help="where pi0.5 paired trials save snapshots (default pool dir)")
+    p.add_argument("--orig-root", default=None, help="run holding the pool's source trials, for replay (default --out)")
+    p.add_argument("--groups", nargs="*", default=None,
+                   help="worker method groups in run order, e.g. base,pps task (uses worker_groups)")
     args = p.parse_args()
     logging.basicConfig(level=logging.INFO, format="%(asctime)s %(message)s")
     ctx = Ctx(args)
     logging.info("t59 init states: %d, server %s", len(ctx.init_states), ctx.meta)
-    if args.mode == "worker":
+    if args.mode == "worker" and args.groups:
+        worker_groups(ctx, [tuple(g.split(",")) for g in args.groups])
+    elif args.mode == "worker":
         worker(ctx)
     elif args.mode == "paired":
         done = _done(ctx.root, args.method, "paired.jsonl")
@@ -446,6 +567,13 @@ def main():
             s, b = (int(x) for x in pr.split(":"))
             if "state_%02d_branch_%d" % (s, b) not in done:
                 drop_branch(ctx, args.method, man, s, b, jl_name=jl, tag=args.tag)
+    elif args.mode == "simreplay":
+        man = load_manifest(ctx.pool)
+        jl = ctx.root / "checks" / "simreplay_check.jsonl"
+        jl.parent.mkdir(parents=True, exist_ok=True)
+        ok = all([simreplay_state(ctx, man, s, jl) for s in args.states])
+        ctx.env.close()
+        sys.exit(0 if ok else 3)
     elif args.mode == "replay":
         man = load_manifest(ctx.pool)
         jl = ctx.root / "checks" / "replay_check.jsonl"

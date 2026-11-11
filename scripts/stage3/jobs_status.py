@@ -34,7 +34,14 @@ def alive(pid):
 def main():
     p = argparse.ArgumentParser()
     p.add_argument("--cleanup", action="store_true")
+    p.add_argument("--root", default=None, help="run directory (default the Nov 10 one)")
+    p.add_argument("--methods", nargs="*", default=None, help="methods with jobs (default base pps)")
     args = p.parse_args()
+    global ROOT, METHODS
+    if args.root:
+        ROOT = pathlib.Path(args.root)
+    if args.methods:
+        METHODS = tuple(args.methods)
     claims = ROOT / "claims"
     claims.mkdir(parents=True, exist_ok=True)
     jobs = {}

@@ -71,3 +71,62 @@ class PPSSteer:
         """(10, len(STAT_KEYS)) float64 for the last call, as a dict of 10 vectors."""
         s = torch.stack(self._stats).cpu().numpy()
         return {k: s[:, i] for i, k in enumerate(STAT_KEYS)}
+
+
+# ---------------------------------------------------------------- task proxy alone (added for the 4090 rerun, step 6)
+# Definition used: the task proxy as a standalone policy. Its velocity replaces the base's on all 32 dims at all 10
+# Euler steps, so the actions come from the task proxy only (no base velocity, no reference proxy, no gamma). This is
+# the analogue of the authors' --only_steer for a proxy that predicts all 32 dims: their proxy reads and predicts only
+# the real action dims, so their actions also come from the task proxy alone. Same noise, time grid (openpi's float32
+# t = 1.0, 0.9, ... accumulated as in pps_real.sampler) and output transform as the base.
+
+class TaskOnlyHook:
+    """Reference implementation: run through pps_real.sampler with the base evaluated but ignored. Uses the task proxy
+    of a PPSSteer (same weights, same image encoding code as PPSSteer.begin)."""
+
+    def __init__(self, steer):
+        self.s = steer
+        self.kv_t = None
+
+    @torch.no_grad()
+    def begin(self, image, wrist):
+        self.kv_t = encode_task(self.s, image, wrist)
+
+    @torch.no_grad()
+    def __call__(self, step, x_t, t, v_base, ctx):
+        with torch.autocast("cuda", dtype=torch.bfloat16):
+            return self.s.task.velocity(self.kv_t, x_t, t).float()
+
+
+@torch.no_grad()
+def encode_task(steer, image, wrist):
+    assert image.dtype == np.uint8 and image.shape == (224, 224, 3), (image.dtype, image.shape)
+    assert wrist.dtype == np.uint8 and wrist.shape == (224, 224, 3), (wrist.dtype, wrist.shape)
+    imgs = torch.from_numpy(np.stack([image, wrist])[None]).to(steer.device)
+    with torch.autocast("cuda", dtype=torch.bfloat16):
+        return steer.task.image_kv(steer.task.encode(imgs))
+
+
+@torch.no_grad()
+def task_only_infer(sp, steer, obs, noise):
+    """Fast path: the task proxy's own Euler loop, the base is not run. Mirrors SteerablePolicy.infer (input transform
+    for the state the output transform carries, batch 1) and pps_real.sampler's loop arithmetic exactly, so it must be
+    bit identical to sp.infer(obs, noise=noise, hook=TaskOnlyHook(steer)); check_task_only.py checks that."""
+    import jax
+    inputs, _ = sp.observation(obs)
+    kv = encode_task(steer, np.asarray(obs["observation/image"]), np.asarray(obs["observation/wrist_image"]))
+    x_t = torch.from_numpy(noise).to(sp.device)
+    if x_t.ndim == 2:
+        x_t = x_t[None, ...]
+    dt = torch.tensor(-1.0 / sp.num_steps, dtype=torch.float32, device=sp.device)
+    time = torch.tensor(1.0, dtype=torch.float32, device=sp.device)
+    while time >= -dt / 2:
+        expanded_time = time.expand(x_t.shape[0])
+        with torch.autocast("cuda", dtype=torch.bfloat16):
+            v_t = steer.task.velocity(kv, x_t, expanded_time.clone()).float()
+        x_t = x_t + dt * v_t
+        time += dt
+    outputs = {"state": inputs["state"], "actions": x_t}
+    outputs = jax.tree.map(lambda x: np.asarray(x[0, ...].detach().cpu()), outputs)
+    outputs = sp.policy._output_transform(outputs)  # noqa: SLF001
+    return outputs
