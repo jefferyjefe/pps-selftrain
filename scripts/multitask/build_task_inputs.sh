@@ -17,6 +17,8 @@ LPY=/workspace/openpi/examples/libero/.venv/bin/python
 D=/workspace/data/t${T}_demos
 K=/workspace/data/t${T}_task
 F=/workspace/data/t${T}_faithful
+exec 9>/workspace/data/.build_t${T}.lock
+flock 9  # one build per task at a time (the background builder and the stage B chain)
 [ -f $F/BUILD_OK ] && { echo "t$T already built"; exit 0; }
 NAME=$(PYTHONPATH=/workspace/openpi/third_party/libero $LPY -c "
 from libero.libero import benchmark

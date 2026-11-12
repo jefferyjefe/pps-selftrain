@@ -115,6 +115,12 @@ class Probe(object):
             return float(np.linalg.norm(d))
         return float(np.linalg.norm(sim.data.body_xpos[self.target_body][:2] - p[:2]))
 
+    def target_xy(self):
+        sim = self.raw.sim
+        if self.target_site is not None:
+            return sim.data.get_site_xpos(self.target_site)[:2].copy()
+        return sim.data.body_xpos[self.target_body][:2].copy()
+
     def read(self, action):
         p = self.pert.obj_pos()
         cs = _perturb.object_contacts(self.raw.sim, self.pert.obj_geoms)
@@ -127,3 +133,72 @@ class Probe(object):
             "finger": any(("finger" in c) or ("gripper" in c) for c in cs),
             "tray_dxy": self.target_dist_xy(p),
         }
+
+
+# ---------------------------------------------------------------- drop disturbance (PROTOCOL_multitask.md section c)
+
+LEVELS_M = (0.0, 0.03, 0.06, 0.09, 0.12, 0.15)  # teleport distance d_L for L = 0..5
+HALF_ANGLE = np.pi / 4  # direction: away from the goal target, rotated by U(-45, 45) deg
+WORK_MARGIN_M = 0.03  # the scene's *_init_region sites' xy box, expanded by this
+MAX_TRIES = 50
+
+
+def work_box(raw, margin=WORK_MARGIN_M):
+    """xy box spanned by every *_init_region site of the scene, expanded by margin."""
+    lo, hi = [], []
+    for name, site in raw.object_sites_dict.items():
+        if not name.endswith("_init_region"):
+            continue
+        pos = raw.sim.data.get_site_xpos(name).copy()
+        mat = raw.sim.data.get_site_xmat(name).copy()
+        half = np.abs(mat @ np.asarray(site.size, dtype=float))
+        lo.append(pos[:2] - half[:2])
+        hi.append(pos[:2] + half[:2])
+    assert lo, "no *_init_region sites"
+    return np.min(lo, 0) - margin, np.max(hi, 0) + margin
+
+
+def teleport_away(env, probe, dist, rng):
+    """Move the carried object horizontally by dist, away from the goal target +- 45 deg, keeping its height and
+    orientation and zeroing its velocity (pps_real.perturb.Perturber._teleport logic). A draw is rejected if the moved
+    object touches anything but the table or leaves work_box. Up to MAX_TRIES draws; if none is clear the object is
+    put back where it was. Returns (obs, info). dist == 0 changes nothing and calls nothing (L = 0 is the t59 drop)."""
+    raw = env.env
+    if dist <= 0:
+        return None, {"level_dist_m": 0.0, "moved": False, "tries": 0}
+    sim = raw.sim
+    pert = probe.pert
+    qpos0, qvel0 = sim.data.qpos.copy(), sim.data.qvel.copy()
+    p0 = qpos0[pert.qpos_adr:pert.qpos_adr + 3].copy()
+    away = p0[:2] - probe.target_xy()
+    base = float(np.arctan2(away[1], away[0]))
+    lo, hi = work_box(raw)
+    tries, ok = [], False
+    for _ in range(MAX_TRIES):
+        theta = base + float(rng.uniform(-HALF_ANGLE, HALF_ANGLE))
+        xy = p0[:2] + dist * np.array([np.cos(theta), np.sin(theta)])
+        inside = bool(np.all(xy >= lo) and np.all(xy <= hi))
+        bad = []
+        if inside:
+            q = qpos0.copy()
+            q[pert.qpos_adr:pert.qpos_adr + 2] = xy
+            v = qvel0.copy()
+            v[pert.qvel_adr:pert.qvel_adr + 6] = 0.0
+            sim.data.qpos[:] = q
+            sim.data.qvel[:] = v
+            sim.forward()
+            bad = [c for c in _perturb.object_contacts(sim, pert.obj_geoms) if "table" not in c]
+        tries.append({"theta": theta, "inside_work_box": inside, "blocking_contacts": bad})
+        if inside and not bad:
+            ok = True
+            break
+    if not ok:
+        sim.data.qpos[:] = qpos0
+        sim.data.qvel[:] = qvel0
+        sim.forward()
+    raw._update_observables(force=True)  # noqa: SLF001
+    obs = raw._get_observations()  # noqa: SLF001
+    p1 = pert.obj_pos()
+    return obs, {"level_dist_m": float(dist), "moved": ok, "tries": len(tries), "theta": tries[-1]["theta"],
+                 "rejected": tries[:-1] if ok else tries, "obj_before": p0.tolist(), "obj_after": p1.tolist(),
+                 "moved_m": float(np.linalg.norm(p1[:2] - p0[:2])), "work_box": [lo.tolist(), hi.tolist()]}

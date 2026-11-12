@@ -66,6 +66,7 @@ from pps_real import policy as _policy  # noqa: E402
 
 # Stage 4: other tasks point these at their own inputs (scripts/multitask/build_task_inputs.sh); defaults are t59's.
 DATA = pathlib.Path(os.environ.get("PPS_FAITHFUL_DATA", "/workspace/data/t59_faithful"))
+PIN_LIMIT_BYTES = int(os.environ.get("PPS_FAITHFUL_PIN_LIMIT", 80 * 2 ** 30))  # stage 4: see build_prefix_cache
 OBS = os.environ.get("PPS_FAITHFUL_OBS", "/workspace/data/t59_demos/policy_obs.npz")
 GROUP = 4  # training steps per teacher call
 
@@ -243,10 +244,18 @@ def build_prefix_cache(model, frames, bs=16):
             nl, (_, nkv, _, hd) = len(legacy), legacy[0][0].shape
             assert nkv == 1
             lv = int(valid.sum())
-            K = torch.empty((frames.n, nl, lv, hd), dtype=torch.bfloat16, pin_memory=True)
-            V = torch.empty((frames.n, nl, lv, hd), dtype=torch.bfloat16, pin_memory=True)
+            # stage 4: torch's pinned host allocator rounds each block up to a power of two, so two pinned blocks
+            # of 35 GB take 137 GB and exceed the pod's 125 GB memory limit (t77, 7336 frames). Pinning K and V
+            # changes nothing downstream: every read is a fancy-index copy (K[flat], K[idx_cpu]) that is unpinned.
+            # Keep the pinned path whenever its rounded size fits (t59, t14: same code path as before), else
+            # plain host memory (same values).
+            nbytes = frames.n * nl * lv * hd * 2
+            pin = 2 * (1 << (nbytes - 1).bit_length()) <= PIN_LIMIT_BYTES
+            K = torch.empty((frames.n, nl, lv, hd), dtype=torch.bfloat16, pin_memory=pin)
+            V = torch.empty((frames.n, nl, lv, hd), dtype=torch.bfloat16, pin_memory=pin)
             print(f"prefix cache: {nl} layers, {lv} valid of {valid.numel()} prefix tokens, "
-                  f"{2 * K.numel() * 2 / 1e9:.1f} GB pinned host", flush=True)
+                  f"{2 * K.numel() * 2 / 1e9:.1f} GB {'pinned' if pin else 'unpinned (stage 4: too big to pin)'} host",
+                  flush=True)
         assert torch.equal(valid, valid0)
         legacy = pkv.to_legacy_cache()
         ks = torch.stack([k[:, 0][:, valid] for k, _ in legacy], 1)

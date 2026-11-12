@@ -1,7 +1,7 @@
 """Bit-for-bit comparison of rerun normal trials against earlier records. Plain Python 3 + numpy.
 
-Compares <new>/<cell>/paired/trial_XXXX.npz with <old>/<cell>/paired/trial_XXXX.npz for every trial in <new>'s
-paired.jsonl: every step's action, qpos, qvel and object pose, and the outcome (success, env steps). Writes
+Compares <new>/<kind>/trial_XXXX.npz with <old>/<kind>/trial_XXXX.npz (kind paired or screen) for every trial in
+<new>'s <kind>.jsonl: every step's action, qpos, qvel and object pose, and the outcome (success, env steps). Writes
 <out> (json) and prints one line per trial and IDENTICAL_ALL / NOT_IDENTICAL.
 
 Usage
@@ -21,14 +21,15 @@ def main():
     p.add_argument("--new", required=True)
     p.add_argument("--old", required=True)
     p.add_argument("--out", required=True)
+    p.add_argument("--kind", default="paired", help="record kind: paired (t59 runner) or screen (run_mt.py)")
     a = p.parse_args()
     new_d, old_d = pathlib.Path(a.new), pathlib.Path(a.old)
-    new = {json.loads(l)["trial"]: json.loads(l) for l in open(new_d / "paired.jsonl")}
-    old = {json.loads(l)["trial"]: json.loads(l) for l in open(old_d / "paired.jsonl")}
+    new = {json.loads(l)["trial"]: json.loads(l) for l in open(new_d / (a.kind + ".jsonl"))}
+    old = {json.loads(l)["trial"]: json.loads(l) for l in open(old_d / (a.kind + ".jsonl"))}
     rows, ok = [], True
     for t in sorted(new):
-        x = np.load(new_d / "paired" / ("trial_%04d.npz" % t))
-        y = np.load(old_d / "paired" / ("trial_%04d.npz" % t))
+        x = np.load(new_d / a.kind / ("trial_%04d.npz" % t))
+        y = np.load(old_d / a.kind / ("trial_%04d.npz" % t))
         r = {"trial": t, "success_new": new[t]["success"], "success_old": old[t]["success"],
              "env_steps_new": new[t]["env_steps"], "env_steps_old": old[t]["env_steps"],
              "gpu_new": new[t]["server"].get("gpu"), "gpu_old": old[t]["server"].get("gpu")}

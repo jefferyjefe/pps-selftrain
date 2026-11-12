@@ -242,3 +242,55 @@ All figures are on the 4090:
 
 Under the 40 h limit, so nothing is cut in advance. If the measured queue grows past about 40 h, Step 4 is cut
 first, and the report lists what was left undone.
+
+## Addendum 1 (Nov 12, before any harder-start rollout): harder-starts pilot on t14 and t77
+
+Written after a change of plan on Nov 12. Stage B stops after t77, and Step 5 is not run. The pod is stopped by
+17:00 UTC, and no training job or eval batch starts unless it is estimated to end by 16:40 UTC. This addendum is
+committed and pushed before any harder-start rollout.
+
+**Purpose.** A pilot to inform a possible protocol amendment. It does not select tasks, and it changes nothing in
+sections a–d.
+
+**Policies.** Only π0.5 alone (`base`) and the task's faithful task proxy seed 0 alone (`task_f`) are run. PPS
+and the blend are never run on these starts. Rollouts use the same servers (`serve_faithful.py --no-v3 --task-id
+T` with `reference_tT_faithful_s0` and `task_tT_faithful_s0`), 2 servers × 3 workers, and the same episode loop as
+the screening trials.
+
+**Construction rule** (the t59 idea, `scripts/multitask/build_hard_starts_mt.py`). The rule is fixed here and
+the shift is never tuned after any result:
+- *Object:* the object the task moves, from the first `(On|In obj target)` goal predicate of the BDDL.
+- *Demo range:* the object's xy at frame 0 of each of the 50 training demos.
+- *Goal location:* the goal target's xy in those 50 frame-0 states (the site centre for a region, else the target
+  object's body), averaged over the demos.
+- *Shift axis:* "directly away from the goal location", along a world table axis as on t59. Take the vector from
+  the mean goal location to the mean demo start of the object, and use the world axis (+x, −x, +y or −y) with
+  the larger component and its sign.
+  - Checked on t59 before any t14 or t77 geometry was computed. The rule gives −y, a demo width of 4.83 cm and a
+    shift of 7 cm, which is the t59 construction.
+  - The exact (unsnapped) vector would give (−0.40, −0.92) and 9 cm, which is not t59's, so it is not used.
+- *Shift size:* along the chosen axis, the width of the demo range (max − min) plus 2 cm, rounded up to a whole
+  cm. Each start's actual distance beyond the demo range is reported.
+- *Starts:* the 50 official init states, with the object's free-joint xy moved by the shift. Nothing else
+  changes.
+- *Settle check (t59's):* after the 10 settle steps with the dummy action, a start passes if all of these hold:
+  - the object touches the table and nothing else;
+  - its orientation is within 5° of the unshifted start's after the same settle;
+  - it moved less than 5 mm in xy while settling;
+  - every other object ends within 2 mm (xy) of where it ends from the unshifted start.
+- *Direction choice:*
+  1. Use the away axis if at least 40 of the 50 starts pass.
+  2. Otherwise try the two perpendicular axes in this fixed order: the away axis rotated +90° (counter-clockwise
+     seen from above), then −90°. Each uses its own shift size by the same width + 2 cm rule. The first with at
+     least 40 passing starts is used.
+  3. If none has 40, the task is skipped and the report says why.
+- *Trials:* every passing start of the chosen axis is run once per policy. Trial j uses kept start j.
+
+**Seeds.** Trial index 40,000 + j, `env.seed(7 + 40,000 + j)` and noise `default_rng((7, 40,000 + j))`. These are
+disjoint from evaluation trials (< 10,000), the t59 harder starts (10,000+), screening (20,000+) and drop pilots
+(30,000+).
+
+**Analysis (descriptive).** Per task, π0.5 and `task_f` success rates with Wilson 95% intervals, the paired 2×2
+table (both, π0.5 only, `task_f` only, neither) and the exact McNemar p. They are shown next to the t59 harder-start
+numbers from `results/eval_t59_faithful/REPORT.md` (π0.5 29/50, task proxy alone 14/50). No test is used for any
+decision.
