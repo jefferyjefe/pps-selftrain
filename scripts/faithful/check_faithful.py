@@ -39,6 +39,7 @@ def main():
     p.add_argument("--ref", default=REF_F)
     p.add_argument("--task", default=TASK_F)
     p.add_argument("--images", default="/workspace/data/t59_demos/policy_obs.npz")
+    p.add_argument("--prompt", default=PROMPT, help="task prompt (stage 4: other tasks)")
     p.add_argument("--out", required=True)
     args = p.parse_args()
     z = np.load(args.images)
@@ -56,7 +57,7 @@ def main():
     ok = {"A": True, "B": True, "C": True, "D": True}
     for f in frames:
         obs = {"observation/image": z["image"][f], "observation/wrist_image": z["wrist_image"][f],
-               "observation/state": z["state"][f], "prompt": PROMPT}
+               "observation/state": z["state"][f], "prompt": args.prompt}
         noise = np.random.default_rng((303, int(f))).standard_normal((10, 32)).astype(np.float32)
         inputs, ob = sp.observation(dict(obs))
         st = inputs["state"][0]

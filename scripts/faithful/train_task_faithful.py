@@ -24,6 +24,7 @@ Usage
 
 import argparse
 import json
+import os
 import pathlib
 import subprocess
 import sys
@@ -37,7 +38,7 @@ sys.path.insert(0, str(pathlib.Path(__file__).resolve().parent))
 import official  # noqa: E402
 from distill_faithful import DATA, Frames, their_lr_schedule  # noqa: E402
 
-TASK = pathlib.Path("/workspace/data/t59_task")
+TASK = pathlib.Path(os.environ.get("PPS_FAITHFUL_TASK", "/workspace/data/t59_task"))  # stage 4: per task; default t59
 
 
 def main():

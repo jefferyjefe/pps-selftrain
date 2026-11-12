@@ -63,6 +63,8 @@ class Server:
             out = self.sp.infer(obs, noise=noise, hook=self.steer)
             out["pps"] = self.steer.stats()
             extra = {"pad_checked": self.steer.pad_checked, "pad_violations": self.steer.pad_violations}
+        elif method in ("pps_v3", "task_v3") and self.v3 is None:
+            raise ValueError("server started with --no-v3")
         elif method == "pps_v3":
             self.v3.gamma = gamma
             self.v3.begin(np.asarray(obs["observation/image"]), np.asarray(obs["observation/wrist_image"]))
@@ -93,19 +95,26 @@ def main():
     p.add_argument("--checkpoint", default=_policy.DEFAULT_CHECKPOINT)
     p.add_argument("--task-impl", default="fast", choices=("fast", "hook"))
     p.add_argument("--no-faithful", action="store_true", help="serve base and v3 only (before the faithful proxies exist)")
+    p.add_argument("--no-v3", action="store_true", help="do not load the t59 v3 proxies (stage 4: other tasks)")
+    p.add_argument("--task-id", type=int, default=59, help="libero_90 task the faithful proxies belong to (metadata)")
     args = p.parse_args()
     logging.basicConfig(level=logging.INFO, force=True)
     sp = _policy.SteerablePolicy(_policy.load_openpi_policy(args.checkpoint, compile_mode=None))
     prec = torch.get_float32_matmul_precision()  # "high": set by upstream PI0Pytorch.__init__ (pi0_pytorch.py:111)
     assert prec == "high", prec
     steer = None if args.no_faithful else FaithfulSteer(args.ref, args.task)
-    from pps_steer import PPSSteer
-    v3 = PPSSteer(args.ref_v3, args.task_v3, 0.0)
+    v3 = None
+    if not args.no_v3:
+        from pps_steer import PPSSteer
+        v3 = PPSSteer(args.ref_v3, args.task_v3, 0.0)
     assert torch.get_float32_matmul_precision() == prec
     meta = dict(sp.metadata)
     meta["eval"] = {"port": args.port, "ref": None if args.no_faithful else args.ref,
-                    "task": None if args.no_faithful else args.task, "ref_v3": args.ref_v3,
-                    "task_v3": args.task_v3, "checkpoint": args.checkpoint, "num_denoise_steps": sp.num_steps,
+                    "task": None if args.no_faithful else args.task,
+                    "task_id": None if args.no_faithful else args.task_id,
+                    "ref_v3": None if args.no_v3 else args.ref_v3,
+                    "task_v3": None if args.no_v3 else args.task_v3, "checkpoint": args.checkpoint,
+                    "num_denoise_steps": sp.num_steps,
                     "compile_mode": None, "gpu": torch.cuda.get_device_name(), "task_impl": args.task_impl,
                     "official_commit": official.COMMIT,
                     "sampler": "pps_real.sampler eager, batch 1; base: no hook; *_f: scripts/faithful/faithful_steer.py; "

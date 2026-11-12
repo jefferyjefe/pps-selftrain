@@ -45,6 +45,7 @@ Usage
 import argparse
 import concurrent.futures
 import json
+import os
 import pathlib
 import subprocess
 import sys
@@ -63,8 +64,9 @@ from transformers.cache_utils import DynamicCache  # noqa: E402
 
 from pps_real import policy as _policy  # noqa: E402
 
-DATA = pathlib.Path("/workspace/data/t59_faithful")
-OBS = "/workspace/data/t59_demos/policy_obs.npz"
+# Stage 4: other tasks point these at their own inputs (scripts/multitask/build_task_inputs.sh); defaults are t59's.
+DATA = pathlib.Path(os.environ.get("PPS_FAITHFUL_DATA", "/workspace/data/t59_faithful"))
+OBS = os.environ.get("PPS_FAITHFUL_OBS", "/workspace/data/t59_demos/policy_obs.npz")
 GROUP = 4  # training steps per teacher call
 
 

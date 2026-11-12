@@ -1,0 +1,35 @@
+{
+ "identical_all": true,
+ "new": "/workspace/runs/stage4_screen/step0_repro/base",
+ "old": "/workspace/runs/eval_t59_4090/base",
+ "rows": [
+  {
+   "trial": 0,
+   "success_new": true,
+   "success_old": true,
+   "env_steps_new": 239,
+   "env_steps_old": 239,
+   "gpu_new": "NVIDIA GeForce RTX 4090",
+   "gpu_old": "NVIDIA GeForce RTX 4090",
+   "action_identical": true,
+   "qpos_identical": true,
+   "qvel_identical": true,
+   "obj_identical": true,
+   "identical": true
+  },
+  {
+   "trial": 10,
+   "success_new": true,
+   "success_old": true,
+   "env_steps_new": 284,
+   "env_steps_old": 284,
+   "gpu_new": "NVIDIA GeForce RTX 4090",
+   "gpu_old": "NVIDIA GeForce RTX 4090",
+   "action_identical": true,
+   "qpos_identical": true,
+   "qvel_identical": true,
+   "obj_identical": true,
+   "identical": true
+  }
+ ]
+}

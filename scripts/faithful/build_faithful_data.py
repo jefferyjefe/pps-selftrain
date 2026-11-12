@@ -16,6 +16,7 @@ Usage: /workspace/openpi/.venv/bin/python scripts/faithful/build_faithful_data.p
 
 import dataclasses
 import json
+import os
 import pathlib
 import sys
 
@@ -29,10 +30,11 @@ sys.path.insert(0, str(pathlib.Path(__file__).resolve().parents[1] / "stage2"))
 from build_task_data import DemoFrames  # noqa: E402
 
 CKPT = "/workspace/checkpoints/pi05_libero_pytorch"
-OBS = "/workspace/data/t59_demos/policy_obs.npz"
-STATES = "/workspace/data/t59_demos/states.npz"
-TASK = pathlib.Path("/workspace/data/t59_task")
-OUT = pathlib.Path("/workspace/data/t59_faithful")
+# Stage 4: other tasks set these (scripts/multitask/build_task_inputs.sh); defaults are t59's.
+OBS = os.environ.get("PPS_FAITHFUL_OBS", "/workspace/data/t59_demos/policy_obs.npz")
+STATES = os.environ.get("PPS_FAITHFUL_STATES", "/workspace/data/t59_demos/states.npz")
+TASK = pathlib.Path(os.environ.get("PPS_FAITHFUL_TASK", "/workspace/data/t59_task"))
+OUT = pathlib.Path(os.environ.get("PPS_FAITHFUL_DATA", "/workspace/data/t59_faithful"))
 
 
 def main():
@@ -77,7 +79,7 @@ def main():
                 prompt=str(obs["prompt"]), n_prompt_tokens_valid=int(tokm.sum()), max_token_len=int(len(tok)),
                 image_keys_base=["base_0_rgb", "left_wrist_0_rgb", "right_wrist_0_rgb (zeros, masked)"],
                 image_keys_proxy=["base_0_rgb", "left_wrist_0_rgb"],
-                actions_target="/workspace/data/t59_task/actions.npy[..., :action_dim_real] (asserted equal to the "
+                actions_target=str(TASK / "actions.npy") + "[..., :action_dim_real] (asserted equal to the "
                                "pipeline's output for every frame)")
     (OUT / "real_dims.json").write_text(json.dumps(info, indent=1))
     print(json.dumps(info, indent=1))
