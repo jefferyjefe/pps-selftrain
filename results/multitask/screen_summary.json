@@ -1,0 +1,1043 @@
+{
+ "gpu": "NVIDIA GeForce RTX 4090",
+ "stageA": {
+  "rule": "eligible 3-15 of 30; one per scene (closest to 30%, tie lower id); up to 5, scenes other than LIVING_ROOM_SCENE3 first by |rate-0.30| (tie lower id), LIVING_ROOM_SCENE3 only to fill, placed last",
+  "shortlist": [
+   14,
+   77,
+   82,
+   38,
+   31
+  ],
+  "tasks": [
+   {
+    "task": 2,
+    "task_name": "KITCHEN_SCENE10_put_the_black_bowl_in_the_top_drawer_of_the_cabinet",
+    "scene": "KITCHEN_SCENE10",
+    "successes": 21,
+    "n": 30,
+    "rate": 0.7,
+    "wilson95": [
+     0.5212421239810444,
+     0.8333525181143747
+    ],
+    "eligible": false,
+    "dist30": 12,
+    "trials_with_event": 24,
+    "why": "not eligible: 21/30 outside 3-15"
+   },
+   {
+    "task": 14,
+    "task_name": "KITCHEN_SCENE2_put_the_middle_black_bowl_on_the_plate",
+    "scene": "KITCHEN_SCENE2",
+    "successes": 9,
+    "n": 30,
+    "rate": 0.3,
+    "wilson95": [
+     0.16664748188562525,
+     0.4787578760189556
+    ],
+    "eligible": true,
+    "dist30": 0,
+    "trials_with_event": 10,
+    "why": "shortlisted, position 1"
+   },
+   {
+    "task": 19,
+    "task_name": "KITCHEN_SCENE3_put_the_moka_pot_on_the_stove",
+    "scene": "KITCHEN_SCENE3",
+    "successes": 25,
+    "n": 30,
+    "rate": 0.8333333333333334,
+    "wilson95": [
+     0.6643564934133498,
+     0.9266345767456822
+    ],
+    "eligible": false,
+    "dist30": 16,
+    "trials_with_event": 26,
+    "why": "not eligible: 25/30 outside 3-15"
+   },
+   {
+    "task": 31,
+    "task_name": "KITCHEN_SCENE5_put_the_black_bowl_on_top_of_the_cabinet",
+    "scene": "KITCHEN_SCENE5",
+    "successes": 4,
+    "n": 30,
+    "rate": 0.13333333333333333,
+    "wilson95": [
+     0.05309655447112463,
+     0.2968132683539402
+    ],
+    "eligible": true,
+    "dist30": 5,
+    "trials_with_event": 28,
+    "why": "shortlisted, position 5"
+   },
+   {
+    "task": 38,
+    "task_name": "KITCHEN_SCENE8_put_the_right_moka_pot_on_the_stove",
+    "scene": "KITCHEN_SCENE8",
+    "successes": 12,
+    "n": 30,
+    "rate": 0.4,
+    "wilson95": [
+     0.24590628016444746,
+     0.576796398787843
+    ],
+    "eligible": true,
+    "dist30": 3,
+    "trials_with_event": 20,
+    "why": "shortlisted, position 4"
+   },
+   {
+    "task": 43,
+    "task_name": "KITCHEN_SCENE9_put_the_white_bowl_on_top_of_the_cabinet",
+    "scene": "KITCHEN_SCENE9",
+    "successes": 1,
+    "n": 30,
+    "rate": 0.03333333333333333,
+    "wilson95": [
+     0.005908590316197976,
+     0.16670391146115726
+    ],
+    "eligible": false,
+    "dist30": 8,
+    "trials_with_event": 2,
+    "why": "not eligible: 1/30 outside 3-15"
+   },
+   {
+    "task": 50,
+    "task_name": "LIVING_ROOM_SCENE2_pick_up_the_alphabet_soup_and_put_it_in_the_basket",
+    "scene": "LIVING_ROOM_SCENE2",
+    "successes": 27,
+    "n": 30,
+    "rate": 0.9,
+    "wilson95": [
+     0.7437891726682571,
+     0.9654001115225814
+    ],
+    "eligible": false,
+    "dist30": 18,
+    "trials_with_event": 28,
+    "why": "not eligible: 27/30 outside 3-15"
+   },
+   {
+    "task": 56,
+    "task_name": "LIVING_ROOM_SCENE3_pick_up_the_butter_and_put_it_in_the_tray",
+    "scene": "LIVING_ROOM_SCENE3",
+    "successes": 28,
+    "n": 30,
+    "rate": 0.9333333333333333,
+    "wilson95": [
+     0.7867654148312584,
+     0.9815229763754831
+    ],
+    "eligible": false,
+    "dist30": 19,
+    "trials_with_event": 29,
+    "why": "not eligible: 28/30 outside 3-15"
+   },
+   {
+    "task": 60,
+    "task_name": "LIVING_ROOM_SCENE4_pick_up_the_black_bowl_on_the_left_and_put_it_in_the_tray",
+    "scene": "LIVING_ROOM_SCENE4",
+    "successes": 14,
+    "n": 30,
+    "rate": 0.4666666666666667,
+    "wilson95": [
+     0.30232388795369436,
+     0.6385770050304025
+    ],
+    "eligible": true,
+    "dist30": 5,
+    "trials_with_event": 17,
+    "why": "eligible, left out: 5 tasks closer to 30%"
+   },
+   {
+    "task": 64,
+    "task_name": "LIVING_ROOM_SCENE4_stack_the_right_bowl_on_the_left_bowl_and_place_them_in_the_tray",
+    "scene": "LIVING_ROOM_SCENE4",
+    "successes": 15,
+    "n": 30,
+    "rate": 0.5,
+    "wilson95": [
+     0.33154125522739103,
+     0.6684587447726089
+    ],
+    "eligible": true,
+    "dist30": 6,
+    "trials_with_event": 29,
+    "why": "eligible, but t60 is closer to 30% in LIVING_ROOM_SCENE4"
+   },
+   {
+    "task": 70,
+    "task_name": "LIVING_ROOM_SCENE6_put_the_chocolate_pudding_to_the_right_of_the_plate",
+    "scene": "LIVING_ROOM_SCENE6",
+    "successes": 23,
+    "n": 30,
+    "rate": 0.7666666666666667,
+    "wilson95": [
+     0.5907167369328042,
+     0.8820761191944214
+    ],
+    "eligible": false,
+    "dist30": 14,
+    "trials_with_event": 29,
+    "why": "not eligible: 23/30 outside 3-15"
+   },
+   {
+    "task": 77,
+    "task_name": "STUDY_SCENE2_pick_up_the_book_and_place_it_in_the_back_compartment_of_the_caddy",
+    "scene": "STUDY_SCENE2",
+    "successes": 8,
+    "n": 30,
+    "rate": 0.26666666666666666,
+    "wilson95": [
+     0.14182663247581012,
+     0.4444796184128676
+    ],
+    "eligible": true,
+    "dist30": 1,
+    "trials_with_event": 30,
+    "why": "shortlisted, position 2"
+   },
+   {
+    "task": 82,
+    "task_name": "STUDY_SCENE3_pick_up_the_book_and_place_it_in_the_left_compartment_of_the_caddy",
+    "scene": "STUDY_SCENE3",
+    "successes": 10,
+    "n": 30,
+    "rate": 0.3333333333333333,
+    "wilson95": [
+     0.19230497996726426,
+     0.5121994849532198
+    ],
+    "eligible": true,
+    "dist30": 1,
+    "trials_with_event": 15,
+    "why": "shortlisted, position 3"
+   }
+  ]
+ },
+ "stageB": {
+  "14": {
+   "task": 14,
+   "task_name": "KITCHEN_SCENE2_put_the_middle_black_bowl_on_the_plate",
+   "scene": "KITCHEN_SCENE2",
+   "n": 50,
+   "base": {
+    "successes": 20,
+    "rate": 0.4,
+    "wilson95": [
+     0.27608389644428605,
+     0.5381856235914368
+    ],
+    "source": "trials 0-29 Stage A (Stage B rerun of 0 and 1 bit identical), 30-49 Stage B"
+   },
+   "task_f": {
+    "successes": 50,
+    "rate": 1.0,
+    "wilson95": [
+     0.9286523998213857,
+     0.9999999999999999
+    ]
+   },
+   "paired": {
+    "task_f_only": 30,
+    "base_only": 0,
+    "mcnemar_p": 1.862645149230957e-09
+   },
+   "qualifies": false,
+   "rule": "task_f 20-42 of 50",
+   "flag_task_f_100": true,
+   "errors": 0,
+   "regrasp_screen": {
+    "base": {
+     "trials_with_drop_after_lift": 1,
+     "of_which_regrasped": 0
+    },
+    "task_f": {
+     "trials_with_drop_after_lift": 2,
+     "of_which_regrasped": 0
+    }
+   },
+   "training": {
+    "reference": {
+     "train_min": 91.92666715780894,
+     "gpu": "NVIDIA GeForce RTX 4090",
+     "config_gpu": "NVIDIA GeForce RTX 4090",
+     "steps": 20000,
+     "batch": 8,
+     "seed": 0
+    },
+    "task": {
+     "train_min": 112.2619654695193,
+     "gpu": "NVIDIA GeForce RTX 4090",
+     "config_gpu": "NVIDIA GeForce RTX 4090",
+     "steps": 24000,
+     "batch": 64,
+     "seed": 0
+    }
+   },
+   "repro_identical": true
+  },
+  "77": {
+   "task": 77,
+   "task_name": "STUDY_SCENE2_pick_up_the_book_and_place_it_in_the_back_compartment_of_the_caddy",
+   "scene": "STUDY_SCENE2",
+   "n": 50,
+   "base": {
+    "successes": 10,
+    "rate": 0.2,
+    "wilson95": [
+     0.11243749964234825,
+     0.33037106046482023
+    ],
+    "source": "trials 0-29 Stage A (Stage B rerun of 0 and 1 bit identical), 30-49 Stage B"
+   },
+   "task_f": {
+    "successes": 40,
+    "rate": 0.8,
+    "wilson95": [
+     0.6696289395351799,
+     0.8875625003576518
+    ]
+   },
+   "paired": {
+    "task_f_only": 33,
+    "base_only": 3,
+    "mcnemar_p": 2.2721360437572002e-07
+   },
+   "qualifies": true,
+   "rule": "task_f 20-42 of 50",
+   "flag_task_f_100": false,
+   "errors": 0,
+   "regrasp_screen": {
+    "base": {
+     "trials_with_drop_after_lift": 0,
+     "of_which_regrasped": 0
+    },
+    "task_f": {
+     "trials_with_drop_after_lift": 0,
+     "of_which_regrasped": 0
+    }
+   },
+   "training": {
+    "reference": {
+     "train_min": 81.68124166727065,
+     "gpu": "NVIDIA GeForce RTX 4090",
+     "config_gpu": "NVIDIA GeForce RTX 4090",
+     "steps": 20000,
+     "batch": 8,
+     "seed": 0
+    },
+    "task": {
+     "train_min": 112.50001678864162,
+     "gpu": "NVIDIA GeForce RTX 4090",
+     "config_gpu": "NVIDIA GeForce RTX 4090",
+     "steps": 24000,
+     "batch": 64,
+     "seed": 0
+    }
+   },
+   "repro_identical": true
+  },
+  "82": {
+   "task": 82,
+   "task_name": "STUDY_SCENE3_pick_up_the_book_and_place_it_in_the_left_compartment_of_the_caddy",
+   "scene": "STUDY_SCENE3",
+   "n": 50,
+   "base": {
+    "successes": 21,
+    "rate": 0.42,
+    "wilson95": [
+     0.2937500326623289,
+     0.5576655833662493
+    ],
+    "source": "trials 0-29 Stage A (Stage B rerun of 0 and 1 bit identical), 30-49 Stage B"
+   },
+   "task_f": {
+    "successes": 29,
+    "rate": 0.58,
+    "wilson95": [
+     0.4423344166337506,
+     0.706249967337671
+    ]
+   },
+   "paired": {
+    "task_f_only": 15,
+    "base_only": 7,
+    "mcnemar_p": 0.13380050659179688
+   },
+   "qualifies": true,
+   "rule": "task_f 20-42 of 50",
+   "flag_task_f_100": false,
+   "errors": 0,
+   "regrasp_screen": {
+    "base": {
+     "trials_with_drop_after_lift": 3,
+     "of_which_regrasped": 1
+    },
+    "task_f": {
+     "trials_with_drop_after_lift": 3,
+     "of_which_regrasped": 0
+    }
+   },
+   "training": {
+    "reference": {
+     "train_min": 82.90593047936757,
+     "gpu": "NVIDIA GeForce RTX 4090",
+     "config_gpu": "NVIDIA GeForce RTX 4090",
+     "steps": 20000,
+     "batch": 8,
+     "seed": 0
+    },
+    "task": {
+     "train_min": 112.50785901546479,
+     "gpu": "NVIDIA GeForce RTX 4090",
+     "config_gpu": "NVIDIA GeForce RTX 4090",
+     "steps": 24000,
+     "batch": 64,
+     "seed": 0
+    }
+   },
+   "repro_identical": true
+  }
+ },
+ "stageB_not_evaluated": {},
+ "stageB_qualifying_so_far": [
+  77,
+  82
+ ],
+ "training": {
+  "t14_s0": {
+   "reference": {
+    "run": "/workspace/runs/reference_t14_faithful_s0",
+    "complete": true,
+    "train_min": 91.92666715780894,
+    "gpu": "NVIDIA GeForce RTX 4090",
+    "config_gpu": "NVIDIA GeForce RTX 4090",
+    "steps": 20000,
+    "batch": 8,
+    "seed": 0,
+    "torch_seed": 42,
+    "data": {
+     "frames": 5393,
+     "obs": "/workspace/data/t14_demos/policy_obs.npz",
+     "state": "/workspace/data/t14_faithful/state_norm.npy"
+    },
+    "final_probe": {
+     "step": 20000,
+     "elapsed_s": 5514.75718832016,
+     "mse_real": 0.01743459329009056,
+     "cos_real_mean": 0.9905176515420835,
+     "cos_real_by_point": [
+      0.9993392850772627,
+      0.9992218628649795,
+      0.9990336298953184,
+      0.9986699629967941,
+      0.9980838026131651,
+      0.9973643062193494,
+      0.9965220537959019,
+      0.993881048905216,
+      0.9873058309698962,
+      0.9357547320829509
+     ]
+    },
+    "checks_pass": true
+   },
+   "task": {
+    "run": "/workspace/runs/task_t14_faithful_s0",
+    "complete": true,
+    "train_min": 112.2619654695193,
+    "gpu": "NVIDIA GeForce RTX 4090",
+    "config_gpu": "NVIDIA GeForce RTX 4090",
+    "steps": 24000,
+    "batch": 64,
+    "seed": 0,
+    "torch_seed": 42,
+    "data": {
+     "frames": 5393,
+     "actions": "/workspace/data/t14_task/actions.npy[..., :7]"
+    },
+    "final_probe": {
+     "step": 24000,
+     "mse": 0.0054543702863156796,
+     "elapsed_s": 6735.165412902832
+    },
+    "checks_pass": null
+   }
+  },
+  "t77_s0": {
+   "reference": {
+    "run": "/workspace/runs/reference_t77_faithful_s0",
+    "complete": true,
+    "train_min": 81.68124166727065,
+    "gpu": "NVIDIA GeForce RTX 4090",
+    "config_gpu": "NVIDIA GeForce RTX 4090",
+    "steps": 20000,
+    "batch": 8,
+    "seed": 0,
+    "torch_seed": 42,
+    "data": {
+     "frames": 7336,
+     "obs": "/workspace/data/t77_demos/policy_obs.npz",
+     "state": "/workspace/data/t77_faithful/state_norm.npy"
+    },
+    "final_probe": {
+     "step": 20000,
+     "elapsed_s": 4900.0126757621765,
+     "mse_real": 0.016364173963665962,
+     "cos_real_mean": 0.9915924200336619,
+     "cos_real_by_point": [
+      0.9992821351702263,
+      0.9992210708912899,
+      0.9990337243550966,
+      0.9987806807421011,
+      0.9981703864162358,
+      0.9975846013029861,
+      0.9973095533033385,
+      0.9956938903467136,
+      0.9896008831810684,
+      0.9412472746275615
+     ]
+    },
+    "checks_pass": true
+   },
+   "task": {
+    "run": "/workspace/runs/task_t77_faithful_s0",
+    "complete": true,
+    "train_min": 112.50001678864162,
+    "gpu": "NVIDIA GeForce RTX 4090",
+    "config_gpu": "NVIDIA GeForce RTX 4090",
+    "steps": 24000,
+    "batch": 64,
+    "seed": 0,
+    "torch_seed": 42,
+    "data": {
+     "frames": 7336,
+     "actions": "/workspace/data/t77_task/actions.npy[..., :7]"
+    },
+    "final_probe": {
+     "step": 24000,
+     "mse": 0.0052064089104533195,
+     "elapsed_s": 6749.6052803993225
+    },
+    "checks_pass": null
+   }
+  },
+  "t82_s0": {
+   "reference": {
+    "run": "/workspace/runs/reference_t82_faithful_s0",
+    "complete": true,
+    "train_min": 82.90593047936757,
+    "gpu": "NVIDIA GeForce RTX 4090",
+    "config_gpu": "NVIDIA GeForce RTX 4090",
+    "steps": 20000,
+    "batch": 8,
+    "seed": 0,
+    "torch_seed": 42,
+    "data": {
+     "frames": 7310,
+     "obs": "/workspace/data/t82_demos/policy_obs.npz",
+     "state": "/workspace/data/t82_faithful/state_norm.npy"
+    },
+    "final_probe": {
+     "step": 20000,
+     "elapsed_s": 4973.507457256317,
+     "mse_real": 0.0192119050770998,
+     "cos_real_mean": 0.9895167691483838,
+     "cos_real_by_point": [
+      0.9993847960044002,
+      0.9993122773107603,
+      0.9991532250014983,
+      0.9988694095950783,
+      0.998465688263551,
+      0.9978977098041959,
+      0.996417131868899,
+      0.992233647840652,
+      0.9841462014802017,
+      0.9292876043146006
+     ]
+    },
+    "checks_pass": true
+   },
+   "task": {
+    "run": "/workspace/runs/task_t82_faithful_s0",
+    "complete": true,
+    "train_min": 112.50785901546479,
+    "gpu": "NVIDIA GeForce RTX 4090",
+    "config_gpu": "NVIDIA GeForce RTX 4090",
+    "steps": 24000,
+    "batch": 64,
+    "seed": 0,
+    "torch_seed": 42,
+    "data": {
+     "frames": 7310,
+     "actions": "/workspace/data/t82_task/actions.npy[..., :7]"
+    },
+    "final_probe": {
+     "step": 24000,
+     "mse": 0.005338834132999182,
+     "elapsed_s": 6749.87789440155
+    },
+    "checks_pass": null
+   }
+  },
+  "t59_s0 (Nov 11, for reference)": {
+   "reference": {
+    "run": "/workspace/runs/reference_t59_faithful_s0",
+    "complete": true,
+    "train_min": 111.79928756952286,
+    "gpu": "NVIDIA GeForce RTX 4090",
+    "config_gpu": "NVIDIA GeForce RTX 4090",
+    "steps": 20000,
+    "batch": 8,
+    "seed": 0,
+    "torch_seed": 42,
+    "data": {
+     "frames": 5571,
+     "obs": "/workspace/data/t59_demos/policy_obs.npz",
+     "state": "/workspace/data/t59_faithful/state_norm.npy"
+    },
+    "final_probe": {
+     "step": 20000,
+     "elapsed_s": 6707.0633018016815,
+     "mse_real": 0.01904994435608387,
+     "cos_real_mean": 0.9896938061049655,
+     "cos_real_by_point": [
+      0.9992682665694764,
+      0.9991688554935174,
+      0.9989906647380837,
+      0.9986041843049327,
+      0.9977776337323574,
+      0.9961637829742291,
+      0.995816063322591,
+      0.9936001369947647,
+      0.9850912801079377,
+      0.9324571928117651
+     ]
+    },
+    "checks_pass": true
+   },
+   "task": {
+    "run": "/workspace/runs/task_t59_faithful_s0",
+    "complete": true,
+    "train_min": 112.02019975980123,
+    "gpu": "NVIDIA GeForce RTX 4090",
+    "config_gpu": "NVIDIA GeForce RTX 4090",
+    "steps": 24000,
+    "batch": 64,
+    "seed": 0,
+    "torch_seed": 42,
+    "data": {
+     "frames": 5571,
+     "actions": "/workspace/data/t59_task/actions.npy[..., :7]"
+    },
+    "final_probe": {
+     "step": 24000,
+     "mse": 0.005184451583772898,
+     "elapsed_s": 6720.712020397186
+    },
+    "checks_pass": null
+   }
+  },
+  "t59_s1": {
+   "reference": {
+    "run": "/workspace/runs/reference_t59_faithful_s1",
+    "complete": false,
+    "metrics": false
+   },
+   "task": {
+    "run": "/workspace/runs/task_t59_faithful_s1",
+    "complete": false,
+    "metrics": false
+   }
+  },
+  "t59_s2": {
+   "reference": {
+    "run": "/workspace/runs/reference_t59_faithful_s2",
+    "complete": false,
+    "metrics": false
+   },
+   "task": {
+    "run": "/workspace/runs/task_t59_faithful_s2",
+    "complete": false,
+    "metrics": false
+   }
+  }
+ },
+ "hard_pilot": {
+  "14": {
+   "result": {
+    "task": 14,
+    "skipped": false,
+    "direction": "away",
+    "tried": [
+     {
+      "direction": "away",
+      "unit_xy": [
+       0.0,
+       1.0
+      ],
+      "shift_m": 0.07,
+      "n_pass": 50
+     }
+    ],
+    "shift_m": 0.07,
+    "n": 50,
+    "beyond_demo_range_m": [
+     0.020521932943993626,
+     0.07001635831889352
+    ],
+    "base": {
+     "successes": 0,
+     "rate": 0.0,
+     "wilson95": [
+      0.0,
+      0.07134760017861413
+     ]
+    },
+    "task_f": {
+     "successes": 17,
+     "rate": 0.34,
+     "wilson95": [
+      0.2243694914541036,
+      0.478461740603053
+     ]
+    },
+    "paired": {
+     "both": 0,
+     "base_only": 0,
+     "task_f_only": 17,
+     "neither": 33,
+     "mcnemar_p": 1.52587890625e-05
+    },
+    "errors": 0,
+    "t59_harder_starts": {
+     "source": "results/eval_t59_faithful/REPORT.md, Harder starts (bottle 7 cm off the demo range)",
+     "n": 50,
+     "base": 29,
+     "task_f": 14,
+     "task_f_only": 7,
+     "base_only": 22
+    }
+   },
+   "geometry": {
+    "task": 14,
+    "name": "KITCHEN_SCENE2_put_the_middle_black_bowl_on_the_plate",
+    "obj": "akita_black_bowl_2",
+    "target": "plate_1",
+    "demo_obj_xy_min": [
+     -0.07291104228602312,
+     0.17548505337718204
+    ],
+    "demo_obj_xy_max": [
+     -0.027428674850888728,
+     0.22484567221764018
+    ],
+    "goal_xy_mean": [
+     0.0013108170698085961,
+     0.0017945425769510424
+    ],
+    "demo_obj_xy_mean": [
+     -0.046896588921075094,
+     0.20279732690488256
+    ],
+    "away_exact_unit_xy": [
+     -0.23322079551739308,
+     0.9724238070606017
+    ],
+    "directions": [
+     {
+      "name": "away",
+      "unit_xy": [
+       0.0,
+       1.0
+      ],
+      "demo_width_m": 0.04936061884045814,
+      "shift_m": 0.07
+     },
+     {
+      "name": "perp_plus90",
+      "unit_xy": [
+       -1.0,
+       0.0
+      ],
+      "demo_width_m": 0.04548236743513439,
+      "shift_m": 0.07
+     },
+     {
+      "name": "perp_minus90",
+      "unit_xy": [
+       1.0,
+       -0.0
+      ],
+      "demo_width_m": 0.04548236743513439,
+      "shift_m": 0.07
+     }
+    ]
+   },
+   "skipped": false,
+   "tried": [
+    {
+     "direction": "away",
+     "unit_xy": [
+      0.0,
+      1.0
+     ],
+     "shift_m": 0.07,
+     "n_pass": 50
+    }
+   ]
+  },
+  "77": {
+   "result": {
+    "task": 77,
+    "skipped": false,
+    "direction": "away",
+    "tried": [
+     {
+      "direction": "away",
+      "unit_xy": [
+       1.0,
+       0.0
+      ],
+      "shift_m": 0.07,
+      "n_pass": 50
+     }
+    ],
+    "shift_m": 0.07,
+    "n": 50,
+    "beyond_demo_range_m": [
+     0.02302336970640123,
+     0.07103512274966618
+    ],
+    "base": {
+     "successes": 15,
+     "rate": 0.3,
+     "wilson95": [
+      0.1910355343030571,
+      0.4375035057683886
+     ]
+    },
+    "task_f": {
+     "successes": 36,
+     "rate": 0.72,
+     "wilson95": [
+      0.5833487619095525,
+      0.8252582940118571
+     ]
+    },
+    "paired": {
+     "both": 9,
+     "base_only": 6,
+     "task_f_only": 27,
+     "neither": 8,
+     "mcnemar_p": 0.0003240634687244892
+    },
+    "errors": 0,
+    "t59_harder_starts": {
+     "source": "results/eval_t59_faithful/REPORT.md, Harder starts (bottle 7 cm off the demo range)",
+     "n": 50,
+     "base": 29,
+     "task_f": 14,
+     "task_f_only": 7,
+     "base_only": 22
+    }
+   },
+   "geometry": {
+    "task": 77,
+    "name": "STUDY_SCENE2_pick_up_the_book_and_place_it_in_the_back_compartment_of_the_caddy",
+    "obj": "black_book_1",
+    "target": "desk_caddy_1_back_contain_region",
+    "demo_obj_xy_min": [
+     -0.22390749050610181,
+     -0.07274054664022618
+    ],
+    "demo_obj_xy_max": [
+     -0.17683255337281592,
+     -0.025870087408903345
+    ],
+    "goal_xy_mean": [
+     -0.4322500301183979,
+     -0.13898490529229826
+    ],
+    "demo_obj_xy_mean": [
+     -0.2004685352668033,
+     -0.04545704273354076
+    ],
+    "away_exact_unit_xy": [
+     0.927347661056706,
+     0.3742009026347434
+    ],
+    "directions": [
+     {
+      "name": "away",
+      "unit_xy": [
+       1.0,
+       0.0
+      ],
+      "demo_width_m": 0.04707493713328589,
+      "shift_m": 0.07
+     },
+     {
+      "name": "perp_plus90",
+      "unit_xy": [
+       -0.0,
+       1.0
+      ],
+      "demo_width_m": 0.04687045923132284,
+      "shift_m": 0.07
+     },
+     {
+      "name": "perp_minus90",
+      "unit_xy": [
+       0.0,
+       -1.0
+      ],
+      "demo_width_m": 0.04687045923132284,
+      "shift_m": 0.07
+     }
+    ]
+   },
+   "skipped": false,
+   "tried": [
+    {
+     "direction": "away",
+     "unit_xy": [
+      1.0,
+      0.0
+     ],
+     "shift_m": 0.07,
+     "n_pass": 50
+    }
+   ]
+  }
+ },
+ "memfix_pin_compare": {
+  "files": [
+   "/workspace/runs/stage4_screen/pin_test/batches_plain.json",
+   "/workspace/runs/stage4_screen/pin_test/batches_pinned.json"
+  ],
+  "pinned": [
+   false,
+   true
+  ],
+  "frames": [
+   5393,
+   5393
+  ],
+  "gpu": [
+   "NVIDIA GeForce RTX 4090",
+   "NVIDIA GeForce RTX 4090"
+  ],
+  "K_identical": true,
+  "V_identical": true,
+  "groups_compared": 500,
+  "steps_compared": 2000,
+  "groups_differing": [],
+  "n_groups_differing": 0,
+  "IDENTICAL_ALL": true
+ },
+ "logs": {
+  "chain": [
+   "2026-11-12T03:18:03Z shortlist: 14 77 82 38 31",
+   "2026-11-12T03:18:03Z t14: inputs",
+   "2026-11-12T03:18:03Z t14 s0 reference: start",
+   "2026-11-12T04:59:24Z t14 s0 reference: done, done in 91.9 min on NVIDIA GeForce RTX 4090",
+   "2026-11-12T04:59:24Z t14 s0 task: start",
+   "2026-11-12T06:52:51Z t14 s0 task: done, done in 112.3 min on NVIDIA GeForce RTX 4090",
+   "2026-11-12T06:52:51Z t14: check_faithful (put the middle black bowl on the plate)",
+   "2026-11-12T06:59:12Z t14: checks passed",
+   "2026-11-12T07:01:48Z t14: servers up",
+   "2026-11-12T07:02:57Z t14: pi0.5 repro vs Stage A: IDENTICAL_ALL",
+   "2026-11-12T07:07:46Z t14: t14 base 20/50 task_f 50/50 qualifies=False",
+   "2026-11-12T07:07:46Z t77: inputs",
+   "2026-11-12T07:07:46Z t77 s0 reference: start",
+   "2026-11-12T07:12:20Z t77 s0 reference FAILED (see train_ref_t77_s0.log)",
+   "2026-11-12T07:12:20Z t77 training FAILED: not evaluated",
+   "2026-11-12T07:12:20Z t82: inputs",
+   "2026-11-12T07:12:20Z t82 s0 reference: start",
+   "2026-11-12T08:07:54Z shortlist: 14 77 82 38 31",
+   "2026-11-12T08:07:54Z ONLY_TASKS override (user change of plan, Nov 12): 77",
+   "2026-11-12T08:07:54Z t77: inputs",
+   "2026-11-12T08:07:54Z t77 s0 reference: start",
+   "2026-11-12T09:39:23Z t77 s0 reference: done, done in 81.7 min on NVIDIA GeForce RTX 4090",
+   "2026-11-12T09:39:23Z t77 s0 task: start",
+   "2026-11-12T11:32:51Z t77 s0 task: done, done in 112.5 min on NVIDIA GeForce RTX 4090",
+   "2026-11-12T11:32:51Z t77: check_faithful (pick up the book and place it in the back compartment of the caddy)",
+   "2026-11-12T11:39:21Z t77: checks passed",
+   "2026-11-12T11:42:16Z t77: servers up",
+   "2026-11-12T11:43:25Z t77: pi0.5 repro vs Stage A: IDENTICAL_ALL",
+   "2026-11-12T11:51:14Z t77: t77 base 10/50 task_f 40/50 qualifies=True",
+   "2026-11-12T11:51:14Z stage B done: 1 qualify",
+   "2026-11-12T11:51:14Z NO_STEP4 set: stopping before step 4",
+   "2026-11-12T12:27:41Z shortlist: 14 77 82 38 31",
+   "2026-11-12T12:27:41Z ONLY_TASKS override (user change of plan, Nov 12): 82",
+   "2026-11-12T12:27:41Z t82: inputs",
+   "2026-11-12T12:27:41Z t82 s0 reference: start",
+   "2026-11-12T14:00:03Z t82 s0 reference: done, done in 82.9 min on NVIDIA GeForce RTX 4090",
+   "2026-11-12T14:00:03Z t82 s0 task: start",
+   "2026-11-12T15:54:21Z t82 s0 task: done, done in 112.5 min on NVIDIA GeForce RTX 4090",
+   "2026-11-12T15:54:21Z t82: check_faithful (pick up the book and place it in the left compartment of the caddy)",
+   "2026-11-12T16:04:07Z t82: checks passed",
+   "2026-11-12T16:06:58Z t82: servers up",
+   "2026-11-12T16:08:07Z t82: pi0.5 repro vs Stage A: IDENTICAL_ALL",
+   "2026-11-12T16:15:35Z t82: t82 base 21/50 task_f 29/50 qualifies=True",
+   "2026-11-12T16:15:35Z stage B done: 2 qualify",
+   "2026-11-12T16:15:35Z NO_STEP4 set: stopping before step 4"
+  ],
+  "rest": [
+   "2026-11-12T08:07:54Z memory fix check IDENTICAL_ALL: starting run_rest.sh",
+   "2026-11-12T08:07:54Z step A t77 (reference ~100 + task ~115 + checks/eval ~25 min): estimate 250 min, ends 12:17 UTC <= 16:40: start",
+   "2026-11-12T11:51:14Z step A: t77 base 10/50 task_f 40/50 qualifies=True",
+   "2026-11-12T11:51:14Z hard t77 (50 starts x base, task_f): estimate 35 min, ends 12:26 UTC <= 16:40: start",
+   "2026-11-12T12:07:42Z hard t77: t77 hard (away, 0.07 m, n=50): base 15/50 task_f 36/50 paired both 9 base_only 6 task_f_only 27",
+   "2026-11-12T12:07:42Z hard t14 (50 starts x base, task_f): estimate 35 min, ends 12:42 UTC <= 16:40: start",
+   "2026-11-12T12:27:40Z hard t14: t14 hard (away, 0.07 m, n=50): base 0/50 task_f 17/50 paired both 0 base_only 0 task_f_only 17",
+   "2026-11-12T12:27:40Z measured walls (min): t14 ref 101 task 113; t77 ref 91 task 113 checks+eval 18",
+   "2026-11-12T12:27:40Z step C: t77 task_f 40/50 <= 85%: t82 if it fits, then the t59 s1 reference",
+   "2026-11-12T12:27:41Z t82 train + eval: estimate 237 min, ends 16:24 UTC <= 16:40: start",
+   "2026-11-12T16:15:35Z t82: t82 base 21/50 task_f 29/50 qualifies=True",
+   "2026-11-12T16:15:35Z t59 s1 reference: estimate 109 min, would end 18:04 UTC > 16:40: NOT started",
+   "2026-11-12T16:15:35Z run_rest done"
+  ]
+ },
+ "step0_repro_t59": {
+  "identical_all": true,
+  "new": "/workspace/runs/stage4_screen/step0_repro/base",
+  "old": "/workspace/runs/eval_t59_4090/base",
+  "rows": [
+   {
+    "trial": 0,
+    "success_new": true,
+    "success_old": true,
+    "env_steps_new": 239,
+    "env_steps_old": 239,
+    "gpu_new": "NVIDIA GeForce RTX 4090",
+    "gpu_old": "NVIDIA GeForce RTX 4090",
+    "action_identical": true,
+    "qpos_identical": true,
+    "qvel_identical": true,
+    "obj_identical": true,
+    "identical": true
+   },
+   {
+    "trial": 10,
+    "success_new": true,
+    "success_old": true,
+    "env_steps_new": 284,
+    "env_steps_old": 284,
+    "gpu_new": "NVIDIA GeForce RTX 4090",
+    "gpu_old": "NVIDIA GeForce RTX 4090",
+    "action_identical": true,
+    "qpos_identical": true,
+    "qvel_identical": true,
+    "obj_identical": true,
+    "identical": true
+   }
+  ]
+ }
+}

@@ -53,21 +53,35 @@ def main():
     train = {}
     for t in list(stage_b) + list(not_eval):
         train["t%d_s0" % t] = {k: training(k, t, 0) for k in ("reference", "task")}
+    for t in (77, 82):
+        if ("t%d_s0" % t) not in train:
+            train["t%d_s0" % t] = {k: training(k, t, 0) for k in ("reference", "task")}
+    train["t59_s0 (Nov 11, for reference)"] = {k: training(k, 59, 0) for k in ("reference", "task")}
+    hard = {}
+    for d in sorted(glob.glob(str(S / "hard" / "t*"))):
+        t = int(pathlib.Path(d).name[1:])
+        man = jload(pathlib.Path(d) / "manifest.json")
+        if man is None:
+            continue
+        shutil.copy(pathlib.Path(d) / "manifest.json", OUT / "checks" / ("hard_t%d_manifest.json" % t))
+        r = jload(pathlib.Path(d) / "result.json")
+        if r is not None:
+            shutil.copy(pathlib.Path(d) / "result.json", OUT / "checks" / ("hard_t%d_result.json" % t))
+        hard[t] = {"result": r, "geometry": man["geometry"], "skipped": man["skipped"],
+                   "tried": [{k: x[k] for k in ("direction", "unit_xy", "shift_m", "n_pass")} for x in man["tried"]]}
+    pin = jload(S / "pin_test" / "pin_compare.json")
+    if pin is not None:
+        shutil.copy(S / "pin_test" / "pin_compare.json", OUT / "checks" / "memfix_pin_compare.json")
+    logs = {}
+    for name, f in (("chain", S / "stageB" / "logs" / "chain.log"), ("rest", S / "rest.log")):
+        logs[name] = f.read_text().splitlines() if f.exists() else []
     for s in (1, 2):
         train["t59_s%d" % s] = {k: training(k, 59, s) for k in ("reference", "task")}
-    train["t59_s0 (Nov 11, for reference)"] = {k: training(k, 59, 0) for k in ("reference", "task")}
-    cal = {}
-    for f in sorted(glob.glob(str(S / "step5" / "t*" / "cal_result.json"))):
-        r = jload(f)
-        cal[r["task"]] = r
-        shutil.copy(f, OUT / "checks" / ("step5_t%d_cal_result.json" % r["task"]))
-        shutil.copy(S / "step5" / ("t%d" % r["task"]) / "pilot_states.json",
-                    OUT / "checks" / ("step5_t%d_pilot_states.json" % r["task"]))
-    out = {"gpu": GPU, "stageA": short, "stageB": stage_b, "stageB_not_evaluated": not_eval, "chosen": chosen,
-           "training": train, "step5_calibration": cal,
-           "step0_repro_t59": jload(OUT / "checks" / "step0_repro_t59.json")}
+    out = {"gpu": GPU, "stageA": short, "stageB": stage_b, "stageB_not_evaluated": not_eval,
+           "stageB_qualifying_so_far": chosen, "training": train, "hard_pilot": hard, "memfix_pin_compare": pin,
+           "logs": logs, "step0_repro_t59": jload(OUT / "checks" / "step0_repro_t59.json")}
     (OUT / "screen_summary.json").write_text(json.dumps(out, indent=1, default=str))
-    print(json.dumps({"shortlist": (short or {}).get("shortlist"), "chosen": chosen,
+    print(json.dumps({"shortlist": (short or {}).get("shortlist"), "qualifying": chosen,
                       "stageB": {t: (r["base"]["successes"], r["task_f"]["successes"], r["qualifies"])
                                  for t, r in stage_b.items()}}, default=str))
 

@@ -1,0 +1,220 @@
+{
+ "rule": "eligible 3-15 of 30; one per scene (closest to 30%, tie lower id); up to 5, scenes other than LIVING_ROOM_SCENE3 first by |rate-0.30| (tie lower id), LIVING_ROOM_SCENE3 only to fill, placed last",
+ "shortlist": [
+  14,
+  77,
+  82,
+  38,
+  31
+ ],
+ "tasks": [
+  {
+   "task": 2,
+   "task_name": "KITCHEN_SCENE10_put_the_black_bowl_in_the_top_drawer_of_the_cabinet",
+   "scene": "KITCHEN_SCENE10",
+   "successes": 21,
+   "n": 30,
+   "rate": 0.7,
+   "wilson95": [
+    0.5212421239810444,
+    0.8333525181143747
+   ],
+   "eligible": false,
+   "dist30": 12,
+   "trials_with_event": 24,
+   "why": "not eligible: 21/30 outside 3-15"
+  },
+  {
+   "task": 14,
+   "task_name": "KITCHEN_SCENE2_put_the_middle_black_bowl_on_the_plate",
+   "scene": "KITCHEN_SCENE2",
+   "successes": 9,
+   "n": 30,
+   "rate": 0.3,
+   "wilson95": [
+    0.16664748188562525,
+    0.4787578760189556
+   ],
+   "eligible": true,
+   "dist30": 0,
+   "trials_with_event": 10,
+   "why": "shortlisted, position 1"
+  },
+  {
+   "task": 19,
+   "task_name": "KITCHEN_SCENE3_put_the_moka_pot_on_the_stove",
+   "scene": "KITCHEN_SCENE3",
+   "successes": 25,
+   "n": 30,
+   "rate": 0.8333333333333334,
+   "wilson95": [
+    0.6643564934133498,
+    0.9266345767456822
+   ],
+   "eligible": false,
+   "dist30": 16,
+   "trials_with_event": 26,
+   "why": "not eligible: 25/30 outside 3-15"
+  },
+  {
+   "task": 31,
+   "task_name": "KITCHEN_SCENE5_put_the_black_bowl_on_top_of_the_cabinet",
+   "scene": "KITCHEN_SCENE5",
+   "successes": 4,
+   "n": 30,
+   "rate": 0.13333333333333333,
+   "wilson95": [
+    0.05309655447112463,
+    0.2968132683539402
+   ],
+   "eligible": true,
+   "dist30": 5,
+   "trials_with_event": 28,
+   "why": "shortlisted, position 5"
+  },
+  {
+   "task": 38,
+   "task_name": "KITCHEN_SCENE8_put_the_right_moka_pot_on_the_stove",
+   "scene": "KITCHEN_SCENE8",
+   "successes": 12,
+   "n": 30,
+   "rate": 0.4,
+   "wilson95": [
+    0.24590628016444746,
+    0.576796398787843
+   ],
+   "eligible": true,
+   "dist30": 3,
+   "trials_with_event": 20,
+   "why": "shortlisted, position 4"
+  },
+  {
+   "task": 43,
+   "task_name": "KITCHEN_SCENE9_put_the_white_bowl_on_top_of_the_cabinet",
+   "scene": "KITCHEN_SCENE9",
+   "successes": 1,
+   "n": 30,
+   "rate": 0.03333333333333333,
+   "wilson95": [
+    0.005908590316197976,
+    0.16670391146115726
+   ],
+   "eligible": false,
+   "dist30": 8,
+   "trials_with_event": 2,
+   "why": "not eligible: 1/30 outside 3-15"
+  },
+  {
+   "task": 50,
+   "task_name": "LIVING_ROOM_SCENE2_pick_up_the_alphabet_soup_and_put_it_in_the_basket",
+   "scene": "LIVING_ROOM_SCENE2",
+   "successes": 27,
+   "n": 30,
+   "rate": 0.9,
+   "wilson95": [
+    0.7437891726682571,
+    0.9654001115225814
+   ],
+   "eligible": false,
+   "dist30": 18,
+   "trials_with_event": 28,
+   "why": "not eligible: 27/30 outside 3-15"
+  },
+  {
+   "task": 56,
+   "task_name": "LIVING_ROOM_SCENE3_pick_up_the_butter_and_put_it_in_the_tray",
+   "scene": "LIVING_ROOM_SCENE3",
+   "successes": 28,
+   "n": 30,
+   "rate": 0.9333333333333333,
+   "wilson95": [
+    0.7867654148312584,
+    0.9815229763754831
+   ],
+   "eligible": false,
+   "dist30": 19,
+   "trials_with_event": 29,
+   "why": "not eligible: 28/30 outside 3-15"
+  },
+  {
+   "task": 60,
+   "task_name": "LIVING_ROOM_SCENE4_pick_up_the_black_bowl_on_the_left_and_put_it_in_the_tray",
+   "scene": "LIVING_ROOM_SCENE4",
+   "successes": 14,
+   "n": 30,
+   "rate": 0.4666666666666667,
+   "wilson95": [
+    0.30232388795369436,
+    0.6385770050304025
+   ],
+   "eligible": true,
+   "dist30": 5,
+   "trials_with_event": 17,
+   "why": "eligible, left out: 5 tasks closer to 30%"
+  },
+  {
+   "task": 64,
+   "task_name": "LIVING_ROOM_SCENE4_stack_the_right_bowl_on_the_left_bowl_and_place_them_in_the_tray",
+   "scene": "LIVING_ROOM_SCENE4",
+   "successes": 15,
+   "n": 30,
+   "rate": 0.5,
+   "wilson95": [
+    0.33154125522739103,
+    0.6684587447726089
+   ],
+   "eligible": true,
+   "dist30": 6,
+   "trials_with_event": 29,
+   "why": "eligible, but t60 is closer to 30% in LIVING_ROOM_SCENE4"
+  },
+  {
+   "task": 70,
+   "task_name": "LIVING_ROOM_SCENE6_put_the_chocolate_pudding_to_the_right_of_the_plate",
+   "scene": "LIVING_ROOM_SCENE6",
+   "successes": 23,
+   "n": 30,
+   "rate": 0.7666666666666667,
+   "wilson95": [
+    0.5907167369328042,
+    0.8820761191944214
+   ],
+   "eligible": false,
+   "dist30": 14,
+   "trials_with_event": 29,
+   "why": "not eligible: 23/30 outside 3-15"
+  },
+  {
+   "task": 77,
+   "task_name": "STUDY_SCENE2_pick_up_the_book_and_place_it_in_the_back_compartment_of_the_caddy",
+   "scene": "STUDY_SCENE2",
+   "successes": 8,
+   "n": 30,
+   "rate": 0.26666666666666666,
+   "wilson95": [
+    0.14182663247581012,
+    0.4444796184128676
+   ],
+   "eligible": true,
+   "dist30": 1,
+   "trials_with_event": 30,
+   "why": "shortlisted, position 2"
+  },
+  {
+   "task": 82,
+   "task_name": "STUDY_SCENE3_pick_up_the_book_and_place_it_in_the_left_compartment_of_the_caddy",
+   "scene": "STUDY_SCENE3",
+   "successes": 10,
+   "n": 30,
+   "rate": 0.3333333333333333,
+   "wilson95": [
+    0.19230497996726426,
+    0.5121994849532198
+   ],
+   "eligible": true,
+   "dist30": 1,
+   "trials_with_event": 15,
+   "why": "shortlisted, position 3"
+  }
+ ]
+}

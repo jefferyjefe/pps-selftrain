@@ -1,0 +1,54 @@
+{
+ "task": 14,
+ "skipped": false,
+ "direction": "away",
+ "tried": [
+  {
+   "direction": "away",
+   "unit_xy": [
+    0.0,
+    1.0
+   ],
+   "shift_m": 0.07,
+   "n_pass": 50
+  }
+ ],
+ "shift_m": 0.07,
+ "n": 50,
+ "beyond_demo_range_m": [
+  0.020521932943993626,
+  0.07001635831889352
+ ],
+ "base": {
+  "successes": 0,
+  "rate": 0.0,
+  "wilson95": [
+   0.0,
+   0.07134760017861413
+  ]
+ },
+ "task_f": {
+  "successes": 17,
+  "rate": 0.34,
+  "wilson95": [
+   0.2243694914541036,
+   0.478461740603053
+  ]
+ },
+ "paired": {
+  "both": 0,
+  "base_only": 0,
+  "task_f_only": 17,
+  "neither": 33,
+  "mcnemar_p": 1.52587890625e-05
+ },
+ "errors": 0,
+ "t59_harder_starts": {
+  "source": "results/eval_t59_faithful/REPORT.md, Harder starts (bottle 7 cm off the demo range)",
+  "n": 50,
+  "base": 29,
+  "task_f": 14,
+  "task_f_only": 7,
+  "base_only": 22
+ }
+}

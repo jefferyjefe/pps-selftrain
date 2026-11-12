@@ -1,0 +1,25 @@
+{
+ "files": [
+  "/workspace/runs/stage4_screen/pin_test/batches_plain.json",
+  "/workspace/runs/stage4_screen/pin_test/batches_pinned.json"
+ ],
+ "pinned": [
+  false,
+  true
+ ],
+ "frames": [
+  5393,
+  5393
+ ],
+ "gpu": [
+  "NVIDIA GeForce RTX 4090",
+  "NVIDIA GeForce RTX 4090"
+ ],
+ "K_identical": true,
+ "V_identical": true,
+ "groups_compared": 500,
+ "steps_compared": 2000,
+ "groups_differing": [],
+ "n_groups_differing": 0,
+ "IDENTICAL_ALL": true
+}

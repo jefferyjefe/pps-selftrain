@@ -1,0 +1,35 @@
+{
+ "identical_all": true,
+ "new": "/workspace/runs/stage4_screen/stageB/repro/t82/base",
+ "old": "/workspace/runs/stage4_screen/stageA/t82/base",
+ "rows": [
+  {
+   "trial": 0,
+   "success_new": true,
+   "success_old": true,
+   "env_steps_new": 405,
+   "env_steps_old": 405,
+   "gpu_new": "NVIDIA GeForce RTX 4090",
+   "gpu_old": "NVIDIA GeForce RTX 4090",
+   "action_identical": true,
+   "qpos_identical": true,
+   "qvel_identical": true,
+   "obj_identical": true,
+   "identical": true
+  },
+  {
+   "trial": 1,
+   "success_new": false,
+   "success_old": false,
+   "env_steps_new": 410,
+   "env_steps_old": 410,
+   "gpu_new": "NVIDIA GeForce RTX 4090",
+   "gpu_old": "NVIDIA GeForce RTX 4090",
+   "action_identical": true,
+   "qpos_identical": true,
+   "qvel_identical": true,
+   "obj_identical": true,
+   "identical": true
+  }
+ ]
+}

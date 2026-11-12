@@ -1,0 +1,61 @@
+{
+ "task": 14,
+ "task_name": "KITCHEN_SCENE2_put_the_middle_black_bowl_on_the_plate",
+ "scene": "KITCHEN_SCENE2",
+ "n": 50,
+ "base": {
+  "successes": 20,
+  "rate": 0.4,
+  "wilson95": [
+   0.27608389644428605,
+   0.5381856235914368
+  ],
+  "source": "trials 0-29 Stage A (Stage B rerun of 0 and 1 bit identical), 30-49 Stage B"
+ },
+ "task_f": {
+  "successes": 50,
+  "rate": 1.0,
+  "wilson95": [
+   0.9286523998213857,
+   0.9999999999999999
+  ]
+ },
+ "paired": {
+  "task_f_only": 30,
+  "base_only": 0,
+  "mcnemar_p": 1.862645149230957e-09
+ },
+ "qualifies": false,
+ "rule": "task_f 20-42 of 50",
+ "flag_task_f_100": true,
+ "errors": 0,
+ "regrasp_screen": {
+  "base": {
+   "trials_with_drop_after_lift": 1,
+   "of_which_regrasped": 0
+  },
+  "task_f": {
+   "trials_with_drop_after_lift": 2,
+   "of_which_regrasped": 0
+  }
+ },
+ "training": {
+  "reference": {
+   "train_min": 91.92666715780894,
+   "gpu": "NVIDIA GeForce RTX 4090",
+   "config_gpu": "NVIDIA GeForce RTX 4090",
+   "steps": 20000,
+   "batch": 8,
+   "seed": 0
+  },
+  "task": {
+   "train_min": 112.2619654695193,
+   "gpu": "NVIDIA GeForce RTX 4090",
+   "config_gpu": "NVIDIA GeForce RTX 4090",
+   "steps": 24000,
+   "batch": 64,
+   "seed": 0
+  }
+ },
+ "repro_identical": true
+}

@@ -1,0 +1,1244 @@
+{
+ "pass": true,
+ "checks": {
+  "A": true,
+  "B": true,
+  "C": true,
+  "D": true
+ },
+ "n_observations": 12,
+ "frames": [
+  0,
+  490,
+  980,
+  1471,
+  1961,
+  2451,
+  2941,
+  3431,
+  3921,
+  4412,
+  4902,
+  5392
+ ],
+ "pad_steps_checked_total": 3000,
+ "pad_violations_total": 0,
+ "pi05_matmul_precision": "high",
+ "ref": "/workspace/runs/reference_t14_faithful_s0/final.pt",
+ "task": "/workspace/runs/task_t14_faithful_s0/final.pt",
+ "gpu": "NVIDIA GeForce RTX 4090",
+ "rows": [
+  {
+   "frame": 0,
+   "stock_eq_base": true,
+   "pps0_eq_base": true,
+   "pps0_eq_stock": true,
+   "pps0_raw_eq_base": true,
+   "blend0_eq_base": true,
+   "blend0_eq_stock": true,
+   "blend0_raw_eq_base": true,
+   "task_fast_eq_hook": true,
+   "blend1_eq_task_only": true,
+   "pad": {
+    "pps_0.0": {
+     "pad_velocity_violations": 0,
+     "raw_pad_eq_unsteered": true,
+     "raw_eq_unsteered": true,
+     "max_abs_action_change": 0.0,
+     "cos_ref_base_real": 0.9960171451074787
+    },
+    "pps_0.2": {
+     "pad_velocity_violations": 0,
+     "raw_pad_eq_unsteered": false,
+     "raw_eq_unsteered": false,
+     "max_abs_action_change": 0.18876153243672833,
+     "cos_ref_base_real": 0.9950634126083333
+    },
+    "pps_0.4": {
+     "pad_velocity_violations": 0,
+     "raw_pad_eq_unsteered": false,
+     "raw_eq_unsteered": false,
+     "max_abs_action_change": 0.36596195673704146,
+     "cos_ref_base_real": 0.9925588211677253
+    },
+    "pps_0.6": {
+     "pad_velocity_violations": 0,
+     "raw_pad_eq_unsteered": false,
+     "raw_eq_unsteered": false,
+     "max_abs_action_change": 0.515523345189333,
+     "cos_ref_base_real": 0.9894630738794683
+    },
+    "pps_0.8": {
+     "pad_velocity_violations": 0,
+     "raw_pad_eq_unsteered": false,
+     "raw_eq_unsteered": false,
+     "max_abs_action_change": 0.6380603213860989,
+     "cos_ref_base_real": 0.9869583840555652
+    },
+    "pps_1.0": {
+     "pad_velocity_violations": 0,
+     "raw_pad_eq_unsteered": false,
+     "raw_eq_unsteered": false,
+     "max_abs_action_change": 0.7390251117204726,
+     "cos_ref_base_real": 0.9858875418442761
+    },
+    "blend_0.0": {
+     "pad_velocity_violations": 0,
+     "raw_pad_eq_unsteered": true,
+     "raw_eq_unsteered": true,
+     "max_abs_action_change": 0.0,
+     "cos_ref_base_real": NaN
+    },
+    "blend_0.2": {
+     "pad_velocity_violations": 0,
+     "raw_pad_eq_unsteered": false,
+     "raw_eq_unsteered": false,
+     "max_abs_action_change": 0.18277404011833653,
+     "cos_ref_base_real": NaN
+    },
+    "blend_0.4": {
+     "pad_velocity_violations": 0,
+     "raw_pad_eq_unsteered": false,
+     "raw_eq_unsteered": false,
+     "max_abs_action_change": 0.34498234575176234,
+     "cos_ref_base_real": NaN
+    },
+    "blend_0.6": {
+     "pad_velocity_violations": 0,
+     "raw_pad_eq_unsteered": false,
+     "raw_eq_unsteered": false,
+     "max_abs_action_change": 0.4741119125496148,
+     "cos_ref_base_real": NaN
+    },
+    "blend_0.8": {
+     "pad_velocity_violations": 0,
+     "raw_pad_eq_unsteered": false,
+     "raw_eq_unsteered": false,
+     "max_abs_action_change": 0.5650894475018976,
+     "cos_ref_base_real": NaN
+    },
+    "blend_1.0": {
+     "pad_velocity_violations": 0,
+     "raw_pad_eq_unsteered": false,
+     "raw_eq_unsteered": false,
+     "max_abs_action_change": 0.6251234476811885,
+     "cos_ref_base_real": NaN
+    },
+    "only": {
+     "pad_velocity_violations": 0
+    }
+   }
+  },
+  {
+   "frame": 490,
+   "stock_eq_base": true,
+   "pps0_eq_base": true,
+   "pps0_eq_stock": true,
+   "pps0_raw_eq_base": true,
+   "blend0_eq_base": true,
+   "blend0_eq_stock": true,
+   "blend0_raw_eq_base": true,
+   "task_fast_eq_hook": true,
+   "blend1_eq_task_only": true,
+   "pad": {
+    "pps_0.0": {
+     "pad_velocity_violations": 0,
+     "raw_pad_eq_unsteered": true,
+     "raw_eq_unsteered": true,
+     "max_abs_action_change": 0.0,
+     "cos_ref_base_real": 0.9951030975573806
+    },
+    "pps_0.2": {
+     "pad_velocity_violations": 0,
+     "raw_pad_eq_unsteered": false,
+     "raw_eq_unsteered": false,
+     "max_abs_action_change": 0.06170694420254225,
+     "cos_ref_base_real": 0.9955230902505348
+    },
+    "pps_0.4": {
+     "pad_velocity_violations": 0,
+     "raw_pad_eq_unsteered": false,
+     "raw_eq_unsteered": false,
+     "max_abs_action_change": 0.11890765272325271,
+     "cos_ref_base_real": 0.9955314412975251
+    },
+    "pps_0.6": {
+     "pad_velocity_violations": 0,
+     "raw_pad_eq_unsteered": false,
+     "raw_eq_unsteered": false,
+     "max_abs_action_change": 0.16863759458595512,
+     "cos_ref_base_real": 0.9955019619494486
+    },
+    "pps_0.8": {
+     "pad_velocity_violations": 0,
+     "raw_pad_eq_unsteered": false,
+     "raw_eq_unsteered": false,
+     "max_abs_action_change": 0.21723161484739179,
+     "cos_ref_base_real": 0.9949912367640625
+    },
+    "pps_1.0": {
+     "pad_velocity_violations": 0,
+     "raw_pad_eq_unsteered": false,
+     "raw_eq_unsteered": false,
+     "max_abs_action_change": 0.27041204345151776,
+     "cos_ref_base_real": 0.9938841560363997
+    },
+    "blend_0.0": {
+     "pad_velocity_violations": 0,
+     "raw_pad_eq_unsteered": true,
+     "raw_eq_unsteered": true,
+     "max_abs_action_change": 0.0,
+     "cos_ref_base_real": NaN
+    },
+    "blend_0.2": {
+     "pad_velocity_violations": 0,
+     "raw_pad_eq_unsteered": false,
+     "raw_eq_unsteered": false,
+     "max_abs_action_change": 0.055962073541790225,
+     "cos_ref_base_real": NaN
+    },
+    "blend_0.4": {
+     "pad_velocity_violations": 0,
+     "raw_pad_eq_unsteered": false,
+     "raw_eq_unsteered": false,
+     "max_abs_action_change": 0.10395878990912438,
+     "cos_ref_base_real": NaN
+    },
+    "blend_0.6": {
+     "pad_velocity_violations": 0,
+     "raw_pad_eq_unsteered": false,
+     "raw_eq_unsteered": false,
+     "max_abs_action_change": 0.14591012619310612,
+     "cos_ref_base_real": NaN
+    },
+    "blend_0.8": {
+     "pad_velocity_violations": 0,
+     "raw_pad_eq_unsteered": false,
+     "raw_eq_unsteered": false,
+     "max_abs_action_change": 0.18018878320670123,
+     "cos_ref_base_real": NaN
+    },
+    "blend_1.0": {
+     "pad_velocity_violations": 0,
+     "raw_pad_eq_unsteered": false,
+     "raw_eq_unsteered": false,
+     "max_abs_action_change": 0.20371817901629202,
+     "cos_ref_base_real": NaN
+    },
+    "only": {
+     "pad_velocity_violations": 0
+    }
+   }
+  },
+  {
+   "frame": 980,
+   "stock_eq_base": true,
+   "pps0_eq_base": true,
+   "pps0_eq_stock": true,
+   "pps0_raw_eq_base": true,
+   "blend0_eq_base": true,
+   "blend0_eq_stock": true,
+   "blend0_raw_eq_base": true,
+   "task_fast_eq_hook": true,
+   "blend1_eq_task_only": true,
+   "pad": {
+    "pps_0.0": {
+     "pad_velocity_violations": 0,
+     "raw_pad_eq_unsteered": true,
+     "raw_eq_unsteered": true,
+     "max_abs_action_change": 0.0,
+     "cos_ref_base_real": 0.9904005519458339
+    },
+    "pps_0.2": {
+     "pad_velocity_violations": 0,
+     "raw_pad_eq_unsteered": false,
+     "raw_eq_unsteered": false,
+     "max_abs_action_change": 2.0058520414867402,
+     "cos_ref_base_real": 0.9925856515615706
+    },
+    "pps_0.4": {
+     "pad_velocity_violations": 0,
+     "raw_pad_eq_unsteered": false,
+     "raw_eq_unsteered": false,
+     "max_abs_action_change": 1.9981097509326933,
+     "cos_ref_base_real": 0.9848285534024821
+    },
+    "pps_0.6": {
+     "pad_velocity_violations": 0,
+     "raw_pad_eq_unsteered": false,
+     "raw_eq_unsteered": false,
+     "max_abs_action_change": 1.996407781888485,
+     "cos_ref_base_real": 0.985102278187908
+    },
+    "pps_0.8": {
+     "pad_velocity_violations": 0,
+     "raw_pad_eq_unsteered": false,
+     "raw_eq_unsteered": false,
+     "max_abs_action_change": 1.9986758820923565,
+     "cos_ref_base_real": 0.9819904087294893
+    },
+    "pps_1.0": {
+     "pad_velocity_violations": 0,
+     "raw_pad_eq_unsteered": false,
+     "raw_eq_unsteered": false,
+     "max_abs_action_change": 2.0013542188123465,
+     "cos_ref_base_real": 0.9736920312614263
+    },
+    "blend_0.0": {
+     "pad_velocity_violations": 0,
+     "raw_pad_eq_unsteered": true,
+     "raw_eq_unsteered": true,
+     "max_abs_action_change": 0.0,
+     "cos_ref_base_real": NaN
+    },
+    "blend_0.2": {
+     "pad_velocity_violations": 0,
+     "raw_pad_eq_unsteered": false,
+     "raw_eq_unsteered": false,
+     "max_abs_action_change": 1.9982000935472248,
+     "cos_ref_base_real": NaN
+    },
+    "blend_0.4": {
+     "pad_velocity_violations": 0,
+     "raw_pad_eq_unsteered": false,
+     "raw_eq_unsteered": false,
+     "max_abs_action_change": 1.9991122202345728,
+     "cos_ref_base_real": NaN
+    },
+    "blend_0.6": {
+     "pad_velocity_violations": 0,
+     "raw_pad_eq_unsteered": false,
+     "raw_eq_unsteered": false,
+     "max_abs_action_change": 1.9988968520228863,
+     "cos_ref_base_real": NaN
+    },
+    "blend_0.8": {
+     "pad_velocity_violations": 0,
+     "raw_pad_eq_unsteered": false,
+     "raw_eq_unsteered": false,
+     "max_abs_action_change": 1.998970031924367,
+     "cos_ref_base_real": NaN
+    },
+    "blend_1.0": {
+     "pad_velocity_violations": 0,
+     "raw_pad_eq_unsteered": false,
+     "raw_eq_unsteered": false,
+     "max_abs_action_change": 1.9988289162837267,
+     "cos_ref_base_real": NaN
+    },
+    "only": {
+     "pad_velocity_violations": 0
+    }
+   }
+  },
+  {
+   "frame": 1471,
+   "stock_eq_base": true,
+   "pps0_eq_base": true,
+   "pps0_eq_stock": true,
+   "pps0_raw_eq_base": true,
+   "blend0_eq_base": true,
+   "blend0_eq_stock": true,
+   "blend0_raw_eq_base": true,
+   "task_fast_eq_hook": true,
+   "blend1_eq_task_only": true,
+   "pad": {
+    "pps_0.0": {
+     "pad_velocity_violations": 0,
+     "raw_pad_eq_unsteered": true,
+     "raw_eq_unsteered": true,
+     "max_abs_action_change": 0.0,
+     "cos_ref_base_real": 0.9917324468541029
+    },
+    "pps_0.2": {
+     "pad_velocity_violations": 0,
+     "raw_pad_eq_unsteered": false,
+     "raw_eq_unsteered": false,
+     "max_abs_action_change": 0.1428921446310878,
+     "cos_ref_base_real": 0.991526827777507
+    },
+    "pps_0.4": {
+     "pad_velocity_violations": 0,
+     "raw_pad_eq_unsteered": false,
+     "raw_eq_unsteered": false,
+     "max_abs_action_change": 0.27654114610362057,
+     "cos_ref_base_real": 0.9913890016926787
+    },
+    "pps_0.6": {
+     "pad_velocity_violations": 0,
+     "raw_pad_eq_unsteered": false,
+     "raw_eq_unsteered": false,
+     "max_abs_action_change": 0.3993217940970063,
+     "cos_ref_base_real": 0.9911511438213323
+    },
+    "pps_0.8": {
+     "pad_velocity_violations": 0,
+     "raw_pad_eq_unsteered": false,
+     "raw_eq_unsteered": false,
+     "max_abs_action_change": 0.4995022588855028,
+     "cos_ref_base_real": 0.9907631838718167
+    },
+    "pps_1.0": {
+     "pad_velocity_violations": 0,
+     "raw_pad_eq_unsteered": false,
+     "raw_eq_unsteered": false,
+     "max_abs_action_change": 0.5886062970901728,
+     "cos_ref_base_real": 0.9902004418601402
+    },
+    "blend_0.0": {
+     "pad_velocity_violations": 0,
+     "raw_pad_eq_unsteered": true,
+     "raw_eq_unsteered": true,
+     "max_abs_action_change": 0.0,
+     "cos_ref_base_real": NaN
+    },
+    "blend_0.2": {
+     "pad_velocity_violations": 0,
+     "raw_pad_eq_unsteered": false,
+     "raw_eq_unsteered": false,
+     "max_abs_action_change": 0.14075412810301774,
+     "cos_ref_base_real": NaN
+    },
+    "blend_0.4": {
+     "pad_velocity_violations": 0,
+     "raw_pad_eq_unsteered": false,
+     "raw_eq_unsteered": false,
+     "max_abs_action_change": 0.2689943637083768,
+     "cos_ref_base_real": NaN
+    },
+    "blend_0.6": {
+     "pad_velocity_violations": 0,
+     "raw_pad_eq_unsteered": false,
+     "raw_eq_unsteered": false,
+     "max_abs_action_change": 0.38018123949247595,
+     "cos_ref_base_real": NaN
+    },
+    "blend_0.8": {
+     "pad_velocity_violations": 0,
+     "raw_pad_eq_unsteered": false,
+     "raw_eq_unsteered": false,
+     "max_abs_action_change": 0.46789858418661345,
+     "cos_ref_base_real": NaN
+    },
+    "blend_1.0": {
+     "pad_velocity_violations": 0,
+     "raw_pad_eq_unsteered": false,
+     "raw_eq_unsteered": false,
+     "max_abs_action_change": 0.5278601510441898,
+     "cos_ref_base_real": NaN
+    },
+    "only": {
+     "pad_velocity_violations": 0
+    }
+   }
+  },
+  {
+   "frame": 1961,
+   "stock_eq_base": true,
+   "pps0_eq_base": true,
+   "pps0_eq_stock": true,
+   "pps0_raw_eq_base": true,
+   "blend0_eq_base": true,
+   "blend0_eq_stock": true,
+   "blend0_raw_eq_base": true,
+   "task_fast_eq_hook": true,
+   "blend1_eq_task_only": true,
+   "pad": {
+    "pps_0.0": {
+     "pad_velocity_violations": 0,
+     "raw_pad_eq_unsteered": true,
+     "raw_eq_unsteered": true,
+     "max_abs_action_change": 0.0,
+     "cos_ref_base_real": 0.9982547677876058
+    },
+    "pps_0.2": {
+     "pad_velocity_violations": 0,
+     "raw_pad_eq_unsteered": false,
+     "raw_eq_unsteered": false,
+     "max_abs_action_change": 0.17988815447771556,
+     "cos_ref_base_real": 0.9987975944359905
+    },
+    "pps_0.4": {
+     "pad_velocity_violations": 0,
+     "raw_pad_eq_unsteered": false,
+     "raw_eq_unsteered": false,
+     "max_abs_action_change": 0.3427037552907466,
+     "cos_ref_base_real": 0.9983226465109016
+    },
+    "pps_0.6": {
+     "pad_velocity_violations": 0,
+     "raw_pad_eq_unsteered": false,
+     "raw_eq_unsteered": false,
+     "max_abs_action_change": 0.4907490768200158,
+     "cos_ref_base_real": 0.9970765588833498
+    },
+    "pps_0.8": {
+     "pad_velocity_violations": 0,
+     "raw_pad_eq_unsteered": false,
+     "raw_eq_unsteered": false,
+     "max_abs_action_change": 0.6247531890666485,
+     "cos_ref_base_real": 0.995297053986995
+    },
+    "pps_1.0": {
+     "pad_velocity_violations": 0,
+     "raw_pad_eq_unsteered": false,
+     "raw_eq_unsteered": false,
+     "max_abs_action_change": 0.7413802119117974,
+     "cos_ref_base_real": 0.993386628411533
+    },
+    "blend_0.0": {
+     "pad_velocity_violations": 0,
+     "raw_pad_eq_unsteered": true,
+     "raw_eq_unsteered": true,
+     "max_abs_action_change": 0.0,
+     "cos_ref_base_real": NaN
+    },
+    "blend_0.2": {
+     "pad_velocity_violations": 0,
+     "raw_pad_eq_unsteered": false,
+     "raw_eq_unsteered": false,
+     "max_abs_action_change": 0.18289443337786193,
+     "cos_ref_base_real": NaN
+    },
+    "blend_0.4": {
+     "pad_velocity_violations": 0,
+     "raw_pad_eq_unsteered": false,
+     "raw_eq_unsteered": false,
+     "max_abs_action_change": 0.3491571300503016,
+     "cos_ref_base_real": NaN
+    },
+    "blend_0.6": {
+     "pad_velocity_violations": 0,
+     "raw_pad_eq_unsteered": false,
+     "raw_eq_unsteered": false,
+     "max_abs_action_change": 0.49426189555716515,
+     "cos_ref_base_real": NaN
+    },
+    "blend_0.8": {
+     "pad_velocity_violations": 0,
+     "raw_pad_eq_unsteered": false,
+     "raw_eq_unsteered": false,
+     "max_abs_action_change": 0.6119019980763196,
+     "cos_ref_base_real": NaN
+    },
+    "blend_1.0": {
+     "pad_velocity_violations": 0,
+     "raw_pad_eq_unsteered": false,
+     "raw_eq_unsteered": false,
+     "max_abs_action_change": 0.6963272779034374,
+     "cos_ref_base_real": NaN
+    },
+    "only": {
+     "pad_velocity_violations": 0
+    }
+   }
+  },
+  {
+   "frame": 2451,
+   "stock_eq_base": true,
+   "pps0_eq_base": true,
+   "pps0_eq_stock": true,
+   "pps0_raw_eq_base": true,
+   "blend0_eq_base": true,
+   "blend0_eq_stock": true,
+   "blend0_raw_eq_base": true,
+   "task_fast_eq_hook": true,
+   "blend1_eq_task_only": true,
+   "pad": {
+    "pps_0.0": {
+     "pad_velocity_violations": 0,
+     "raw_pad_eq_unsteered": true,
+     "raw_eq_unsteered": true,
+     "max_abs_action_change": 0.0,
+     "cos_ref_base_real": 0.9972537949044341
+    },
+    "pps_0.2": {
+     "pad_velocity_violations": 0,
+     "raw_pad_eq_unsteered": false,
+     "raw_eq_unsteered": false,
+     "max_abs_action_change": 0.2613624178844689,
+     "cos_ref_base_real": 0.993872358867673
+    },
+    "pps_0.4": {
+     "pad_velocity_violations": 0,
+     "raw_pad_eq_unsteered": false,
+     "raw_eq_unsteered": false,
+     "max_abs_action_change": 0.5301282317657471,
+     "cos_ref_base_real": 0.9874126604633947
+    },
+    "pps_0.6": {
+     "pad_velocity_violations": 0,
+     "raw_pad_eq_unsteered": false,
+     "raw_eq_unsteered": false,
+     "max_abs_action_change": 0.760727408717513,
+     "cos_ref_base_real": 0.9797293282852655
+    },
+    "pps_0.8": {
+     "pad_velocity_violations": 0,
+     "raw_pad_eq_unsteered": false,
+     "raw_eq_unsteered": false,
+     "max_abs_action_change": 0.9713717482934594,
+     "cos_ref_base_real": 0.9747406616324351
+    },
+    "pps_1.0": {
+     "pad_velocity_violations": 0,
+     "raw_pad_eq_unsteered": false,
+     "raw_eq_unsteered": false,
+     "max_abs_action_change": 1.096152453981459,
+     "cos_ref_base_real": 0.9761438142344021
+    },
+    "blend_0.0": {
+     "pad_velocity_violations": 0,
+     "raw_pad_eq_unsteered": true,
+     "raw_eq_unsteered": true,
+     "max_abs_action_change": 0.0,
+     "cos_ref_base_real": NaN
+    },
+    "blend_0.2": {
+     "pad_velocity_violations": 0,
+     "raw_pad_eq_unsteered": false,
+     "raw_eq_unsteered": false,
+     "max_abs_action_change": 0.24067027047705658,
+     "cos_ref_base_real": NaN
+    },
+    "blend_0.4": {
+     "pad_velocity_violations": 0,
+     "raw_pad_eq_unsteered": false,
+     "raw_eq_unsteered": false,
+     "max_abs_action_change": 0.45755537228989607,
+     "cos_ref_base_real": NaN
+    },
+    "blend_0.6": {
+     "pad_velocity_violations": 0,
+     "raw_pad_eq_unsteered": false,
+     "raw_eq_unsteered": false,
+     "max_abs_action_change": 0.6168623977347613,
+     "cos_ref_base_real": NaN
+    },
+    "blend_0.8": {
+     "pad_velocity_violations": 0,
+     "raw_pad_eq_unsteered": false,
+     "raw_eq_unsteered": false,
+     "max_abs_action_change": 0.7314743630693554,
+     "cos_ref_base_real": NaN
+    },
+    "blend_1.0": {
+     "pad_velocity_violations": 0,
+     "raw_pad_eq_unsteered": false,
+     "raw_eq_unsteered": false,
+     "max_abs_action_change": 0.7900002896485925,
+     "cos_ref_base_real": NaN
+    },
+    "only": {
+     "pad_velocity_violations": 0
+    }
+   }
+  },
+  {
+   "frame": 2941,
+   "stock_eq_base": true,
+   "pps0_eq_base": true,
+   "pps0_eq_stock": true,
+   "pps0_raw_eq_base": true,
+   "blend0_eq_base": true,
+   "blend0_eq_stock": true,
+   "blend0_raw_eq_base": true,
+   "task_fast_eq_hook": true,
+   "blend1_eq_task_only": true,
+   "pad": {
+    "pps_0.0": {
+     "pad_velocity_violations": 0,
+     "raw_pad_eq_unsteered": true,
+     "raw_eq_unsteered": true,
+     "max_abs_action_change": 0.0,
+     "cos_ref_base_real": 0.9953608883584915
+    },
+    "pps_0.2": {
+     "pad_velocity_violations": 0,
+     "raw_pad_eq_unsteered": false,
+     "raw_eq_unsteered": false,
+     "max_abs_action_change": 0.37872240870922813,
+     "cos_ref_base_real": 0.994755515841252
+    },
+    "pps_0.4": {
+     "pad_velocity_violations": 0,
+     "raw_pad_eq_unsteered": false,
+     "raw_eq_unsteered": false,
+     "max_abs_action_change": 0.8158645610901117,
+     "cos_ref_base_real": 0.9904073977906936
+    },
+    "pps_0.6": {
+     "pad_velocity_violations": 0,
+     "raw_pad_eq_unsteered": false,
+     "raw_eq_unsteered": false,
+     "max_abs_action_change": 1.2350601738202571,
+     "cos_ref_base_real": 0.9806211140899916
+    },
+    "pps_0.8": {
+     "pad_velocity_violations": 0,
+     "raw_pad_eq_unsteered": false,
+     "raw_eq_unsteered": false,
+     "max_abs_action_change": 1.4263840103418826,
+     "cos_ref_base_real": 0.9763888399638642
+    },
+    "pps_1.0": {
+     "pad_velocity_violations": 0,
+     "raw_pad_eq_unsteered": false,
+     "raw_eq_unsteered": false,
+     "max_abs_action_change": 1.4959309530006646,
+     "cos_ref_base_real": 0.973113775841395
+    },
+    "blend_0.0": {
+     "pad_velocity_violations": 0,
+     "raw_pad_eq_unsteered": true,
+     "raw_eq_unsteered": true,
+     "max_abs_action_change": 0.0,
+     "cos_ref_base_real": NaN
+    },
+    "blend_0.2": {
+     "pad_velocity_violations": 0,
+     "raw_pad_eq_unsteered": false,
+     "raw_eq_unsteered": false,
+     "max_abs_action_change": 0.3712142113668323,
+     "cos_ref_base_real": NaN
+    },
+    "blend_0.4": {
+     "pad_velocity_violations": 0,
+     "raw_pad_eq_unsteered": false,
+     "raw_eq_unsteered": false,
+     "max_abs_action_change": 0.7705220911608934,
+     "cos_ref_base_real": NaN
+    },
+    "blend_0.6": {
+     "pad_velocity_violations": 0,
+     "raw_pad_eq_unsteered": false,
+     "raw_eq_unsteered": false,
+     "max_abs_action_change": 1.0720165165951252,
+     "cos_ref_base_real": NaN
+    },
+    "blend_0.8": {
+     "pad_velocity_violations": 0,
+     "raw_pad_eq_unsteered": false,
+     "raw_eq_unsteered": false,
+     "max_abs_action_change": 1.1995463332862855,
+     "cos_ref_base_real": NaN
+    },
+    "blend_1.0": {
+     "pad_velocity_violations": 0,
+     "raw_pad_eq_unsteered": false,
+     "raw_eq_unsteered": false,
+     "max_abs_action_change": 1.2458279693228005,
+     "cos_ref_base_real": NaN
+    },
+    "only": {
+     "pad_velocity_violations": 0
+    }
+   }
+  },
+  {
+   "frame": 3431,
+   "stock_eq_base": true,
+   "pps0_eq_base": true,
+   "pps0_eq_stock": true,
+   "pps0_raw_eq_base": true,
+   "blend0_eq_base": true,
+   "blend0_eq_stock": true,
+   "blend0_raw_eq_base": true,
+   "task_fast_eq_hook": true,
+   "blend1_eq_task_only": true,
+   "pad": {
+    "pps_0.0": {
+     "pad_velocity_violations": 0,
+     "raw_pad_eq_unsteered": true,
+     "raw_eq_unsteered": true,
+     "max_abs_action_change": 0.0,
+     "cos_ref_base_real": 0.9975187319273976
+    },
+    "pps_0.2": {
+     "pad_velocity_violations": 0,
+     "raw_pad_eq_unsteered": false,
+     "raw_eq_unsteered": false,
+     "max_abs_action_change": 0.17801939451408377,
+     "cos_ref_base_real": 0.997297427644215
+    },
+    "pps_0.4": {
+     "pad_velocity_violations": 0,
+     "raw_pad_eq_unsteered": false,
+     "raw_eq_unsteered": false,
+     "max_abs_action_change": 0.33622126904630667,
+     "cos_ref_base_real": 0.9962784670134273
+    },
+    "pps_0.6": {
+     "pad_velocity_violations": 0,
+     "raw_pad_eq_unsteered": false,
+     "raw_eq_unsteered": false,
+     "max_abs_action_change": 0.473113141910553,
+     "cos_ref_base_real": 0.9948405582407837
+    },
+    "pps_0.8": {
+     "pad_velocity_violations": 0,
+     "raw_pad_eq_unsteered": false,
+     "raw_eq_unsteered": false,
+     "max_abs_action_change": 0.5946285258244275,
+     "cos_ref_base_real": 0.993182066612414
+    },
+    "pps_1.0": {
+     "pad_velocity_violations": 0,
+     "raw_pad_eq_unsteered": false,
+     "raw_eq_unsteered": false,
+     "max_abs_action_change": 0.6904397514636516,
+     "cos_ref_base_real": 0.9918848375854065
+    },
+    "blend_0.0": {
+     "pad_velocity_violations": 0,
+     "raw_pad_eq_unsteered": true,
+     "raw_eq_unsteered": true,
+     "max_abs_action_change": 0.0,
+     "cos_ref_base_real": NaN
+    },
+    "blend_0.2": {
+     "pad_velocity_violations": 0,
+     "raw_pad_eq_unsteered": false,
+     "raw_eq_unsteered": false,
+     "max_abs_action_change": 0.17461512707650662,
+     "cos_ref_base_real": NaN
+    },
+    "blend_0.4": {
+     "pad_velocity_violations": 0,
+     "raw_pad_eq_unsteered": false,
+     "raw_eq_unsteered": false,
+     "max_abs_action_change": 0.32804064574456215,
+     "cos_ref_base_real": NaN
+    },
+    "blend_0.6": {
+     "pad_velocity_violations": 0,
+     "raw_pad_eq_unsteered": false,
+     "raw_eq_unsteered": false,
+     "max_abs_action_change": 0.4578583290987015,
+     "cos_ref_base_real": NaN
+    },
+    "blend_0.8": {
+     "pad_velocity_violations": 0,
+     "raw_pad_eq_unsteered": false,
+     "raw_eq_unsteered": false,
+     "max_abs_action_change": 0.567532246474266,
+     "cos_ref_base_real": NaN
+    },
+    "blend_1.0": {
+     "pad_velocity_violations": 0,
+     "raw_pad_eq_unsteered": false,
+     "raw_eq_unsteered": false,
+     "max_abs_action_change": 0.6504054400835035,
+     "cos_ref_base_real": NaN
+    },
+    "only": {
+     "pad_velocity_violations": 0
+    }
+   }
+  },
+  {
+   "frame": 3921,
+   "stock_eq_base": true,
+   "pps0_eq_base": true,
+   "pps0_eq_stock": true,
+   "pps0_raw_eq_base": true,
+   "blend0_eq_base": true,
+   "blend0_eq_stock": true,
+   "blend0_raw_eq_base": true,
+   "task_fast_eq_hook": true,
+   "blend1_eq_task_only": true,
+   "pad": {
+    "pps_0.0": {
+     "pad_velocity_violations": 0,
+     "raw_pad_eq_unsteered": true,
+     "raw_eq_unsteered": true,
+     "max_abs_action_change": 0.0,
+     "cos_ref_base_real": 0.9969831114384254
+    },
+    "pps_0.2": {
+     "pad_velocity_violations": 0,
+     "raw_pad_eq_unsteered": false,
+     "raw_eq_unsteered": false,
+     "max_abs_action_change": 0.08960534784269336,
+     "cos_ref_base_real": 0.997109699394084
+    },
+    "pps_0.4": {
+     "pad_velocity_violations": 0,
+     "raw_pad_eq_unsteered": false,
+     "raw_eq_unsteered": false,
+     "max_abs_action_change": 0.17665608887445927,
+     "cos_ref_base_real": 0.9971214536589512
+    },
+    "pps_0.6": {
+     "pad_velocity_violations": 0,
+     "raw_pad_eq_unsteered": false,
+     "raw_eq_unsteered": false,
+     "max_abs_action_change": 0.26159284268856053,
+     "cos_ref_base_real": 0.996996949384914
+    },
+    "pps_0.8": {
+     "pad_velocity_violations": 0,
+     "raw_pad_eq_unsteered": false,
+     "raw_eq_unsteered": false,
+     "max_abs_action_change": 0.3407541739504336,
+     "cos_ref_base_real": 0.9965285970129456
+    },
+    "pps_1.0": {
+     "pad_velocity_violations": 0,
+     "raw_pad_eq_unsteered": false,
+     "raw_eq_unsteered": false,
+     "max_abs_action_change": 0.4153454955003262,
+     "cos_ref_base_real": 0.9955503903713137
+    },
+    "blend_0.0": {
+     "pad_velocity_violations": 0,
+     "raw_pad_eq_unsteered": true,
+     "raw_eq_unsteered": true,
+     "max_abs_action_change": 0.0,
+     "cos_ref_base_real": NaN
+    },
+    "blend_0.2": {
+     "pad_velocity_violations": 0,
+     "raw_pad_eq_unsteered": false,
+     "raw_eq_unsteered": false,
+     "max_abs_action_change": 0.09058852656781669,
+     "cos_ref_base_real": NaN
+    },
+    "blend_0.4": {
+     "pad_velocity_violations": 0,
+     "raw_pad_eq_unsteered": false,
+     "raw_eq_unsteered": false,
+     "max_abs_action_change": 0.17410878460550316,
+     "cos_ref_base_real": NaN
+    },
+    "blend_0.6": {
+     "pad_velocity_violations": 0,
+     "raw_pad_eq_unsteered": false,
+     "raw_eq_unsteered": false,
+     "max_abs_action_change": 0.25068659493756296,
+     "cos_ref_base_real": NaN
+    },
+    "blend_0.8": {
+     "pad_velocity_violations": 0,
+     "raw_pad_eq_unsteered": false,
+     "raw_eq_unsteered": false,
+     "max_abs_action_change": 0.31758774769377696,
+     "cos_ref_base_real": NaN
+    },
+    "blend_1.0": {
+     "pad_velocity_violations": 0,
+     "raw_pad_eq_unsteered": false,
+     "raw_eq_unsteered": false,
+     "max_abs_action_change": 0.37452586480927463,
+     "cos_ref_base_real": NaN
+    },
+    "only": {
+     "pad_velocity_violations": 0
+    }
+   }
+  },
+  {
+   "frame": 4412,
+   "stock_eq_base": true,
+   "pps0_eq_base": true,
+   "pps0_eq_stock": true,
+   "pps0_raw_eq_base": true,
+   "blend0_eq_base": true,
+   "blend0_eq_stock": true,
+   "blend0_raw_eq_base": true,
+   "task_fast_eq_hook": true,
+   "blend1_eq_task_only": true,
+   "pad": {
+    "pps_0.0": {
+     "pad_velocity_violations": 0,
+     "raw_pad_eq_unsteered": true,
+     "raw_eq_unsteered": true,
+     "max_abs_action_change": 0.0,
+     "cos_ref_base_real": 0.9922544101163944
+    },
+    "pps_0.2": {
+     "pad_velocity_violations": 0,
+     "raw_pad_eq_unsteered": false,
+     "raw_eq_unsteered": false,
+     "max_abs_action_change": 0.11719420683237908,
+     "cos_ref_base_real": 0.9924687524120607
+    },
+    "pps_0.4": {
+     "pad_velocity_violations": 0,
+     "raw_pad_eq_unsteered": false,
+     "raw_eq_unsteered": false,
+     "max_abs_action_change": 0.22140014139360187,
+     "cos_ref_base_real": 0.9918823435452954
+    },
+    "pps_0.6": {
+     "pad_velocity_violations": 0,
+     "raw_pad_eq_unsteered": false,
+     "raw_eq_unsteered": false,
+     "max_abs_action_change": 0.3179146713228225,
+     "cos_ref_base_real": 0.9908181248257041
+    },
+    "pps_0.8": {
+     "pad_velocity_violations": 0,
+     "raw_pad_eq_unsteered": false,
+     "raw_eq_unsteered": false,
+     "max_abs_action_change": 0.40596563901412475,
+     "cos_ref_base_real": 0.9900412330176444
+    },
+    "pps_1.0": {
+     "pad_velocity_violations": 0,
+     "raw_pad_eq_unsteered": false,
+     "raw_eq_unsteered": false,
+     "max_abs_action_change": 0.4805900204067527,
+     "cos_ref_base_real": 0.9897044896748035
+    },
+    "blend_0.0": {
+     "pad_velocity_violations": 0,
+     "raw_pad_eq_unsteered": true,
+     "raw_eq_unsteered": true,
+     "max_abs_action_change": 0.0,
+     "cos_ref_base_real": NaN
+    },
+    "blend_0.2": {
+     "pad_velocity_violations": 0,
+     "raw_pad_eq_unsteered": false,
+     "raw_eq_unsteered": false,
+     "max_abs_action_change": 0.1174877381711602,
+     "cos_ref_base_real": NaN
+    },
+    "blend_0.4": {
+     "pad_velocity_violations": 0,
+     "raw_pad_eq_unsteered": false,
+     "raw_eq_unsteered": false,
+     "max_abs_action_change": 0.21863109716844553,
+     "cos_ref_base_real": NaN
+    },
+    "blend_0.6": {
+     "pad_velocity_violations": 0,
+     "raw_pad_eq_unsteered": false,
+     "raw_eq_unsteered": false,
+     "max_abs_action_change": 0.3016032748904526,
+     "cos_ref_base_real": NaN
+    },
+    "blend_0.8": {
+     "pad_velocity_violations": 0,
+     "raw_pad_eq_unsteered": false,
+     "raw_eq_unsteered": false,
+     "max_abs_action_change": 0.3637643467637002,
+     "cos_ref_base_real": NaN
+    },
+    "blend_1.0": {
+     "pad_velocity_violations": 0,
+     "raw_pad_eq_unsteered": false,
+     "raw_eq_unsteered": false,
+     "max_abs_action_change": 0.4015042337556779,
+     "cos_ref_base_real": NaN
+    },
+    "only": {
+     "pad_velocity_violations": 0
+    }
+   }
+  },
+  {
+   "frame": 4902,
+   "stock_eq_base": true,
+   "pps0_eq_base": true,
+   "pps0_eq_stock": true,
+   "pps0_raw_eq_base": true,
+   "blend0_eq_base": true,
+   "blend0_eq_stock": true,
+   "blend0_raw_eq_base": true,
+   "task_fast_eq_hook": true,
+   "blend1_eq_task_only": true,
+   "pad": {
+    "pps_0.0": {
+     "pad_velocity_violations": 0,
+     "raw_pad_eq_unsteered": true,
+     "raw_eq_unsteered": true,
+     "max_abs_action_change": 0.0,
+     "cos_ref_base_real": 0.9965929881680637
+    },
+    "pps_0.2": {
+     "pad_velocity_violations": 0,
+     "raw_pad_eq_unsteered": false,
+     "raw_eq_unsteered": false,
+     "max_abs_action_change": 0.22570124363207822,
+     "cos_ref_base_real": 0.9949689662705904
+    },
+    "pps_0.4": {
+     "pad_velocity_violations": 0,
+     "raw_pad_eq_unsteered": false,
+     "raw_eq_unsteered": false,
+     "max_abs_action_change": 0.44006884344184405,
+     "cos_ref_base_real": 0.991210078645764
+    },
+    "pps_0.6": {
+     "pad_velocity_violations": 0,
+     "raw_pad_eq_unsteered": false,
+     "raw_eq_unsteered": false,
+     "max_abs_action_change": 0.6144483155152798,
+     "cos_ref_base_real": 0.9883730479778027
+    },
+    "pps_0.8": {
+     "pad_velocity_violations": 0,
+     "raw_pad_eq_unsteered": false,
+     "raw_eq_unsteered": false,
+     "max_abs_action_change": 0.7580968159968853,
+     "cos_ref_base_real": 0.9862974281227853
+    },
+    "pps_1.0": {
+     "pad_velocity_violations": 0,
+     "raw_pad_eq_unsteered": false,
+     "raw_eq_unsteered": false,
+     "max_abs_action_change": 0.8650528061971663,
+     "cos_ref_base_real": 0.9852677735870723
+    },
+    "blend_0.0": {
+     "pad_velocity_violations": 0,
+     "raw_pad_eq_unsteered": true,
+     "raw_eq_unsteered": true,
+     "max_abs_action_change": 0.0,
+     "cos_ref_base_real": NaN
+    },
+    "blend_0.2": {
+     "pad_velocity_violations": 0,
+     "raw_pad_eq_unsteered": false,
+     "raw_eq_unsteered": false,
+     "max_abs_action_change": 0.21512597866177563,
+     "cos_ref_base_real": NaN
+    },
+    "blend_0.4": {
+     "pad_velocity_violations": 0,
+     "raw_pad_eq_unsteered": false,
+     "raw_eq_unsteered": false,
+     "max_abs_action_change": 0.398968064884901,
+     "cos_ref_base_real": NaN
+    },
+    "blend_0.6": {
+     "pad_velocity_violations": 0,
+     "raw_pad_eq_unsteered": false,
+     "raw_eq_unsteered": false,
+     "max_abs_action_change": 0.5373941623440981,
+     "cos_ref_base_real": NaN
+    },
+    "blend_0.8": {
+     "pad_velocity_violations": 0,
+     "raw_pad_eq_unsteered": false,
+     "raw_eq_unsteered": false,
+     "max_abs_action_change": 0.6355530565440655,
+     "cos_ref_base_real": NaN
+    },
+    "blend_1.0": {
+     "pad_velocity_violations": 0,
+     "raw_pad_eq_unsteered": false,
+     "raw_eq_unsteered": false,
+     "max_abs_action_change": 0.6990514221076964,
+     "cos_ref_base_real": NaN
+    },
+    "only": {
+     "pad_velocity_violations": 0
+    }
+   }
+  },
+  {
+   "frame": 5392,
+   "stock_eq_base": true,
+   "pps0_eq_base": true,
+   "pps0_eq_stock": true,
+   "pps0_raw_eq_base": true,
+   "blend0_eq_base": true,
+   "blend0_eq_stock": true,
+   "blend0_raw_eq_base": true,
+   "task_fast_eq_hook": true,
+   "blend1_eq_task_only": true,
+   "pad": {
+    "pps_0.0": {
+     "pad_velocity_violations": 0,
+     "raw_pad_eq_unsteered": true,
+     "raw_eq_unsteered": true,
+     "max_abs_action_change": 0.0,
+     "cos_ref_base_real": 0.9973744230892224
+    },
+    "pps_0.2": {
+     "pad_velocity_violations": 0,
+     "raw_pad_eq_unsteered": false,
+     "raw_eq_unsteered": false,
+     "max_abs_action_change": 0.12194376196575152,
+     "cos_ref_base_real": 0.9955875022989005
+    },
+    "pps_0.4": {
+     "pad_velocity_violations": 0,
+     "raw_pad_eq_unsteered": false,
+     "raw_eq_unsteered": false,
+     "max_abs_action_change": 0.25324354932081694,
+     "cos_ref_base_real": 0.9775021289556539
+    },
+    "pps_0.6": {
+     "pad_velocity_violations": 0,
+     "raw_pad_eq_unsteered": false,
+     "raw_eq_unsteered": false,
+     "max_abs_action_change": 0.3556879657150507,
+     "cos_ref_base_real": 0.9360609133449828
+    },
+    "pps_0.8": {
+     "pad_velocity_violations": 0,
+     "raw_pad_eq_unsteered": false,
+     "raw_eq_unsteered": false,
+     "max_abs_action_change": 0.4215773664020299,
+     "cos_ref_base_real": 0.9103299596090444
+    },
+    "pps_1.0": {
+     "pad_velocity_violations": 0,
+     "raw_pad_eq_unsteered": false,
+     "raw_eq_unsteered": false,
+     "max_abs_action_change": 0.4575987289825676,
+     "cos_ref_base_real": 0.8859802128966713
+    },
+    "blend_0.0": {
+     "pad_velocity_violations": 0,
+     "raw_pad_eq_unsteered": true,
+     "raw_eq_unsteered": true,
+     "max_abs_action_change": 0.0,
+     "cos_ref_base_real": NaN
+    },
+    "blend_0.2": {
+     "pad_velocity_violations": 0,
+     "raw_pad_eq_unsteered": false,
+     "raw_eq_unsteered": false,
+     "max_abs_action_change": 0.11625794265961642,
+     "cos_ref_base_real": NaN
+    },
+    "blend_0.4": {
+     "pad_velocity_violations": 0,
+     "raw_pad_eq_unsteered": false,
+     "raw_eq_unsteered": false,
+     "max_abs_action_change": 0.2241049265433548,
+     "cos_ref_base_real": NaN
+    },
+    "blend_0.6": {
+     "pad_velocity_violations": 0,
+     "raw_pad_eq_unsteered": false,
+     "raw_eq_unsteered": false,
+     "max_abs_action_change": 0.2960406082171201,
+     "cos_ref_base_real": NaN
+    },
+    "blend_0.8": {
+     "pad_velocity_violations": 0,
+     "raw_pad_eq_unsteered": false,
+     "raw_eq_unsteered": false,
+     "max_abs_action_change": 0.33599196404993514,
+     "cos_ref_base_real": NaN
+    },
+    "blend_1.0": {
+     "pad_velocity_violations": 0,
+     "raw_pad_eq_unsteered": false,
+     "raw_eq_unsteered": false,
+     "max_abs_action_change": 0.3576277099109886,
+     "cos_ref_base_real": NaN
+    },
+    "only": {
+     "pad_velocity_violations": 0
+    }
+   }
+  }
+ ]
+}

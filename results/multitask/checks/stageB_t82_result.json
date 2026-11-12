@@ -1,0 +1,61 @@
+{
+ "task": 82,
+ "task_name": "STUDY_SCENE3_pick_up_the_book_and_place_it_in_the_left_compartment_of_the_caddy",
+ "scene": "STUDY_SCENE3",
+ "n": 50,
+ "base": {
+  "successes": 21,
+  "rate": 0.42,
+  "wilson95": [
+   0.2937500326623289,
+   0.5576655833662493
+  ],
+  "source": "trials 0-29 Stage A (Stage B rerun of 0 and 1 bit identical), 30-49 Stage B"
+ },
+ "task_f": {
+  "successes": 29,
+  "rate": 0.58,
+  "wilson95": [
+   0.4423344166337506,
+   0.706249967337671
+  ]
+ },
+ "paired": {
+  "task_f_only": 15,
+  "base_only": 7,
+  "mcnemar_p": 0.13380050659179688
+ },
+ "qualifies": true,
+ "rule": "task_f 20-42 of 50",
+ "flag_task_f_100": false,
+ "errors": 0,
+ "regrasp_screen": {
+  "base": {
+   "trials_with_drop_after_lift": 3,
+   "of_which_regrasped": 1
+  },
+  "task_f": {
+   "trials_with_drop_after_lift": 3,
+   "of_which_regrasped": 0
+  }
+ },
+ "training": {
+  "reference": {
+   "train_min": 82.90593047936757,
+   "gpu": "NVIDIA GeForce RTX 4090",
+   "config_gpu": "NVIDIA GeForce RTX 4090",
+   "steps": 20000,
+   "batch": 8,
+   "seed": 0
+  },
+  "task": {
+   "train_min": 112.50785901546479,
+   "gpu": "NVIDIA GeForce RTX 4090",
+   "config_gpu": "NVIDIA GeForce RTX 4090",
+   "steps": 24000,
+   "batch": 64,
+   "seed": 0
+  }
+ },
+ "repro_identical": true
+}
